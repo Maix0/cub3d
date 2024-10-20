@@ -1,0 +1,9 @@
+.envrc
+build
+flake.nix
+flake.lock
+/mlx
+*.d
+*.o
+*.a
+/cub3d
