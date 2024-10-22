@@ -6,7 +6,7 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/10/20 15:00:38 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/10/22 13:11:32 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ endif
 #CFLAGS_ADDITIONAL	+= -DNVALGRIND
 
 # TODO: REMOVE THIS WHEN FINISHING THIS:
-#CFLAGS_ADDITIONAL	+= -gcolumn-info -g3 -fno-builtin
+CFLAGS_ADDITIONAL	+= -gcolumn-info -g3 -fno-builtin
 
 export CFLAGS_ADDITIONAL
 export CC
@@ -118,9 +118,9 @@ tokei:
 	@/bin/sh -c 'tokei -tC,C\ Header'
 
 
-build_filelist:
-	@$(MAKE) --no-print-directory -C ./stdme/ 	build_filelist
-	@$(MAKE) --no-print-directory -f ./Cub3d.mk	build_filelist
+filelist:
+	@$(MAKE) --no-print-directory -C ./stdme/ 	filelist
+	@$(MAKE) --no-print-directory -f ./Cub3d.mk	filelist
 
 #	phony
-.PHONY: all bonus clean fclean re header footer build_filelist
+.PHONY: all bonus clean fclean re header footer filelist
