@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/22 14:48:40 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/22 14:51:17 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,9 @@ int main(void)
 	mem_set_zero(&blx, sizeof(blx));
 	if (blx_initialize(game_loop, game_free,
 					   (t_blx_app){
-						   .size_x = 500,
-						   .size_y = 400,
-						   .pixel_size = 2,
+						   .size_x = 200,
+						   .size_y = 100,
+						   .pixel_size = 5,
 						   .title = "Cub3d - Yes",
 						   .data = &game,
 					   },

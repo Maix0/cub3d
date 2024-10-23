@@ -6,13 +6,15 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/10/22 13:11:32 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/10/23 14:37:11 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Objdir
 BUILD_DIR = $(shell realpath ./build)
 BASE_PATH = $(shell pwd)
+
+CC=cc
 
 # Colors
 GREEN = \033[32m
