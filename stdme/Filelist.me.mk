@@ -22,6 +22,8 @@ blx/blx_handlers                                                              \
 blx/blx_keycode                                                               \
 blx/colors                                                                    \
 blx/draw/draw                                                                 \
+blx/draw/draw_circle                                                          \
+blx/draw/draw_line                                                            \
 blx/draw/draw_sprite                                                          \
 blx/draw/draw_string                                                          \
 blx/inputs                                                                    \
