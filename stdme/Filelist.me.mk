@@ -52,6 +52,7 @@ fs/fd                                                                         \
 fs/file                                                                       \
 fs/file_dup                                                                   \
 fs/fs_internal                                                                \
+fs/getline                                                                    \
 fs/getters                                                                    \
 fs/putfd                                                                      \
 gnl/get_next_line                                                             \

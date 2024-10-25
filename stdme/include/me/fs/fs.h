@@ -14,6 +14,7 @@
 # define FS_H
 
 # include "me/types.h"
+# include "me/string/string.h" 
 # include <dirent.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -257,6 +258,10 @@ void						put_char_fd(t_fd *fd, t_u8 c);
 /// @brief Duplicate a t_fd using the dup syscall
 /// @note will return NULL in case of error (either fd is null or dup failed)
 t_fd						*dup_fd(t_fd *fd);
+
+
+t_error	getline_fd(t_fd *fd, t_string *out);
+
 /* _____ _____ _____  ______ _____ _______ ____  _______     __
   |  __ \_   _|  __ \|  ____/ ____|__   __/ __ \|  __ \ \   / /
   | |  | || | | |__) | |__ | |       | | | |  | | |__) \ \_/ /
