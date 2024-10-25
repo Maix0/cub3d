@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/25 15:11:21 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/10/25 21:58:59 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,12 +123,11 @@ int main(int argc, char **argv)
 {
 	t_game game;
 	t_blx  blx;
-	t_data data;
-	
+
 	if (argc != 2)
-		return (printf("Error.\nInvalid argument.\n"), 1);
-	if (!map_format(argv[1]))
-		exit(1);
+		return (cube_error("Usage: %s <map>", argv[0]), 1);
+	if (map_format(argv[1]))
+		return (1);
 	mem_set_zero(&game, sizeof(game));
 	mem_set_zero(&blx, sizeof(blx));
 	game.map.size = vi2d(30, 20);
@@ -144,7 +143,8 @@ int main(int argc, char **argv)
 					   },
 					   &blx))
 		exit(1);
-	data.map = read_map(&data, argv[1], &blx);
+	if (read_map(&game.map, argv[1], &blx))
+		return (blx_free(blx), 1);
 	blx_run(blx);
 	return (0);
 }

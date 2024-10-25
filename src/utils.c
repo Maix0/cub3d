@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state.h                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/25 21:22:59 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/10/25 21:19:50 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/10/25 21:23:27 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STATE_H
-#define STATE_H
+#include "me/fs/fs.h"
+#include "me/printf/printf.h"
+#include <stdarg.h>
 
-#include "app/maps.h"
-#include "me/types.h"
-#include "me/vec2/vec2.h"
-
-t_error cube_error(t_const_str fmt, ...);
-
-typedef struct s_game t_game;
-
-struct s_game
+t_error cube_error(t_const_str fmt, ...)
 {
-	t_vf2d pos;
-	t_f64  angle;
-	t_map  map;
-};
+	va_list args;
 
-#endif /* STATE_H */
+	va_start(args, fmt);
+	put_string_fd(get_stderr(), "Error:\n");
+	me_veprintf(fmt, &args);
+	put_string_fd(get_stderr(), "\n");
+	return (ERROR);
+}

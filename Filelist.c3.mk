@@ -3,6 +3,7 @@ get_map_data                                                                  \
 get_map_utils                                                                 \
 main                                                                          \
 parse                                                                         \
+utils                                                                         \
 
 GEN_FILES =                                                                   \
 vec/tile/tile                                                                 \

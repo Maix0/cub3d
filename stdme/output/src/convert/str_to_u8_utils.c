@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 21:15:19 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:19 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/10/25 21:40:47 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 t_error	checked_add_u8(t_u8 lhs, t_u8 rhs, t_u8 *out)
 {
-	if (rhs > 0 && (lhs > 128u - rhs))
+	if (rhs > 0 && (lhs > 255u - rhs))
 		return (ERROR);
 	*out = (t_u8)(lhs + rhs);
 	return (NO_ERROR);

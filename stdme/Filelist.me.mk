@@ -9,13 +9,13 @@ aq/me_alloc/merge_blocks                                                      \
 aq/me_alloc/pages                                                             \
 aq/me_alloc/realloc                                                           \
 aq/vg/dummy_block                                                             \
+aq/vg/dummy_mem_status                                                        \
 aq/vg/dummy_mempool                                                           \
 aq/vg/dummy_mempool_bis                                                       \
-aq/vg/dummy_mem_status                                                        \
 aq/vg/valgrind_block                                                          \
+aq/vg/valgrind_mem_status                                                     \
 aq/vg/valgrind_mempool                                                        \
 aq/vg/valgrind_mempool_bis                                                    \
-aq/vg/valgrind_mem_status                                                     \
 blx/blx                                                                       \
 blx/blx_create_fontsheet                                                      \
 blx/blx_handlers                                                              \
@@ -56,10 +56,10 @@ fs/getline                                                                    \
 fs/getters                                                                    \
 fs/putfd                                                                      \
 gnl/get_next_line                                                             \
-hash/hasher                                                                   \
 hash/hash_signed                                                              \
 hash/hash_str                                                                 \
 hash/hash_unsigned                                                            \
+hash/hasher                                                                   \
 hash/sip/sip13                                                                \
 hash/sip/sip_utils                                                            \
 hash/sip/sip_utils2                                                           \
@@ -107,10 +107,6 @@ printf/printf                                                                 \
 printf/printf_fd                                                              \
 printf/printf_str                                                             \
 printf/vprintf                                                                \
-string/mod                                                                    \
-string/string_insert                                                          \
-string/string_remove                                                          \
-string/string_reserve                                                         \
 str/str_clone                                                                 \
 str/str_compare                                                               \
 str/str_find_chr                                                              \
@@ -127,6 +123,10 @@ str/str_n_find_str                                                            \
 str/str_split                                                                 \
 str/str_substring                                                             \
 str/str_trim                                                                  \
+string/mod                                                                    \
+string/string_insert                                                          \
+string/string_remove                                                          \
+string/string_reserve                                                         \
 
 GEN_FILES =                                                                   \
 convert/i16_to_str                                                            \

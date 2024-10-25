@@ -6,9 +6,24 @@
 #    By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/03 13:20:01 by maiboyer          #+#    #+#              #
-#    Updated: 2024/10/22 14:19:41 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/10/25 21:36:43 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+
+escape = $(subst ','\'',$(1))
+
+define noexpand
+ifeq ($$(origin $(1)),environment)
+    $(1) := $$(value $(1))
+endif
+ifeq ($$(origin $(1)),environment override)
+    $(1) := $$(value $(1))
+endif
+ifeq ($$(origin $(1)),command line)
+    override $(1) := $$(value $(1))
+endif
+endef
 
 ANAME			=	c3
 
@@ -18,7 +33,6 @@ INCLUDE_DIR		=	include stdme/include
 LIBS_DIR		=	.
 GEN_DIR			=	output/src
 GEN_INCLUDE		=	output/include stdme/output/include
-
 
 BASE_PATH		?=	$(shell pwd)
 NAME			=	cub3d
@@ -49,7 +63,7 @@ all: $(NAME)
 
 make_libs: 
 	@$(MAKE) -C ./stdme/ 	"LIB_NAME=$(shell realpath ./stdme)/"	libme.a
-	@$(MAKE) -C ./mlx/ -f Makefile.mk "CFLAGS=-O3 $(CFLAGS_ADDITIONAL)" "OBJ_DIR=$(BUILD_DIR)/mlx" "NAME=$(BUILD_DIR)/libmlx.a"
+	@$(MAKE) -C ./mlx/ -f Makefile.mk 'CFLAGS=-O3 $(call escape, $(CFLAGS_ADDITIONAL))' "OBJ_DIR=$(BUILD_DIR)/mlx" "NAME=$(BUILD_DIR)/libmlx.a"
 
 $(TARGET): $(OBJ) $(BUILD_DIR)/libme.a $(BUILD_DIR)/libmlx.a
 	@echo -e '$(COL_GRAY) Linking \t$(COL_GOLD)$(TARGET)$(COL_RESET)'
