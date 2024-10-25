@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/25 13:21:05 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/25 14:56:28 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,16 @@ void game_free(t_blx_app app)
 	(void)(app);
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
 	t_game game;
 	t_blx  blx;
-
+	t_data data;
+	
+	if (argc != 2)
+		return (printf("Error.\nInvalid argument.\n"), 1);
+	if (!map_format(argv[1]))
+		exit(1);
 	mem_set_zero(&game, sizeof(game));
 	mem_set_zero(&blx, sizeof(blx));
 	game.map.size = vi2d(30, 20);
@@ -127,6 +132,7 @@ int main(void)
 					   },
 					   &blx))
 		exit(1);
+	data.map = read_map(&data, argv[1], &blx);
 	blx_run(blx);
 	return (0);
 }
