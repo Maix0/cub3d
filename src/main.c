@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/24 17:14:24 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/25 13:09:19 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ struct s_game
 	t_vf2d pos;
 	t_f64  angle;
 	t_vi2d map_size;
-	t_f64  playersize;
 };
 
 t_f64 f64_clamp(t_f64 this, t_f64 min, t_f64 max)
@@ -44,7 +43,18 @@ t_f64 f64_clamp(t_f64 this, t_f64 min, t_f64 max)
 #define ROTATE_SPEED (PI * 10)
 #define SPEED 10
 #define CELLSIZE 50
-#define PLAYERSIZE game->playersize
+#define PLAYERSIZE 0.5
+void draw_player(t_blx *ctx, t_game *game)
+{
+	t_vi2d endline =
+		vi2d(((game->pos.x + (cos(game->angle)) * (t_f64)PLAYERSIZE) * (t_f64)CELLSIZE),
+			 ((game->pos.y + (sin(game->angle)) * (t_f64)PLAYERSIZE) * (t_f64)CELLSIZE));
+	blx_draw_line(ctx, vi2d((game->pos.x) * (t_f64)CELLSIZE, (game->pos.y) * (t_f64)CELLSIZE),
+				  endline, new_color(0, 255, 0));
+	blx_draw_circle(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
+					(PLAYERSIZE * CELLSIZE) - 1, new_color(255, 0, 0));
+	blx_draw(ctx, endline, new_color(0, 0, 255));
+}
 
 bool game_loop(t_blx *ctx)
 {
@@ -55,12 +65,12 @@ bool game_loop(t_blx *ctx)
 	if (is_key_pressed(ctx, KB_Escape))
 		return (true);
 	str = string_new(1024);
-	if (is_key_pressed(ctx, KB_w))
+	if (is_key_pressed(ctx, KB_w) || is_key_pressed(ctx, KB_Up))
 	{
 		game->pos.x += cos(game->angle) * SPEED * ctx->elapsed;
 		game->pos.y += sin(game->angle) * SPEED * ctx->elapsed;
 	}
-	if (is_key_pressed(ctx, KB_s))
+	if (is_key_pressed(ctx, KB_s) || is_key_pressed(ctx, KB_Down))
 	{
 		game->pos.x -= cos(game->angle) * SPEED * ctx->elapsed;
 		game->pos.y -= sin(game->angle) * SPEED * ctx->elapsed;
@@ -75,23 +85,15 @@ bool game_loop(t_blx *ctx)
 		game->pos.x -= sin(game->angle) * SPEED * ctx->elapsed;
 		game->pos.y += cos(game->angle) * SPEED * ctx->elapsed;
 	}
-	if (is_key_pressed(ctx, KB_a))
+	if (is_key_pressed(ctx, KB_a) || is_key_pressed(ctx, KB_Left))
 		game->angle -= ROTATE_SPEED * ctx->elapsed;
-	if (is_key_pressed(ctx, KB_d))
+	if (is_key_pressed(ctx, KB_d) || is_key_pressed(ctx, KB_Right))
 		game->angle += ROTATE_SPEED * ctx->elapsed;
-	
-	if (is_key_pressed(ctx, KB_o))
-		game->playersize += 1.0 * ctx->elapsed;
-	if (is_key_pressed(ctx, KB_p))
-		game->playersize -= 1.0 * ctx->elapsed;
-
 
 	while (game->angle >= PI)
 		game->angle -= 2.0 * PI;
 	while (game->angle < -PI)
 		game->angle += 2.0 * PI;
-
-	game->playersize = f64_clamp(game->playersize, 0.1, 20.0);
 
 	game->pos.x = f64_clamp(game->pos.x, PLAYERSIZE, (t_f64)game->map_size.x - PLAYERSIZE);
 	game->pos.y = f64_clamp(game->pos.y, PLAYERSIZE, (t_f64)game->map_size.y - PLAYERSIZE);
@@ -102,14 +104,8 @@ bool game_loop(t_blx *ctx)
 	blx_draw_string(ctx, vi2d(0, 0), str.buf, new_color(255, 255, 255));
 
 	blx_fill_rect(ctx, vi2d(100, 50), vi2d(150, 250), new_color(255, 255, 255));
-	t_vi2d endline =
-		vi2d(((game->pos.x + (cos(game->angle)) * (t_f64)PLAYERSIZE) * (t_f64)CELLSIZE),
-			 ((game->pos.y + (sin(game->angle)) * (t_f64)PLAYERSIZE) * (t_f64)CELLSIZE));
-	blx_draw_line(ctx, vi2d((game->pos.x) * (t_f64)CELLSIZE, (game->pos.y) * (t_f64)CELLSIZE),
-				  endline, new_color(0, 255, 0));
-	blx_draw_circle(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
-					(PLAYERSIZE * CELLSIZE) - 1, new_color(255, 0, 0));
-	blx_draw(ctx, endline, new_color(0, 0, 255));
+
+	draw_player(ctx, game);
 	string_free(str);
 	return (false);
 }
@@ -128,7 +124,6 @@ int main(void)
 	game.map_size = vi2d(30, 20);
 	game.pos.x = 5;
 	game.pos.y = 5;
-	game.playersize = 0.5;
 	if (blx_initialize(game_loop, game_free,
 					   (t_blx_app){
 						   .size_x = game.map_size.x * CELLSIZE,

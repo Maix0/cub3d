@@ -84,7 +84,7 @@ subject.txt:
 
 
 filelist:
-	@echo  -e "$(COL_RESET)Filelist for Cub3d"
+	@echo -e "$(COL_RESET)Filelist for Cub3d"
 	@rm -f Filelist.$(ANAME).mk
 	@printf '%-78s\\\n' "SRC_FILES =" > Filelist.$(ANAME).mk
 	@tree $(SRC_DIR) -ifF | rg '$(SRC_DIR)/(.*)\.c$$' --replace '$$1' | sed -re 's/^(.*)_([0-9]+)$$/\1|\2/g' | sort -t'|' --key=1,1 --key=2,2n | sed -e's/|/_/' | xargs printf '%-78s\\\n' >> Filelist.$(ANAME).mk
