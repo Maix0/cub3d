@@ -6,10 +6,11 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/25 13:09:19 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/25 13:21:05 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "app/state.h"
 #include "me/blx/blx.h"
 #include "me/blx/blx_key.h"
 #include "me/mem/mem.h"
@@ -19,14 +20,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct s_game t_game;
-struct s_game
-{
-	t_vf2d pos;
-	t_f64  angle;
-	t_vi2d map_size;
-};
 
 t_f64 f64_clamp(t_f64 this, t_f64 min, t_f64 max)
 {
@@ -95,8 +88,8 @@ bool game_loop(t_blx *ctx)
 	while (game->angle < -PI)
 		game->angle += 2.0 * PI;
 
-	game->pos.x = f64_clamp(game->pos.x, PLAYERSIZE, (t_f64)game->map_size.x - PLAYERSIZE);
-	game->pos.y = f64_clamp(game->pos.y, PLAYERSIZE, (t_f64)game->map_size.y - PLAYERSIZE);
+	game->pos.x = f64_clamp(game->pos.x, PLAYERSIZE, (t_f64)game->map.size.x - PLAYERSIZE);
+	game->pos.y = f64_clamp(game->pos.y, PLAYERSIZE, (t_f64)game->map.size.y - PLAYERSIZE);
 
 	snprintf(str.buf, 1024, "x: %f\ny: %f\nangle: %f", game->pos.x, game->pos.y, game->angle);
 
@@ -121,13 +114,13 @@ int main(void)
 
 	mem_set_zero(&game, sizeof(game));
 	mem_set_zero(&blx, sizeof(blx));
-	game.map_size = vi2d(30, 20);
+	game.map.size = vi2d(30, 20);
 	game.pos.x = 5;
 	game.pos.y = 5;
 	if (blx_initialize(game_loop, game_free,
 					   (t_blx_app){
-						   .size_x = game.map_size.x * CELLSIZE,
-						   .size_y = game.map_size.y * CELLSIZE,
+						   .size_x = game.map.size.x * CELLSIZE,
+						   .size_y = game.map.size.y * CELLSIZE,
 						   .pixel_size = 1,
 						   .title = "Cub3d - Yes",
 						   .data = &game,
