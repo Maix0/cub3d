@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:01:06 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/22 13:36:36 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/25 14:08:00 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ t_error blx_initialize(t_run_function func, t_free_function free_fn, t_blx_app d
 	return (NO_ERROR);
 }
 
-// mlx_do_key_autorepeatoff(app.mlx);
 void blx_run(t_blx app)
 {
+	mlx_do_key_autorepeatoff(app.mlx);
 	mlx_hook(app.win, KEYPRESS, KEYPRESSMASK, &blx_key_pressed_handler, &app);
 	mlx_hook(app.win, KEYRELEASE, KEYRELEASEMASK, &blx_key_released_handler, &app);
 	mlx_hook(app.win, DESTROYNOTIFY, NOEVENTMASK, &blx_key_exit_handler, &app);
