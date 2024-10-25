@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   maps.h                                             :+:      :+:    :+:   */
+/*   tile.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 13:12:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/25 13:37:36 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/10/25 13:36:32 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/10/25 13:38:26 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAPS_H
-#define MAPS_H
+#ifndef TILE_H
+#define TILE_H
 
 #include "me/types.h"
 #include "me/vec2/vec2.h"
-#include "app/tile.h"
 
-typedef struct s_map t_map;
-
-struct s_map
+typedef enum e_tile t_tile;
+enum e_tile
 {
-	t_vi2d size;
+	TILE_EMPTY = 0,
+	TILE_SOLID = 1,
+
+	TILE_FLOOR = 1 << 16 | ~TILE_SOLID,
+	TILE_WALL = 1 << 16 | TILE_SOLID,
 };
 
-t_tile get_tile(t_map *map, t_vi2d p);
-void set_tile(t_map *map, t_vi2d p, t_tile tile);
+bool tile_is_solid(t_tile tile);
 
-#endif /* MAPS_H */
+#endif /* TILE_H */
