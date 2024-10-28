@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:55:30 by lgasqui           #+#    #+#             */
-/*   Updated: 2024/10/25 21:56:03 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/28 12:44:18 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ t_error get_bg_colors(t_const_str line, t_color *out)
 		return (ERROR);
 	if (colors.len != 3)
 		return (vec_str_free(colors), ERROR);
-	printf("r = %s; g = %s; b = %s;\n", colors.buffer[0], colors.buffer[1], colors.buffer[2]);
 	if (str_to_u8(colors.buffer[0], 10, &res.r) ||
 		str_to_u8(colors.buffer[1], 10, &res.g) ||
 		str_to_u8(colors.buffer[2], 10, &res.b))

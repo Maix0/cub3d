@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:56:05 by lgasqui           #+#    #+#             */
-/*   Updated: 2024/10/25 21:59:21 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/28 12:40:08 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@
 #include "me/string/string.h"
 #include "me/vec/vec_str.h"
 #include "me/vec2/vec2.h"
+#include <errno.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 t_str get_textures_path(t_const_str line)
 {
@@ -85,7 +87,7 @@ t_error read_map(t_map *data, t_str filename, t_blx *blx)
 	printf("map\n");
 	fd = open_fd(filename, FD_READ, 0, 0);
 	if (fd == NULL)
-		return (cube_error("Unable to open map file"), ERROR);
+		return (cube_error("Unable to open map file: %s", strerror(errno)), ERROR);
 	if (get_map(fd, &map))
 		return (ERROR);
 	i = 0;
