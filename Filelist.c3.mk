@@ -2,6 +2,7 @@ SRC_FILES =                                                                   \
 get_map_data                                                                  \
 get_map_utils                                                                 \
 main                                                                          \
+map_utils                                                                     \
 parse                                                                         \
 utils                                                                         \
 

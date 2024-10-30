@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:56:05 by lgasqui           #+#    #+#             */
-/*   Updated: 2024/10/25 21:59:21 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:05:00 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,5 @@ t_error read_map(t_map *data, t_str filename, t_blx *blx)
 	}
 	if (check_error(data, &map, blx))
 		return (cube_error("Invalid map"));
-	return (close_fd(fd), data->map = map, NO_ERROR);
+	return (close_fd(fd), data->map_notfinal = map, NO_ERROR);
 }

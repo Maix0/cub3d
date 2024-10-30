@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:12:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/25 21:59:41 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/10/30 12:04:43 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "me/types.h"
 #include "me/vec/vec_str.h"
 #include "me/vec2/vec2.h"
+#include "me/vec/vec_tile.h"
 
 typedef struct s_map	   t_map;
 typedef struct s_map_state t_map_state;
@@ -39,7 +40,8 @@ struct s_map_state
 
 struct s_map
 {
-	t_vec_str	map;
+	t_vec_tile	map;
+	t_vec_str	map_notfinal;
 	t_vi2d		size;
 	t_map_state state;
 };
