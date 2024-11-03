@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/30 13:00:46 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/03 20:14:36 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "me/blx/blx_key.h"
 #include "me/mem/mem.h"
 #include "me/printf/printf.h"
+#include "me/str/str.h"
 #include "me/string/string.h"
 #include "me/vec/vec_str.h"
 #include "me/vec/vec_tile.h"
@@ -42,51 +43,67 @@ t_f64 f64_clamp(t_f64 this, t_f64 min, t_f64 max)
 #define CELLSIZE 50
 #define PLAYERSIZE 0.2
 
+#define INC 0.2
+
+bool is_wall_for_player(t_game *game, t_vf2d pos)
+{
+	bool is_wall;
+
+	is_wall = false;
+	// point itself
+	is_wall |= get_tile(&game->map, vi2d(pos.x, pos.y)) & TILE_SOLID;
+
+	// four neighbor points
+	is_wall |= get_tile(&game->map, vi2d(pos.x + INC, pos.y)) & TILE_SOLID;
+	is_wall |= get_tile(&game->map, vi2d(pos.x - INC, pos.y)) & TILE_SOLID;
+	is_wall |= get_tile(&game->map, vi2d(pos.x, pos.y + INC)) & TILE_SOLID;
+	is_wall |= get_tile(&game->map, vi2d(pos.x, pos.y - INC)) & TILE_SOLID;
+
+	// four diagonally neighbor points
+	is_wall |= get_tile(&game->map, vi2d(pos.x + INC, pos.y + INC)) & TILE_SOLID;
+	is_wall |= get_tile(&game->map, vi2d(pos.x + INC, pos.y - INC)) & TILE_SOLID;
+	is_wall |= get_tile(&game->map, vi2d(pos.x - INC, pos.y + INC)) & TILE_SOLID;
+	is_wall |= get_tile(&game->map, vi2d(pos.x - INC, pos.y - INC)) & TILE_SOLID;
+
+	// it basically makes a square of size 2*INC centered around `pos`
+	// meaning that if any point is inside a wall, the point will be considered inside the wall.
+	// this means that we can't get closer than INC to a wall
+	return (is_wall);
+}
+
 void perform_collision(t_blx *ctx, t_game *game)
 {
-	t_tile curr;
-
 	(void)(ctx);
-	curr = get_tile(&game->map, vi2d(game->pos.x + 0.01, game->pos.y));
-	curr |= get_tile(&game->map, vi2d(game->pos.x - 0.01, game->pos.y));
-	curr |= get_tile(&game->map, vi2d(game->pos.x, game->pos.y + 0.01));
-	curr |= get_tile(&game->map, vi2d(game->pos.x, game->pos.y - 0.01));
-	curr |= get_tile(&game->map, vi2d(game->pos.x + 0.01, game->pos.y + 0.01));
-	curr |= get_tile(&game->map, vi2d(game->pos.x + 0.01, game->pos.y - 0.01));
-	curr |= get_tile(&game->map, vi2d(game->pos.x - 0.01, game->pos.y + 0.01));
-	curr |= get_tile(&game->map, vi2d(game->pos.x - 0.01, game->pos.y - 0.01));
-	if (curr & TILE_SOLID)
-	{
-		// should handle collision by moving the player a bit back onto old_pos axis by axis to
-		// allow "sliding" on walls
-		game->pos = game->old_pos;
-	}
+	if (!is_wall_for_player(game, vf2d(game->new_pos.x, game->pos.y)))
+		game->pos.x = game->new_pos.x;
+	if (!is_wall_for_player(game, vf2d(game->pos.x, game->new_pos.y)))
+		game->pos.y = game->new_pos.y;
 }
 
 bool handle_input(t_blx *ctx, t_game *game)
 {
-	game->old_pos = game->pos;
+	game->new_pos = game->pos;
 	if (is_key_held(ctx, KB_Escape))
 		return (true);
 	if (is_key_held(ctx, KB_w) || is_key_held(ctx, KB_Up))
 	{
-		game->pos.x += cos(game->angle) * SPEED * ctx->elapsed;
-		game->pos.y += sin(game->angle) * SPEED * ctx->elapsed;
+		game->new_pos.x += cos(game->angle) * SPEED * ctx->elapsed;
+		game->new_pos.y += sin(game->angle) * SPEED * ctx->elapsed;
 	}
 	if (is_key_held(ctx, KB_s) || is_key_held(ctx, KB_Down))
 	{
-		game->pos.x -= cos(game->angle) * SPEED * ctx->elapsed;
-		game->pos.y -= sin(game->angle) * SPEED * ctx->elapsed;
+		game->new_pos.x -= cos(game->angle) * SPEED * ctx->elapsed;
+		game->new_pos.y -= sin(game->angle) * SPEED * ctx->elapsed;
 	}
 	if (is_key_held(ctx, KB_q))
 	{
-		game->pos.x += sin(game->angle) * SPEED * ctx->elapsed;
-		game->pos.y -= cos(game->angle) * SPEED * ctx->elapsed;
+		game->new_pos.x += sin(game->angle) * SPEED * ctx->elapsed;
+		game->new_pos.y -= cos(game->angle) * SPEED * ctx->elapsed;
 	}
 	if (is_key_held(ctx, KB_e))
 	{
-		game->pos.x -= sin(game->angle) * SPEED * ctx->elapsed;
-		game->pos.y += cos(game->angle) * SPEED * ctx->elapsed;
+		game->new_pos.x -= sin(game->angle) * SPEED * ctx->elapsed;
+		game->new_pos.y += cos(game->angle) * SPEED * ctx->elapsed;
 	}
 	if (is_key_held(ctx, KB_a) || is_key_held(ctx, KB_Left))
 		game->angle -= ROTATE_SPEED * ctx->elapsed;
@@ -122,8 +139,10 @@ void sanitize_input(t_blx *ctx, t_game *game)
 
 void draw_map(t_blx *ctx, t_game *game)
 {
-	t_vi2d tilepos;
-	t_tile tile;
+	t_vi2d	tilepos;
+	t_tile	tile;
+	t_color fill;
+	t_color border;
 
 	tilepos = vi2d(0, 0);
 	while (tilepos.y < game->map.size.y)
@@ -131,9 +150,6 @@ void draw_map(t_blx *ctx, t_game *game)
 		tilepos.x = 0;
 		while (tilepos.x < game->map.size.x)
 		{
-			t_color fill;
-			t_color border;
-
 			tile = get_tile(&game->map, tilepos);
 			if (tile == TILE_EMPTY)
 			{
@@ -183,24 +199,27 @@ bool game_loop(t_blx *ctx)
 		return (true);
 	sanitize_input(ctx, game);
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
+	draw_map(ctx, game);
+
 	// TODO: remove this
 	{
 		str = string_new(1024);
 		snprintf(str.buf, 1024, "x: %f\ny: %f\nangle: %f", game->pos.x, game->pos.y, game->angle);
-		blx_draw_string(ctx, vi2d(0, 0), str.buf, new_color(255, 255, 255));
+		blx_draw_string(ctx, vi2d(0, 120), str.buf, new_color(255, 255, 255));
 		string_free(str);
 	}
-	draw_map(ctx, game);
-
 	draw_player(ctx, game);
 	return (false);
 }
 void game_free(t_blx_app app)
 {
+	t_game *game;
+	game = app.data;
+
+	vec_tile_free(game->map.map);
 	(void)(app);
 }
 
-#include "me/str/str.h"
 void create_test_map(t_game *game)
 {
 	t_vec_str	lines;
@@ -209,25 +228,17 @@ void create_test_map(t_game *game)
 	t_const_str map;
 	t_usize		max_width;
 
-	map = "      1111111      \n"
-		  "      1000001      \n"
-		  "      1000001      \n"
-		  "      1000001      \n"
-		  "      100S001      \n"
-		  "     110000011     \n"
-		  "1111110000000111111\n"
-		  "1000000000000000001\n"
-		  "1000000010100000001\n"
-		  "1000000001000000001\n"
-		  "1000000010100000001\n"
-		  "1000000000000000001\n"
-		  "1111110000000111111\n"
-		  "     110000011     \n"
-		  "      1000001      \n"
-		  "      1000001      \n"
-		  "      1000001      \n"
-		  "      1000001      \n"
-		  "      1111111      \n";
+	map = "   11111   \n"
+		  "   10S01   \n"
+		  "  1100011  \n"
+		  "11100000111\n"
+		  "10001010001\n"
+		  "10000100001\n"
+		  "10001010001\n"
+		  "11100000111\n"
+		  "  1100011  \n"
+		  "   10001   \n"
+		  "   11111   \n";
 	if (str_split(map, "\n", &lines))
 		me_abort("Unable to split temp map");
 	y = 0;
@@ -297,6 +308,7 @@ void create_test_map(t_game *game)
 			vec_tile_push(&game->map.map, TILE_WALL);
 		y++;
 	}
+	vec_str_free(lines);
 	if (player_spawn_count != 1)
 		me_abort("too may spawns");
 }
@@ -319,7 +331,7 @@ int main(int argc, char **argv)
 					   (t_blx_app){
 						   .size_x = game.map.size.x * CELLSIZE,
 						   .size_y = game.map.size.y * CELLSIZE,
-						   .pixel_size = 1,
+						   .pixel_size = 2,
 						   .title = "Cub3d - Yes",
 						   .data = &game,
 					   },

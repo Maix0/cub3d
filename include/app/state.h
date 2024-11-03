@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/30 12:48:22 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/03 20:06:17 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_game t_game;
 struct s_game
 {
 	t_vf2d pos;
-	t_vf2d old_pos;
+	t_vf2d new_pos;
 	t_f64  angle;
 	t_map  map;
 };
