@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/03 20:14:36 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:58:05 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ void create_test_map(t_game *game)
 			else if (tile == '1')
 				vec_tile_push(&game->map.map, TILE_WALL | TILE_SOLID);
 			else if (tile == ' ')
-				vec_tile_push(&game->map.map, TILE_WALL);
+				vec_tile_push(&game->map.map, TILE_FLOOR);
 			else if (tile == 'N')
 			{
 				player_spawn_count++;
