@@ -1,12 +1,16 @@
 SRC_FILES =                                                                   \
-get_map_data                                                                  \
-get_map_utils                                                                 \
 main                                                                          \
-map_utils                                                                     \
-parse                                                                         \
+map/map_manipulate_tile                                                       \
+map/parse_lines                                                               \
+map/read_whole_map                                                            \
 utils                                                                         \
 
 GEN_FILES =                                                                   \
+hashmap/texture_path/texture_path                                             \
+hashmap/texture_path/texture_path_clear                                       \
+hashmap/texture_path/texture_path_clone                                       \
+hashmap/texture_path/texture_path_iter                                        \
+hashmap/texture_path/texture_path_utils                                       \
 vec/tile/tile                                                                 \
 vec/tile/tile_functions2                                                      \
 vec/tile/tile_functions3                                                      \

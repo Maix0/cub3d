@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_utils.c                                        :+:      :+:    :+:   */
+/*   textures.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 12:31:46 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/30 12:33:39 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/11/04 13:56:28 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/11/04 13:57:27 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "app/maps.h"
-#include "app/tile.h"
-#include "me/types.h"
-#include "me/vec/vec_tile.h"
-#include "me/vec2/vec2.h"
+#ifndef TEXTURES_H
+#define TEXTURES_H
 
-t_tile get_tile(t_map *map, t_vi2d pos)
+typedef enum e_texture t_texture;
+
+enum e_texture
 {
-	t_tile *out;
+	TEX_NONE,
+	TEX_NORTH,
+	TEX_SOUTH,
+	TEX_EAST,
+	TEX_WEST,
+};
 
-	out = vec_tile_get(&map->map, (t_usize)(pos.y * map->size.x + pos.x));
-	if (out == NULL)
-		return (TILE_EMPTY);
-	return (*out);
-}
+#endif /* TEXTURES_H */

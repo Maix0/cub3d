@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/04 12:58:05 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:22:53 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ void game_free(t_blx_app app)
 	t_game *game;
 	game = app.data;
 
-	vec_tile_free(game->map.map);
+	vec_tile_free(game->map.inner);
 	(void)(app);
 }
 
@@ -252,7 +252,7 @@ void create_test_map(t_game *game)
 	printf("map.len = %zu\n", lines.len);
 	game->map.size.x = max_width;
 	game->map.size.y = lines.len;
-	game->map.map = vec_tile_new(max_width * lines.len, NULL);
+	game->map.inner = vec_tile_new(max_width * lines.len, NULL);
 	y = 0;
 	t_usize player_spawn_count;
 	player_spawn_count = 0;
@@ -263,18 +263,18 @@ void create_test_map(t_game *game)
 		{
 			char tile = lines.buffer[y][x];
 			if (tile == '0')
-				vec_tile_push(&game->map.map, TILE_FLOOR);
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			else if (tile == '1')
-				vec_tile_push(&game->map.map, TILE_WALL | TILE_SOLID);
+				vec_tile_push(&game->map.inner, TILE_WALL | TILE_SOLID);
 			else if (tile == ' ')
-				vec_tile_push(&game->map.map, TILE_FLOOR);
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			else if (tile == 'N')
 			{
 				player_spawn_count++;
 				game->pos.x = x + 0.5;
 				game->pos.y = y + 0.5;
 				game->angle = -PI / 2;
-				vec_tile_push(&game->map.map, TILE_FLOOR);
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			}
 			else if (tile == 'S')
 			{
@@ -282,7 +282,7 @@ void create_test_map(t_game *game)
 				game->pos.x = x + 0.5;
 				game->pos.y = y + 0.5;
 				game->angle = PI / 2;
-				vec_tile_push(&game->map.map, TILE_FLOOR);
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			}
 			else if (tile == 'W')
 			{
@@ -290,7 +290,7 @@ void create_test_map(t_game *game)
 				game->pos.x = x + 0.5;
 				game->pos.y = y + 0.5;
 				game->angle = PI;
-				vec_tile_push(&game->map.map, TILE_FLOOR);
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			}
 			else if (tile == 'E')
 			{
@@ -298,14 +298,14 @@ void create_test_map(t_game *game)
 				game->pos.x = x + 0.5;
 				game->pos.y = y + 0.5;
 				game->angle = 0;
-				vec_tile_push(&game->map.map, TILE_FLOOR);
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			}
 			else
 				me_abort("invalid map character");
 			x++;
 		}
 		while (x++ < max_width)
-			vec_tile_push(&game->map.map, TILE_WALL);
+			vec_tile_push(&game->map.inner, TILE_WALL);
 		y++;
 	}
 	vec_str_free(lines);
@@ -319,13 +319,10 @@ int main(int argc, char **argv)
 	t_blx  blx;
 
 	(void)(&argv[argc]);
-	// if (argc != 2)
-	//	return (cube_error("Usage: %s <map>", argv[0]), 1);
-	// if (map_format(argv[1]))
-	//	return (1);
+	if (argc != 2)
+		return (cube_error("Usage: %s <map>", argv[0]), 1);
 	mem_set_zero(&game, sizeof(game));
 	mem_set_zero(&blx, sizeof(blx));
-	create_test_map(&game);
 	printf("game->map.size = (%i, %i);\n", game.map.size.x, game.map.size.y);
 	if (blx_initialize(game_loop, game_free,
 					   (t_blx_app){
@@ -337,8 +334,6 @@ int main(int argc, char **argv)
 					   },
 					   &blx))
 		exit(1);
-	// if (read_map(&game.map, argv[1], &blx))
-	//	return (blx_free(blx), 1);
 	blx_run(blx);
 	return (0);
 }

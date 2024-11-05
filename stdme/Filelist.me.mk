@@ -107,6 +107,7 @@ printf/printf                                                                 \
 printf/printf_fd                                                              \
 printf/printf_str                                                             \
 printf/vprintf                                                                \
+str/str_charset                                                               \
 str/str_clone                                                                 \
 str/str_compare                                                               \
 str/str_find_chr                                                              \
@@ -120,6 +121,7 @@ str/str_len                                                                   \
 str/str_map                                                                   \
 str/str_n_compare                                                             \
 str/str_n_find_str                                                            \
+str/str_prefixes_suffixes                                                     \
 str/str_split                                                                 \
 str/str_substring                                                             \
 str/str_trim                                                                  \
