@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:36:32 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/25 13:38:26 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/05 14:14:57 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ enum e_tile
 	TILE_EMPTY = 0,
 	TILE_SOLID = 1,
 
-	TILE_FLOOR = 1 << 16 | ~TILE_SOLID,
+	TILE_FLOOR = 1 << 16,
 	TILE_WALL = 1 << 16 | TILE_SOLID,
 };
 

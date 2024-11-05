@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/03 20:06:17 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/05 14:50:19 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "me/types.h"
 #include "me/vec2/vec2.h"
 
-t_error cube_error(t_const_str fmt, ...);
+void cube_error(t_const_str fmt, ...);
 
 typedef struct s_game t_game;
 
@@ -28,5 +28,7 @@ struct s_game
 	t_f64  angle;
 	t_map  map;
 };
+
+t_error parse_map(t_game *game, t_const_str filename);
 
 #endif /* STATE_H */

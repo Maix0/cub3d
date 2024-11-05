@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 12:19:31 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:14:23 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,12 @@ t_error _extract_color(t_map_info *info, t_u8 col_type, t_str *line)
 	// this could be in its own function and just return error/whatever since print the same message
 	// in case of error
 	// whatever when doing the norminette pass
-	if (s.len != 3)
+	if (split.len != 3)
 		return (cube_error("Invalid format for color: %s", s.buf), string_free(s),
 				vec_str_free(split), ERROR);
+
+	slot->a = 0x0;
+	// Extract colors
 	if (str_to_u8(split.buffer[0], 10, &slot->r))
 		return (cube_error("Invalid format for color: %s", s.buf), string_free(s),
 				vec_str_free(split), ERROR);
@@ -123,8 +126,6 @@ t_error _extract_path(t_map_info *info, t_texture tex, t_str *line)
 
 t_error get_mapinfo(t_vec_str *lines, t_map_info *out, t_usize *mstart_idx)
 {
-	(void)(lines);
-	(void)(out);
 	t_usize i;
 
 	i = 0;
@@ -151,4 +152,138 @@ t_error get_mapinfo(t_vec_str *lines, t_map_info *out, t_usize *mstart_idx)
 	}
 	// we arrived here without any map, just information about the textures/colors
 	return (cube_error("No map data found"), ERROR);
+}
+
+t_f64 _get_angle(char tile)
+{
+	if (tile == 'E')
+		return (0);
+	if (tile == 'W')
+		return (PI);
+	if (tile == 'N')
+		return (-PI / 2.0);
+	if (tile == 'S')
+		return (PI / 2.0);
+	return (0);
+}
+
+t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
+{
+	t_usize y;
+	t_usize x;
+	t_usize max_width;
+	t_usize sp_count;
+	char	tile;
+
+	y = map_start;
+	max_width = 0;
+	while (y < lines.len)
+	{
+		if (str_len(lines.buffer[y]) > max_width)
+			max_width = str_len(lines.buffer[y]);
+		y++;
+	}
+	game->map.size.x = max_width;
+	game->map.size.y = lines.len - map_start;
+	game->map.inner = vec_tile_new(max_width * lines.len, NULL);
+	y = map_start;
+	sp_count = 0;
+	while (y < lines.len)
+	{
+		x = 0;
+		while (lines.buffer[y][x] != 0)
+		{
+			tile = lines.buffer[y][x];
+			if (tile == '0')
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
+			else if (tile == '1')
+				vec_tile_push(&game->map.inner, TILE_WALL);
+			else if (tile == ' ')
+				vec_tile_push(&game->map.inner, TILE_EMPTY | TILE_SOLID);
+			else if (tile == 'N' || tile == 'S' || tile == 'E' || tile == 'W')
+			{
+				sp_count++;
+				game->pos = vf2d(x + 0.5, y - map_start + 0.5);
+				game->angle = _get_angle(tile);
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
+			}
+			else
+				return (cube_error("Invalid map character: '%c'(%#02x)", tile, tile), ERROR);
+			x++;
+		}
+		while (x++ < max_width)
+			vec_tile_push(&game->map.inner, TILE_EMPTY | TILE_SOLID);
+		y++;
+	}
+	vec_str_free(lines);
+	if (sp_count != 1)
+		return (cube_error("Invalid spawn count (%zu)", sp_count), ERROR);
+	return (NO_ERROR);
+}
+
+t_error read_whole_map(t_fd *file, t_vec_str *out);
+void	free_texture_pair(struct s_kv_texture_path pair)
+{
+	string_free(pair.val);
+}
+
+void hash_texture(t_hasher *hasher, t_texture *texture)
+{
+	hasher_write_i32(hasher, *texture);
+}
+
+bool cmp_texture(t_texture *lhs, t_texture *rhs)
+{
+	return (*lhs == *rhs);
+}
+
+bool map_contains_all_metadata(t_game *game)
+{
+	t_texture tex;
+	if (!(game->map.info.color_bitfield & FLOOR_COLOR))
+		return (cube_error("Missing Floor color"), false);
+	if (!(game->map.info.color_bitfield & CEIL__COLOR))
+		return (cube_error("Missing Ceiling color"), false);
+	tex = TEX_EAST;
+	if (hmap_texture_path_get(game->map.info.textures_path, &tex) == NULL)
+		return (cube_error("Missing East Texture"), false);
+	tex = TEX_WEST;
+	if (hmap_texture_path_get(game->map.info.textures_path, &tex) == NULL)
+		return (cube_error("Missing West Texture"), false);
+	tex = TEX_NORTH;
+	if (hmap_texture_path_get(game->map.info.textures_path, &tex) == NULL)
+		return (cube_error("Missing North Texture"), false);
+	tex = TEX_SOUTH;
+	if (hmap_texture_path_get(game->map.info.textures_path, &tex) == NULL)
+		return (cube_error("Missing South Texture"), false);
+	return (true);
+}
+
+t_error parse_map(t_game *game, t_const_str filename)
+{
+	t_fd	 *file;
+	t_vec_str lines;
+	t_usize	  map_idx;
+
+	if (game == NULL || filename == NULL)
+		return (ERROR);
+	if (!str_endwith(filename, ".cub"))
+		return (cube_error("Map isn't .cub file"), ERROR);
+
+	file = open_fd((t_str)filename, FD_READ, 0, 0);
+	if (file == NULL)
+		return (cube_error("Failed to open map file"), ERROR);
+	if (read_whole_map(file, &lines))
+		return (cube_error("Failed to read whole map"), ERROR);
+	close_fd(file);
+	game->map.info.textures_path =
+		hmap_texture_path_new(hash_texture, cmp_texture, free_texture_pair);
+
+	if (get_mapinfo(&lines, &game->map.info, &map_idx))
+		return (hmap_texture_path_free(game->map.info.textures_path), vec_str_free(lines), ERROR);
+	if (parse_map_inner(game, lines, map_idx))
+		return (ERROR);
+	if (!map_contains_all_metadata(game))
+		return (ERROR);
+	return (NO_ERROR);
 }

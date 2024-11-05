@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/04 13:22:53 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/05 15:08:20 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-t_f64 f64_clamp(t_f64 this, t_f64 min, t_f64 max)
-{
-	if (this != this)
-		return (this);
-	if (this > max)
-		return (max);
-	if (this < min)
-		return (min);
-	return (this);
-}
-
-#define PI 3.14159265358979323846264338327950288
 #define ROTATE_SPEED (PI * 2)
 #define SPEED 4
 #define CELLSIZE 50
@@ -133,8 +121,6 @@ void sanitize_input(t_blx *ctx, t_game *game)
 		game->angle -= 2.0 * PI;
 	while (game->angle < -PI)
 		game->angle += 2.0 * PI;
-	game->pos.x = f64_clamp(game->pos.x, PLAYERSIZE, (t_f64)game->map.size.x - PLAYERSIZE);
-	game->pos.y = f64_clamp(game->pos.y, PLAYERSIZE, (t_f64)game->map.size.y - PLAYERSIZE);
 }
 
 void draw_map(t_blx *ctx, t_game *game)
@@ -158,17 +144,19 @@ void draw_map(t_blx *ctx, t_game *game)
 			}
 			else if (tile == (TILE_FLOOR))
 			{
-				fill = new_color(0x1E, 0x1E, 0x1E);
-				border = new_color(0xE1, 0xE1, 0xE1);
-			}
-			else if (tile == (TILE_WALL | TILE_SOLID))
-			{
-				fill = new_color(127, 127, 127);
+				//fill = new_color(0x1E, 0x1E, 0x1E);
+				fill = game->map.info.floor_color;
 				border = new_color(0xE1, 0xE1, 0xE1);
 			}
 			else if (tile == (TILE_WALL))
 			{
-				fill = new_color(0x1E, 0x1E, 0x1E);
+				//fill = new_color(127, 127, 127);
+				fill = game->map.info.ceiling_color;
+				border = new_color(0xE1, 0xE1, 0xE1);
+			}
+			else if (tile == (TILE_SOLID))
+			{
+				fill = new_color(0x00, 0x00, 0x00);
 				border = new_color(0xE1, 0xE1, 0xE1);
 			}
 			else
@@ -204,7 +192,8 @@ bool game_loop(t_blx *ctx)
 	// TODO: remove this
 	{
 		str = string_new(1024);
-		snprintf(str.buf, 1024, "x: %f\ny: %f\nangle: %f", game->pos.x, game->pos.y, game->angle);
+		snprintf(str.buf, 1024, "FPS: %02.2f\nx: %f\ny: %f\nangle: %f", 1. / ctx->elapsed,
+				 game->pos.x, game->pos.y, game->angle);
 		blx_draw_string(ctx, vi2d(0, 120), str.buf, new_color(255, 255, 255));
 		string_free(str);
 	}
@@ -220,99 +209,6 @@ void game_free(t_blx_app app)
 	(void)(app);
 }
 
-void create_test_map(t_game *game)
-{
-	t_vec_str	lines;
-	t_usize		y;
-	t_usize		x;
-	t_const_str map;
-	t_usize		max_width;
-
-	map = "   11111   \n"
-		  "   10S01   \n"
-		  "  1100011  \n"
-		  "11100000111\n"
-		  "10001010001\n"
-		  "10000100001\n"
-		  "10001010001\n"
-		  "11100000111\n"
-		  "  1100011  \n"
-		  "   10001   \n"
-		  "   11111   \n";
-	if (str_split(map, "\n", &lines))
-		me_abort("Unable to split temp map");
-	y = 0;
-	max_width = 0;
-	while (y < lines.len)
-	{
-		if (str_len(lines.buffer[y]) > max_width)
-			max_width = str_len(lines.buffer[y]);
-		y++;
-	}
-	printf("map.len = %zu\n", lines.len);
-	game->map.size.x = max_width;
-	game->map.size.y = lines.len;
-	game->map.inner = vec_tile_new(max_width * lines.len, NULL);
-	y = 0;
-	t_usize player_spawn_count;
-	player_spawn_count = 0;
-	while (y < lines.len)
-	{
-		x = 0;
-		while (lines.buffer[y][x] != 0)
-		{
-			char tile = lines.buffer[y][x];
-			if (tile == '0')
-				vec_tile_push(&game->map.inner, TILE_FLOOR);
-			else if (tile == '1')
-				vec_tile_push(&game->map.inner, TILE_WALL | TILE_SOLID);
-			else if (tile == ' ')
-				vec_tile_push(&game->map.inner, TILE_FLOOR);
-			else if (tile == 'N')
-			{
-				player_spawn_count++;
-				game->pos.x = x + 0.5;
-				game->pos.y = y + 0.5;
-				game->angle = -PI / 2;
-				vec_tile_push(&game->map.inner, TILE_FLOOR);
-			}
-			else if (tile == 'S')
-			{
-				player_spawn_count++;
-				game->pos.x = x + 0.5;
-				game->pos.y = y + 0.5;
-				game->angle = PI / 2;
-				vec_tile_push(&game->map.inner, TILE_FLOOR);
-			}
-			else if (tile == 'W')
-			{
-				player_spawn_count++;
-				game->pos.x = x + 0.5;
-				game->pos.y = y + 0.5;
-				game->angle = PI;
-				vec_tile_push(&game->map.inner, TILE_FLOOR);
-			}
-			else if (tile == 'E')
-			{
-				player_spawn_count++;
-				game->pos.x = x + 0.5;
-				game->pos.y = y + 0.5;
-				game->angle = 0;
-				vec_tile_push(&game->map.inner, TILE_FLOOR);
-			}
-			else
-				me_abort("invalid map character");
-			x++;
-		}
-		while (x++ < max_width)
-			vec_tile_push(&game->map.inner, TILE_WALL);
-		y++;
-	}
-	vec_str_free(lines);
-	if (player_spawn_count != 1)
-		me_abort("too may spawns");
-}
-
 int main(int argc, char **argv)
 {
 	t_game game;
@@ -323,17 +219,19 @@ int main(int argc, char **argv)
 		return (cube_error("Usage: %s <map>", argv[0]), 1);
 	mem_set_zero(&game, sizeof(game));
 	mem_set_zero(&blx, sizeof(blx));
+	if (parse_map(&game, argv[1]))
+		return (1);
 	printf("game->map.size = (%i, %i);\n", game.map.size.x, game.map.size.y);
 	if (blx_initialize(game_loop, game_free,
 					   (t_blx_app){
 						   .size_x = game.map.size.x * CELLSIZE,
 						   .size_y = game.map.size.y * CELLSIZE,
-						   .pixel_size = 2,
+						   .pixel_size = 1,
 						   .title = "Cub3d - Yes",
 						   .data = &game,
 					   },
 					   &blx))
-		exit(1);
+		return (cube_error("Failed to init mlx"), 1);
 	blx_run(blx);
 	return (0);
 }

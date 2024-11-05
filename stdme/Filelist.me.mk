@@ -78,6 +78,7 @@ mem/mem_move                                                                  \
 mem/mem_realloc                                                               \
 mem/mem_set                                                                   \
 mem/mem_set_zero                                                              \
+num/f64/f64_clamp                                                             \
 num/u16/rotate                                                                \
 num/u32/rotate                                                                \
 num/u64/from_bytes                                                            \

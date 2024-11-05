@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   f64.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 21:19:50 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:49:43 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/11/05 14:04:25 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/11/05 14:06:52 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "me/fs/fs.h"
-#include "me/printf/printf.h"
-#include <stdarg.h>
+#ifndef F64_H
+#define F64_H
 
-void cube_error(t_const_str fmt, ...)
-{
-	va_list args;
+#include "me/types.h"
 
-	va_start(args, fmt);
-	put_string_fd(get_stderr(), "Error:\n");
-	me_veprintf(fmt, &args);
-	put_string_fd(get_stderr(), "\n");
-	va_end(args);
-}
+
+/// @brief clamp a f64 to be between a minimun and maximum (inclusive)
+/// @param min the minimun bound
+/// @param value the value to clamp
+/// @param max value the maximum
+/// @note if any value is NaN, NaN is returned
+t_f64 f64_clamp(t_f64 min, t_f64 value, t_f64 max);
+
+#endif /* F64_H */
