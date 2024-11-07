@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 14:28:49 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 22:07:36 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,10 +205,6 @@ bool hit_x_y(t_ray *ray)
 	double distance_x = fmin(x, 1 - x);
 	double distance_y = fmin(y, 1 - y);
 
-	printf("x:[%f]\n", x);
-	printf("y:[%f]\n", y);
-	printf("d:[%f]\n", ray->direction);
-
 	if (distance_x > distance_y)
 	{
 		if (ray->direction > 0)
@@ -345,8 +341,8 @@ int main(int argc, char **argv)
 					   },
 					   &blx))
 		return (cube_error("Failed to init mlx"), 1);
-	// if (fetch_textures(&game))
-	//	return (1);
+	 if (fetch_textures(&blx))
+		return (game_free(&game), 1);
 	blx_run(blx);
 	return (0);
 }
