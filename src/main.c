@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 14:08:55 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:10:23 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -344,8 +344,8 @@ int main(int argc, char **argv)
 					   },
 					   &blx))
 		return (cube_error("Failed to init mlx"), 1);
-	if (fetch_textures(&game))
-		return (1);
+	//if (fetch_textures(&game))
+	//	return (1);
 	blx_run(blx);
 	return (0);
 }
