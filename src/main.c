@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/04 12:58:05 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:40:43 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+// Pour empecher le player de sortir de la map
 t_f64 f64_clamp(t_f64 this, t_f64 min, t_f64 max)
 {
 	if (this != this)
@@ -189,6 +191,32 @@ void draw_map(t_blx *ctx, t_game *game)
 	}
 }
 
+t_ray my_ray (t_game *game, double direction)
+{
+	t_ray ray;
+	double mx;
+	double my;
+	
+	ray.ray_len = 0;
+	mx = 0; //cos
+	my = 0; //sin
+
+	while( ray.ray_len < 50)
+	{
+		ray.ray_len += 0.00001;
+		mx = cos(direction) * ray.ray_len + game->pos.x;
+		my = sin(direction) * ray.ray_len + game->pos.y;
+		//quelle tile je touche, len du ray, et sud est , 
+		if (get_tile(&game->map, vi2d(mx, my)) & TILE_SOLID)
+		{
+			printf("hit wall at [ray = %f] %f %f\n",ray,  mx, my);
+			break;
+		}
+
+	}
+	return(ray);	
+}
+
 bool game_loop(t_blx *ctx)
 {
 	t_game	*game;
@@ -201,14 +229,17 @@ bool game_loop(t_blx *ctx)
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
 	draw_map(ctx, game);
 
+	t_ray ray = my_ray(game, game->angle);
 	// TODO: remove this
 	{
 		str = string_new(1024);
-		snprintf(str.buf, 1024, "x: %f\ny: %f\nangle: %f", game->pos.x, game->pos.y, game->angle);
+		snprintf(str.buf, 1024, "x: %f\ny: %f\nangle: %f\nray: %f", game->pos.x, game->pos.y, game->angle, ray.ray_len);
 		blx_draw_string(ctx, vi2d(0, 120), str.buf, new_color(255, 255, 255));
 		string_free(str);
 	}
 	draw_player(ctx, game);
+	t_vi2d endline = vi2d(cos(game->angle) * CELLSIZE * ray.ray_len + game->pos.x * CELLSIZE, sin(game->angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
+	blx_draw_line(ctx, vi2d(game->pos.x* CELLSIZE, game->pos.y* CELLSIZE), endline, new_color(120,255,0));
 	return (false);
 }
 void game_free(t_blx_app app)
@@ -313,6 +344,13 @@ void create_test_map(t_game *game)
 		me_abort("too may spawns");
 }
 
+void printdata (t_game *game)
+{
+	printf("PLAYER X = [%f]\n", game->pos.x);
+	printf("PLAYER Y = [%f]\n", game->pos.y);
+	printf("DIRECTION = [%f]\n", game->angle * 180/PI);
+}
+
 int main(int argc, char **argv)
 {
 	t_game game;
@@ -326,12 +364,13 @@ int main(int argc, char **argv)
 	mem_set_zero(&game, sizeof(game));
 	mem_set_zero(&blx, sizeof(blx));
 	create_test_map(&game);
+	printdata(&game);
 	printf("game->map.size = (%i, %i);\n", game.map.size.x, game.map.size.y);
 	if (blx_initialize(game_loop, game_free,
 					   (t_blx_app){
 						   .size_x = game.map.size.x * CELLSIZE,
 						   .size_y = game.map.size.y * CELLSIZE,
-						   .pixel_size = 2,
+						   .pixel_size = 1,
 						   .title = "Cub3d - Yes",
 						   .data = &game,
 					   },
