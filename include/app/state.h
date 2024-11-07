@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 12:42:52 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/07 13:45:22 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define STATE_H
 
 # define FOV 90
+# define NUM_RAYS ctx->app.size_x
 #include "app/maps.h"
 #include "me/types.h"
 #include "me/vec2/vec2.h"
@@ -39,8 +40,10 @@ struct s_ray
 	int		nord;
 	int		west;
 	bool	hit_wall;
-	double	angle; // en degre
-		
+	double 	x;
+	double 	y;
+	double	direction; // en degre
+	t_tile tile;
 };
 
 #endif /* STATE_H */

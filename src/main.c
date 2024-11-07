@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/04 14:40:43 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/07 13:46:43 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,30 +191,93 @@ void draw_map(t_blx *ctx, t_game *game)
 	}
 }
 
+bool hit_x_y(t_ray *ray)
+{
+	double int_y;
+	double int_x;
+	double x;
+	double y;
+	
+	ray->nord = 0;
+	ray->sud = 0;
+	ray->est = 0;
+	ray->west = 0;
+	x = modf(ray->x, &int_x);
+	y = modf(ray->y, &int_y);
+	
+	double distance_x = fmin(x, 1 - x);
+    double distance_y = fmin(y, 1 - y);
+	
+	printf("x:[%f]\n",  x);
+	printf("y:[%f]\n",  y);
+	printf("d:[%f]\n",  ray->direction);
+	
+	if (distance_x > distance_y)
+	{
+       if(ray->direction > 0)
+			ray->sud = 1;
+		else
+			ray->nord = 1;  
+    }
+	else
+	{
+        if (x >= 0 && x<= 0.5)
+			ray->est = 1;
+
+		else
+			ray->west = 1;
+    }
+	
+ return false;
+}
+
 t_ray my_ray (t_game *game, double direction)
 {
 	t_ray ray;
-	double mx;
-	double my;
 	
 	ray.ray_len = 0;
-	mx = 0; //cos
-	my = 0; //sin
+	ray.x = 0; //cos
+	ray.y = 0; //sin
+	ray.direction = direction;
 
 	while( ray.ray_len < 50)
 	{
-		ray.ray_len += 0.00001;
-		mx = cos(direction) * ray.ray_len + game->pos.x;
-		my = sin(direction) * ray.ray_len + game->pos.y;
+		ray.ray_len += 0.01;
+		ray.x = cos(direction) * ray.ray_len + game->pos.x;
+		ray.y = sin(direction) * ray.ray_len + game->pos.y;
 		//quelle tile je touche, len du ray, et sud est , 
-		if (get_tile(&game->map, vi2d(mx, my)) & TILE_SOLID)
+		if (get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_SOLID)
 		{
-			printf("hit wall at [ray = %f] %f %f\n",ray,  mx, my);
+			ray.tile = get_tile(&game->map, vi2d(ray.x, ray.y));
+			hit_x_y(&ray);
+			//printf("hit wall at [ray = %f] %f %f\n",ray,  mx, my);
 			break;
 		}
 
 	}
 	return(ray);	
+}
+
+void cast_rays(t_blx *ctx, t_game *game)
+{
+    double start_angle = game->angle - (FOV * PI / 180.0) / 2;
+    double angle_step = (FOV * PI / 180.0) / NUM_RAYS;
+    
+    for (t_u32 i = 0; i < NUM_RAYS; i++) {
+        double ray_angle = start_angle + i * angle_step;
+        t_ray ray = my_ray(game, ray_angle);
+
+        t_vi2d ray_end = vi2d(
+            cos(ray_angle) * ray.ray_len * CELLSIZE + game->pos.x * CELLSIZE,
+            sin(ray_angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE
+        );
+
+        blx_draw_line(ctx, 
+            vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE), 
+            ray_end, 
+            new_color(255, 0, 0)
+        );
+    }
 }
 
 bool game_loop(t_blx *ctx)
@@ -229,6 +292,7 @@ bool game_loop(t_blx *ctx)
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
 	draw_map(ctx, game);
 
+	cast_rays(ctx, game); 
 	t_ray ray = my_ray(game, game->angle);
 	// TODO: remove this
 	{
