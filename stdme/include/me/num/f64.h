@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tile.h                                             :+:      :+:    :+:   */
+/*   f64.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 13:36:32 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:14:57 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/11/05 14:04:25 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/11/05 14:06:52 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TILE_H
-#define TILE_H
+#ifndef F64_H
+#define F64_H
 
 #include "me/types.h"
-#include "me/vec2/vec2.h"
 
-typedef enum e_tile t_tile;
-enum e_tile
-{
-	TILE_EMPTY = 0,
-	TILE_SOLID = 1,
 
-	TILE_FLOOR = 1 << 16,
-	TILE_WALL = 1 << 16 | TILE_SOLID,
-};
+/// @brief clamp a f64 to be between a minimun and maximum (inclusive)
+/// @param min the minimun bound
+/// @param value the value to clamp
+/// @param max value the maximum
+/// @note if any value is NaN, NaN is returned
+t_f64 f64_clamp(t_f64 min, t_f64 value, t_f64 max);
 
-bool tile_is_solid(t_tile tile);
-
-#endif /* TILE_H */
+#endif /* F64_H */

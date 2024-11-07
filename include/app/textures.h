@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tile.h                                             :+:      :+:    :+:   */
+/*   textures.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 13:36:32 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:14:57 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/11/04 13:56:28 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/11/05 14:44:09 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TILE_H
-#define TILE_H
+#ifndef TEXTURES_H
+#define TEXTURES_H
 
 #include "me/types.h"
-#include "me/vec2/vec2.h"
+#include "me/hash/hasher.h"
 
-typedef enum e_tile t_tile;
-enum e_tile
+typedef enum e_texture t_texture;
+
+enum e_texture
 {
-	TILE_EMPTY = 0,
-	TILE_SOLID = 1,
-
-	TILE_FLOOR = 1 << 16,
-	TILE_WALL = 1 << 16 | TILE_SOLID,
+	TEX_NONE,
+	TEX_NORTH,
+	TEX_SOUTH,
+	TEX_EAST,
+	TEX_WEST,
 };
 
-bool tile_is_solid(t_tile tile);
+void	hash_texture(t_hasher *hasher, t_texture *texture);
+bool	cmp_texture(t_texture *lhs, t_texture *rhs);
 
-#endif /* TILE_H */
+#endif /* TEXTURES_H */

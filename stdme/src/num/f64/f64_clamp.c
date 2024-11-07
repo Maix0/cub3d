@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tile.h                                             :+:      :+:    :+:   */
+/*   f64_clamp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 13:36:32 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:14:57 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/11/05 14:03:59 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/11/05 14:09:40 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TILE_H
-#define TILE_H
+#include "me/num/f64.h"
 
-#include "me/types.h"
-#include "me/vec2/vec2.h"
-
-typedef enum e_tile t_tile;
-enum e_tile
+t_f64 f64_clamp(t_f64 min, t_f64 value, t_f64 max)
 {
-	TILE_EMPTY = 0,
-	TILE_SOLID = 1,
-
-	TILE_FLOOR = 1 << 16,
-	TILE_WALL = 1 << 16 | TILE_SOLID,
-};
-
-bool tile_is_solid(t_tile tile);
-
-#endif /* TILE_H */
+	if (min != min || value != value || max != max)
+		return (0. / 0.);
+	if (min > value)
+		return (min);
+	if (value > max)
+		return (max);
+	return (value);
+}

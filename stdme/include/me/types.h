@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 14:31:12 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:12 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/05 14:25:55 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@
 /// @def signal that no error occured
 #  define BONUS 0
 # endif
+
+# ifdef PI
+#  undef PI
+# endif
+
+#define PI 3.14159265358979323846264338327950288
 
 /// @brief A string, null terminated
 typedef char		*t_str;

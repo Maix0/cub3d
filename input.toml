@@ -28,20 +28,6 @@ replace.C__TYPEHEADER__ = "header_include"
 replace.C__PREFIX__ = "prefix"
 replace.C__PREFIXUP__ = "prefix"
 
-[definition.str_to_num]
-headers = []
-sources = [
-	"stdme/generic_sources/src/convert/str_to_C__PREFIX__.c__TEMPLATE__",
-	"stdme/generic_sources/src/convert/str_to_C__PREFIX___utils.c__TEMPLATE__",
-]
-replace.C__TYPE__ = "type"
-replace.C__UNSIGNED_TYPE__ = "type"
-replace.C__PREFIX__ = "prefix"
-replace.C__MAX__ = "value"
-replace.C__MIN__ = "value"
-replace.C__ZERO__ = "value"
-replace.C__SIGNED_TYPE__ = "bool"
-
 [[create.vec]]
 sources_output = "src/vec/C__PREFIX__/"
 headers_output = "include/me/vec/"
@@ -49,3 +35,27 @@ replace.C__TYPENAME__ = "t_tile"
 replace.C__TYPEHEADER__ = '#include "app/tile.h"'
 replace.C__PREFIX__ = "tile"
 replace.C__PREFIXUP__ = "TILE"
+
+[[create.hashmap]]
+sources_output = "src/hashmap/C__PREFIX__/"
+headers_output = "include/me/hashmap/"
+replace.C__VALTYPE__ = "t_string"
+replace.C__KEYTYPE__ = "t_texture"
+replace.C__PREFIX__ = "texture_path"
+replace.C__PREFIXUP__ = "TEXTURE_PATH"
+replace.C__TYPEHEADER__ = '''
+#include "app/textures.h"
+#include "me/string/string.h"
+'''
+
+[[create.hashmap]]
+sources_output = "src/hashmap/C__PREFIX__/"
+headers_output = "include/me/hashmap/"
+replace.C__VALTYPE__ = "t_sprite"
+replace.C__KEYTYPE__ = "t_texture"
+replace.C__PREFIX__ = "texture"
+replace.C__PREFIXUP__ = "TEXTURE"
+replace.C__TYPEHEADER__ = '''
+#include "app/textures.h"
+#include "me/blx/sprite.h"
+'''

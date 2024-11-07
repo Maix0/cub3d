@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:12:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/30 12:04:43 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/05 14:48:38 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,51 +16,34 @@
 #include "app/tile.h"
 #include "me/blx/blx.h"
 #include "me/fs/fs.h"
+#include "me/hashmap/hashmap_texture_path.h"
 #include "me/types.h"
 #include "me/vec/vec_str.h"
-#include "me/vec2/vec2.h"
 #include "me/vec/vec_tile.h"
+#include "me/vec2/vec2.h"
 
-typedef struct s_map	   t_map;
-typedef struct s_map_state t_map_state;
+typedef struct s_map	  t_map;
+typedef struct s_map_info t_map_info;
 
-struct s_map_state
+#define FLOOR_COLOR 0b0000010
+#define CEIL__COLOR 0b0000001
+
+struct s_map_info
 {
-	t_sprite no;
-	t_sprite so;
-	t_sprite we;
-	t_sprite ea;
-	t_str	 no_text;
-	t_str	 so_text;
-	t_str	 we_text;
-	t_str	 ea_text;
-	t_color	 floor_colors;
-	t_color	 ceiling_colors;
+	t_u8					color_bitfield;
+	t_hashmap_texture_path *textures_path;
+	t_color					floor_color;
+	t_color					ceiling_color;
 };
 
 struct s_map
 {
-	t_vec_tile	map;
-	t_vec_str	map_notfinal;
-	t_vi2d		size;
-	t_map_state state;
+	t_vec_tile inner;
+	t_vi2d	   size;
+	t_map_info info;
 };
 
 t_tile get_tile(t_map *map, t_vi2d p);
 void   set_tile(t_map *map, t_vi2d p, t_tile tile);
-
-// TRUC DE LOUVE //
-bool	isempty(t_str line);
-bool	map_begin(t_const_str line);
-bool	map_charset(char c);
-t_error check_error(t_map *data, t_vec_str *map, t_blx *blx);
-t_error check_textures(t_map *data, t_blx *blx);
-t_error get_bg_colors(t_const_str line, t_color *out);
-t_error get_map(t_fd *fd, t_vec_str *out);
-t_error map_format(t_str arg);
-t_error parse_line(t_map *data, t_str line);
-t_error valid_map(t_vec_str *map);
-t_error read_map(t_map *data, t_str filename, t_blx *blx);
-t_str	get_textures_path(t_const_str line);
 
 #endif /* MAPS_H */

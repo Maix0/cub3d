@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tile.h                                             :+:      :+:    :+:   */
+/*   str_charset.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 13:36:32 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:14:57 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/11/05 12:12:24 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/11/05 15:04:07 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TILE_H
-#define TILE_H
-
+#include "me/str/str.h"
 #include "me/types.h"
-#include "me/vec2/vec2.h"
 
-typedef enum e_tile t_tile;
-enum e_tile
+bool str_is_charset(t_const_str self, t_const_str charset)
 {
-	TILE_EMPTY = 0,
-	TILE_SOLID = 1,
+	t_usize i;
 
-	TILE_FLOOR = 1 << 16,
-	TILE_WALL = 1 << 16 | TILE_SOLID,
-};
-
-bool tile_is_solid(t_tile tile);
-
-#endif /* TILE_H */
+	if (self == NULL || charset == NULL)
+		return (false);
+	i = 0;
+	while (self[i] != '\0')
+	{
+		if (str_find_chr(charset, self[i]) == NULL)
+			return (false);
+		i++;
+	}
+	return (true);
+}

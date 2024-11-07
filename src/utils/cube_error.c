@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tile.h                                             :+:      :+:    :+:   */
+/*   cube_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 13:36:32 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:14:57 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/10/25 21:19:50 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/11/07 12:44:19 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TILE_H
-#define TILE_H
+#include "me/fs/fs.h"
+#include "me/printf/printf.h"
+#include <stdarg.h>
 
-#include "me/types.h"
-#include "me/vec2/vec2.h"
-
-typedef enum e_tile t_tile;
-enum e_tile
+void	cube_error(t_const_str fmt, ...)
 {
-	TILE_EMPTY = 0,
-	TILE_SOLID = 1,
+	va_list	args;
 
-	TILE_FLOOR = 1 << 16,
-	TILE_WALL = 1 << 16 | TILE_SOLID,
-};
-
-bool tile_is_solid(t_tile tile);
-
-#endif /* TILE_H */
+	va_start(args, fmt);
+	put_string_fd(get_stderr(), "Error:\n");
+	me_veprintf(fmt, &args);
+	put_string_fd(get_stderr(), "\n");
+	va_end(args);
+}
