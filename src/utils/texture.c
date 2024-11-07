@@ -1,26 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 21:19:50 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:49:43 by maiboyer         ###   ########.fr       */
+/*   Created: 2024/11/07 12:39:58 by maiboyer          #+#    #+#             */
+/*   Updated: 2024/11/07 12:41:02 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "me/fs/fs.h"
-#include "me/printf/printf.h"
-#include <stdarg.h>
+#include "me/types.h"
+#include "me/hash/hasher.h"
+#include "me/hashmap/hashmap_texture_path.h"
 
-void cube_error(t_const_str fmt, ...)
+void	free_texture_path_pair(struct s_kv_texture_path pair)
 {
-	va_list args;
+	string_free(pair.val);
+}
 
-	va_start(args, fmt);
-	put_string_fd(get_stderr(), "Error:\n");
-	me_veprintf(fmt, &args);
-	put_string_fd(get_stderr(), "\n");
-	va_end(args);
+void	hash_texture(t_hasher *hasher, t_texture *texture)
+{
+	hasher_write_i32(hasher, *texture);
+}
+
+bool	cmp_texture(t_texture *lhs, t_texture *rhs)
+{
+	return (*lhs == *rhs);
 }

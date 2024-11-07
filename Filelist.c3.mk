@@ -1,9 +1,10 @@
 SRC_FILES =                                                                   \
 main                                                                          \
-map/map_manipulate_tile                                                       \
+map/manipulate_map                                                            \
 map/parse_lines                                                               \
 map/read_whole_map                                                            \
-utils                                                                         \
+utils/cube_error                                                              \
+utils/texture                                                                 \
 
 GEN_FILES =                                                                   \
 hashmap/texture_path/texture_path                                             \
