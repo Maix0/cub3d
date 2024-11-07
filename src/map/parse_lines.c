@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 14:06:44 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:40:26 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 			else
 				return (cube_error("Invalid map character: '%c'(%#02x)", tile,
 								   tile),
-						ERROR);
+						vec_str_free(lines), ERROR);
 			x++;
 		}
 		while (x++ < max_width)
@@ -217,7 +217,7 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 	}
 	vec_str_free(lines);
 	if (sp_count != 1)
-		return (cube_error("Invalid spawn count (%zu)", sp_count), ERROR);
+		return (cube_error("Invalid spawn count (%u)", sp_count), ERROR);
 	return (NO_ERROR);
 }
 

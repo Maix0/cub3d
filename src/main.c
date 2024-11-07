@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 14:10:23 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:28:49 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,87 +194,83 @@ bool hit_x_y(t_ray *ray)
 	double int_x;
 	double x;
 	double y;
-	
+
 	ray->nord = 0;
 	ray->sud = 0;
 	ray->est = 0;
 	ray->west = 0;
 	x = modf(ray->x, &int_x);
 	y = modf(ray->y, &int_y);
-	
+
 	double distance_x = fmin(x, 1 - x);
-    double distance_y = fmin(y, 1 - y);
-	
-	printf("x:[%f]\n",  x);
-	printf("y:[%f]\n",  y);
-	printf("d:[%f]\n",  ray->direction);
-	
+	double distance_y = fmin(y, 1 - y);
+
+	printf("x:[%f]\n", x);
+	printf("y:[%f]\n", y);
+	printf("d:[%f]\n", ray->direction);
+
 	if (distance_x > distance_y)
 	{
-       if(ray->direction > 0)
+		if (ray->direction > 0)
 			ray->sud = 1;
 		else
-			ray->nord = 1;  
-    }
+			ray->nord = 1;
+	}
 	else
 	{
-        if (x >= 0 && x<= 0.5)
+		if (x >= 0 && x <= 0.5)
 			ray->est = 1;
 
 		else
 			ray->west = 1;
-    }
-	
- return false;
+	}
+
+	return false;
 }
 
-t_ray my_ray (t_game *game, double direction)
+t_ray my_ray(t_game *game, double direction)
 {
 	t_ray ray;
-	
+
 	ray.ray_len = 0;
-	ray.x = 0; //cos
-	ray.y = 0; //sin
+	ray.x = 0; // cos
+	ray.y = 0; // sin
 	ray.direction = direction;
 
-	while( ray.ray_len < 50)
+	while (ray.ray_len < 50)
 	{
 		ray.ray_len += 0.01;
 		ray.x = cos(direction) * ray.ray_len + game->pos.x;
 		ray.y = sin(direction) * ray.ray_len + game->pos.y;
-		//quelle tile je touche, len du ray, et sud est , 
+		// quelle tile je touche, len du ray, et sud est ,
 		if (get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_SOLID)
 		{
 			ray.tile = get_tile(&game->map, vi2d(ray.x, ray.y));
 			hit_x_y(&ray);
-			//printf("hit wall at [ray = %f] %f %f\n",ray,  mx, my);
+			// printf("hit wall at [ray = %f] %f %f\n",ray,  mx, my);
 			break;
 		}
-
 	}
-	return(ray);	
+	return (ray);
 }
 
 void cast_rays(t_blx *ctx, t_game *game)
 {
-    double start_angle = game->angle - (FOV * PI / 180.0) / 2;
-    double angle_step = (FOV * PI / 180.0) / NUM_RAYS;
-    
-    for (t_u32 i = 0; i < NUM_RAYS; i++) {
-        double ray_angle = start_angle + i * angle_step;
-        t_ray ray = my_ray(game, ray_angle);
+	double start_angle = game->angle - (FOV * PI / 180.0) / 2;
+	double angle_step = (FOV * PI / 180.0) / NUM_RAYS;
 
-        t_vi2d ray_end = vi2d(
-            cos(ray_angle) * ray.ray_len * CELLSIZE + game->pos.x * CELLSIZE,
-            sin(ray_angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE
-        );
+	for (t_u32 i = 0; i < NUM_RAYS; i++)
+	{
+		double ray_angle = start_angle + i * angle_step;
+		t_ray  ray = my_ray(game, ray_angle);
 
-        blx_draw_line(ctx, 
-            vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE), 
-            ray_end, 
-            new_color(255, 0, 0)
-        );
-    }
+		t_vi2d ray_end = vi2d(
+			cos(ray_angle) * ray.ray_len * CELLSIZE + game->pos.x * CELLSIZE,
+			sin(ray_angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
+
+		blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
+					  ray_end, new_color(255, 0, 0));
+	}
 }
 
 bool game_loop(t_blx *ctx)
@@ -289,7 +285,7 @@ bool game_loop(t_blx *ctx)
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
 	draw_map(ctx, game);
 
-	cast_rays(ctx, game); 
+	cast_rays(ctx, game);
 	t_ray ray = my_ray(game, game->angle);
 	// TODO: remove this
 	{
@@ -300,26 +296,31 @@ bool game_loop(t_blx *ctx)
 		string_free(str);
 	}
 	draw_player(ctx, game);
-	t_vi2d endline = vi2d(cos(game->angle) * CELLSIZE * ray.ray_len + game->pos.x * CELLSIZE, sin(game->angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
-	blx_draw_line(ctx, vi2d(game->pos.x* CELLSIZE, game->pos.y* CELLSIZE), endline, new_color(120,255,0));
+	t_vi2d endline = vi2d(
+		cos(game->angle) * CELLSIZE * ray.ray_len + game->pos.x * CELLSIZE,
+		sin(game->angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
+	blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
+				  endline, new_color(120, 255, 0));
 	return (false);
 }
 
-void game_free(t_blx_app app)
+void game_free(t_game *game)
 {
-	t_game *game;
-	game = app.data;
-
 	vec_tile_free(game->map.inner);
-	(void)(app);
+	hmap_texture_path_free(game->map.info.textures_path);
+	hmap_texture_free(game->textures);
 }
 
+void game_free_blx(t_blx_app app)
+{
+	game_free(app.data);
+}
 
-void printdata (t_game *game)
+void printdata(t_game *game)
 {
 	printf("PLAYER X = [%f]\n", game->pos.x);
 	printf("PLAYER Y = [%f]\n", game->pos.y);
-	printf("DIRECTION = [%f]\n", game->angle * 180/PI);
+	printf("DIRECTION = [%f]\n", game->angle * 180 / PI);
 }
 
 int main(int argc, char **argv)
@@ -333,18 +334,18 @@ int main(int argc, char **argv)
 	init_game(&game);
 	mem_set_zero(&blx, sizeof(blx));
 	if (parse_map(&game, argv[1]))
-		return (1);
-	if (blx_initialize(game_loop, game_free,
+		return (game_free(&game), 1);
+	if (blx_initialize(game_loop, game_free_blx,
 					   (t_blx_app){
 						   .size_x = game.map.size.x * CELLSIZE,
 						   .size_y = game.map.size.y * CELLSIZE,
-						   .pixel_size = 1,
+						   .pixel_size = 2,
 						   .title = "Cub3d - Yes",
 						   .data = &game,
 					   },
 					   &blx))
 		return (cube_error("Failed to init mlx"), 1);
-	//if (fetch_textures(&game))
+	// if (fetch_textures(&game))
 	//	return (1);
 	blx_run(blx);
 	return (0);
