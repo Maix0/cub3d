@@ -1,37 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state.h                                            :+:      :+:    :+:   */
+/*   hashmap_texture.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 13:48:32 by maiboyer         ###   ########.fr       */
+/*   Created: 2023/12/06 11:00:22 by maiboyer          #+#    #+#             */
+/*   Updated: 2023/12/11 15:24:44 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STATE_H
-#define STATE_H
-
-#include "app/maps.h"
 #include "me/types.h"
-#include "me/vec2/vec2.h"
+
+
+
 #include "me/hashmap/hashmap_texture.h"
+#include "me/mem/mem.h"
 
-void cube_error(t_const_str fmt, ...);
 
-typedef struct s_game t_game;
-
-struct s_game
+void	hmap_texture_clear(t_hashmap_texture *self)
 {
-	t_vf2d				pos;
-	t_vf2d				new_pos;
-	t_f64				angle;
-	t_map				map;
-	t_hashmap_texture *textures;
-};
+	t_usize					bucket_id;
+	t_entry_texture		*cur;
+	t_entry_texture		*next;
 
-t_error parse_map(t_game *game, t_const_str filename);
-t_error fetch_textures(t_game *game);
-
-#endif /* STATE_H */
+	bucket_id = 0;
+	while (bucket_id < self->num_buckets)
+	{
+		cur = self->buckets[bucket_id];
+		while (cur != NULL)
+		{
+			next = cur->next;
+			self->free(cur->kv);
+			mem_free(cur);
+			cur = next;
+		}
+		bucket_id++;
+	}
+}

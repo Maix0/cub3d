@@ -47,3 +47,15 @@ replace.C__TYPEHEADER__ = '''
 #include "app/textures.h"
 #include "me/string/string.h"
 '''
+
+[[create.hashmap]]
+sources_output = "src/hashmap/C__PREFIX__/"
+headers_output = "include/me/hashmap/"
+replace.C__VALTYPE__ = "t_sprite"
+replace.C__KEYTYPE__ = "t_texture"
+replace.C__PREFIX__ = "texture"
+replace.C__PREFIXUP__ = "TEXTURE"
+replace.C__TYPEHEADER__ = '''
+#include "app/textures.h"
+#include "me/blx/sprite.h"
+'''

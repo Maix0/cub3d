@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 23:30:46 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 12:12:08 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:30:37 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,18 @@ t_error str_split(t_const_str str, t_const_str chrs, t_vec_str *out);
 /// @param charset the characters to remove
 /// @return the trimmed string
 t_str str_trim(t_const_str str, t_const_str charset);
+
+/// @brief Remove consecutive trailing characters from a string
+/// @param str the string to trim
+/// @param charset the characters to remove
+/// @return the trimmed string
+t_str	str_trim_end(t_const_str str, t_const_str charset);
+
+/// @brief Remove consecutive leading characters from a string
+/// @param str the string to trim
+/// @param charset the characters to remove
+/// @return the trimmed string
+t_str	str_trim_start(t_const_str str, t_const_str charset);
 
 /// @brief Check if a string start `str`
 /// @param self the string to Check

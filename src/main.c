@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 15:08:20 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 13:50:35 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "app/tile.h"
 #include "me/blx/blx.h"
 #include "me/blx/blx_key.h"
+#include "me/hashmap/hashmap_texture.h"
 #include "me/mem/mem.h"
 #include "me/printf/printf.h"
 #include "me/str/str.h"
@@ -209,6 +210,12 @@ void game_free(t_blx_app app)
 	(void)(app);
 }
 
+void init_game(t_game *game)
+{
+	mem_set_zero(game, sizeof(*game));
+	game->textures = hmap_texture_new()
+}
+
 int main(int argc, char **argv)
 {
 	t_game game;
@@ -217,11 +224,10 @@ int main(int argc, char **argv)
 	(void)(&argv[argc]);
 	if (argc != 2)
 		return (cube_error("Usage: %s <map>", argv[0]), 1);
-	mem_set_zero(&game, sizeof(game));
+	init_game(&game);
 	mem_set_zero(&blx, sizeof(blx));
 	if (parse_map(&game, argv[1]))
 		return (1);
-	printf("game->map.size = (%i, %i);\n", game.map.size.x, game.map.size.y);
 	if (blx_initialize(game_loop, game_free,
 					   (t_blx_app){
 						   .size_x = game.map.size.x * CELLSIZE,
@@ -232,6 +238,8 @@ int main(int argc, char **argv)
 					   },
 					   &blx))
 		return (cube_error("Failed to init mlx"), 1);
+	if (fetch_textures(&game))
+		return (1);
 	blx_run(blx);
 	return (0);
 }
