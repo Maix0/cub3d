@@ -6,15 +6,14 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:39:39 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 13:41:35 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:07:08 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "app/state.h"
 
-t_error fetch_texture(t_game *game)
+t_error fetch_textures(t_game *game)
 {
-	
-
+	(void)(game);
 	return (ERROR);
 }

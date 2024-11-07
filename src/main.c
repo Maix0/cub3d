@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 13:50:35 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:05:53 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,18 @@ bool is_wall_for_player(t_game *game, t_vf2d pos)
 	is_wall |= get_tile(&game->map, vi2d(pos.x, pos.y - INC)) & TILE_SOLID;
 
 	// four diagonally neighbor points
-	is_wall |= get_tile(&game->map, vi2d(pos.x + INC, pos.y + INC)) & TILE_SOLID;
-	is_wall |= get_tile(&game->map, vi2d(pos.x + INC, pos.y - INC)) & TILE_SOLID;
-	is_wall |= get_tile(&game->map, vi2d(pos.x - INC, pos.y + INC)) & TILE_SOLID;
-	is_wall |= get_tile(&game->map, vi2d(pos.x - INC, pos.y - INC)) & TILE_SOLID;
+	is_wall |=
+		get_tile(&game->map, vi2d(pos.x + INC, pos.y + INC)) & TILE_SOLID;
+	is_wall |=
+		get_tile(&game->map, vi2d(pos.x + INC, pos.y - INC)) & TILE_SOLID;
+	is_wall |=
+		get_tile(&game->map, vi2d(pos.x - INC, pos.y + INC)) & TILE_SOLID;
+	is_wall |=
+		get_tile(&game->map, vi2d(pos.x - INC, pos.y - INC)) & TILE_SOLID;
 
 	// it basically makes a square of size 2*INC centered around `pos`
-	// meaning that if any point is inside a wall, the point will be considered inside the wall.
-	// this means that we can't get closer than INC to a wall
+	// meaning that if any point is inside a wall, the point will be considered
+	// inside the wall. this means that we can't get closer than INC to a wall
 	return (is_wall);
 }
 
@@ -106,10 +110,14 @@ bool handle_input(t_blx *ctx, t_game *game)
 void draw_player(t_blx *ctx, t_game *game)
 {
 	t_vi2d endline =
-		vi2d(((game->pos.x + (cos(game->angle)) * (t_f64)PLAYERSIZE) * (t_f64)CELLSIZE),
-			 ((game->pos.y + (sin(game->angle)) * (t_f64)PLAYERSIZE) * (t_f64)CELLSIZE));
-	blx_draw_line(ctx, vi2d((game->pos.x) * (t_f64)CELLSIZE, (game->pos.y) * (t_f64)CELLSIZE),
-				  endline, new_color(0, 255, 0));
+		vi2d(((game->pos.x + (cos(game->angle)) * (t_f64)PLAYERSIZE) *
+			  (t_f64)CELLSIZE),
+			 ((game->pos.y + (sin(game->angle)) * (t_f64)PLAYERSIZE) *
+			  (t_f64)CELLSIZE));
+	blx_draw_line(
+		ctx,
+		vi2d((game->pos.x) * (t_f64)CELLSIZE, (game->pos.y) * (t_f64)CELLSIZE),
+		endline, new_color(0, 255, 0));
 	blx_draw_circle(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
 					(PLAYERSIZE * CELLSIZE) - 1, new_color(255, 0, 0));
 	blx_draw(ctx, endline, new_color(0, 0, 255));
@@ -145,13 +153,13 @@ void draw_map(t_blx *ctx, t_game *game)
 			}
 			else if (tile == (TILE_FLOOR))
 			{
-				//fill = new_color(0x1E, 0x1E, 0x1E);
+				// fill = new_color(0x1E, 0x1E, 0x1E);
 				fill = game->map.info.floor_color;
 				border = new_color(0xE1, 0xE1, 0xE1);
 			}
 			else if (tile == (TILE_WALL))
 			{
-				//fill = new_color(127, 127, 127);
+				// fill = new_color(127, 127, 127);
 				fill = game->map.info.ceiling_color;
 				border = new_color(0xE1, 0xE1, 0xE1);
 			}
@@ -167,10 +175,12 @@ void draw_map(t_blx *ctx, t_game *game)
 			}
 
 			blx_fill_rect(ctx, vi2d(tilepos.x * CELLSIZE, tilepos.y * CELLSIZE),
-						  vi2d((tilepos.x + 1) * CELLSIZE - 1, (tilepos.y + 1) * CELLSIZE - 1),
+						  vi2d((tilepos.x + 1) * CELLSIZE - 1,
+							   (tilepos.y + 1) * CELLSIZE - 1),
 						  fill);
 			blx_draw_rect(ctx, vi2d(tilepos.x * CELLSIZE, tilepos.y * CELLSIZE),
-						  vi2d((tilepos.x + 1) * CELLSIZE - 1, (tilepos.y + 1) * CELLSIZE - 1),
+						  vi2d((tilepos.x + 1) * CELLSIZE - 1,
+							   (tilepos.y + 1) * CELLSIZE - 1),
 						  border);
 			tilepos.x++;
 		}
@@ -193,14 +203,15 @@ bool game_loop(t_blx *ctx)
 	// TODO: remove this
 	{
 		str = string_new(1024);
-		snprintf(str.buf, 1024, "FPS: %02.2f\nx: %f\ny: %f\nangle: %f", 1. / ctx->elapsed,
-				 game->pos.x, game->pos.y, game->angle);
+		snprintf(str.buf, 1024, "FPS: %02.2f\nx: %f\ny: %f\nangle: %f",
+				 1. / ctx->elapsed, game->pos.x, game->pos.y, game->angle);
 		blx_draw_string(ctx, vi2d(0, 120), str.buf, new_color(255, 255, 255));
 		string_free(str);
 	}
 	draw_player(ctx, game);
 	return (false);
 }
+
 void game_free(t_blx_app app)
 {
 	t_game *game;
@@ -208,12 +219,6 @@ void game_free(t_blx_app app)
 
 	vec_tile_free(game->map.inner);
 	(void)(app);
-}
-
-void init_game(t_game *game)
-{
-	mem_set_zero(game, sizeof(*game));
-	game->textures = hmap_texture_new()
 }
 
 int main(int argc, char **argv)

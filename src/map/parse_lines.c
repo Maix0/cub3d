@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 12:45:04 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:06:44 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,7 @@
 
 #define MAP_CHARSET "01 NSWE"
 
-void	free_texture_path_pair(struct s_kv_texture_path pair);
-void	hash_texture(t_hasher *hasher, t_texture *texture);
-bool	cmp_texture(t_texture *lhs, t_texture *rhs);
-
-t_const_str	tex_name(t_texture tex)
+t_const_str tex_name(t_texture tex)
 {
 	if (tex == TEX_EAST)
 		return ("EAST");
@@ -40,7 +36,7 @@ t_const_str	tex_name(t_texture tex)
 	return ("UNKNOWN");
 }
 
-t_const_str	col_name(t_u8 col)
+t_const_str col_name(t_u8 col)
 {
 	if (col == FLOOR_COLOR)
 		return ("FLOOR");
@@ -49,7 +45,7 @@ t_const_str	col_name(t_u8 col)
 	return ("UNKNOWN");
 }
 
-t_f64	_get_angle(char tile)
+t_f64 _get_angle(char tile)
 {
 	if (tile == 'E')
 		return (0);
@@ -62,15 +58,16 @@ t_f64	_get_angle(char tile)
 	return (0);
 }
 
-t_error	_extract_color(t_map_info *info, t_u8 col_type, t_str *line)
+t_error _extract_color(t_map_info *info, t_u8 col_type, t_str *line)
 {
-	t_color		*slot;
-	t_string	s;
-	t_vec_str	split;
+	t_color	 *slot;
+	t_string  s;
+	t_vec_str split;
 
 	if (info->color_bitfield & col_type)
-		return (cube_error("Duplicate color declaration: %s",
-				col_name(col_type)), ERROR);
+		return (
+			cube_error("Duplicate color declaration: %s", col_name(col_type)),
+			ERROR);
 	// this allow us to make use of the same logic and just say "write to the
 	// color behind that pointer"
 	slot = &info->floor_color;
@@ -94,26 +91,26 @@ t_error	_extract_color(t_map_info *info, t_u8 col_type, t_str *line)
 	// norminette pass
 	if (split.len != 3)
 		return (cube_error("Invalid format for color: %s", s.buf),
-			string_free(s), vec_str_free(split), ERROR);
+				string_free(s), vec_str_free(split), ERROR);
 	slot->a = 0x0;
 	// Extract colors
 	if (str_to_u8(split.buffer[0], 10, &slot->r))
 		return (cube_error("Invalid format for color: %s", s.buf),
-			string_free(s), vec_str_free(split), ERROR);
+				string_free(s), vec_str_free(split), ERROR);
 	if (str_to_u8(split.buffer[1], 10, &slot->g))
 		return (cube_error("Invalid format for color: %s", s.buf),
-			string_free(s), vec_str_free(split), ERROR);
+				string_free(s), vec_str_free(split), ERROR);
 	if (str_to_u8(split.buffer[2], 10, &slot->b))
 		return (cube_error("Invalid format for color: %s", s.buf),
-			string_free(s), vec_str_free(split), ERROR);
+				string_free(s), vec_str_free(split), ERROR);
 	(string_free(s), vec_str_free(split));
 	info->color_bitfield |= col_type;
 	return (NO_ERROR);
 }
 
-t_error	_extract_path(t_map_info *info, t_texture tex, t_str *line)
+t_error _extract_path(t_map_info *info, t_texture tex, t_str *line)
 {
-	t_string	s;
+	t_string s;
 
 	s = string_new(16);
 	string_push(&s, *line);
@@ -133,32 +130,34 @@ t_error	_extract_path(t_map_info *info, t_texture tex, t_str *line)
 	// definition
 	if (hmap_texture_path_insert(info->textures_path, tex, s))
 		return (cube_error("Duplicate texture declaration: %s", tex_name(tex)),
-			ERROR);
+				ERROR);
 	return (NO_ERROR);
 }
 
-t_error	get_mapinfo(t_vec_str *lines, t_map_info *out, t_usize *mstart_idx)
+t_error get_mapinfo(t_vec_str *lines, t_map_info *out, t_usize *mstart_idx)
 {
-	t_usize	i;
+	t_usize i;
 
 	i = 0;
 	while (i < lines->len)
 	{
-		if ((str_startwith(lines->buffer[i], "NO") && _extract_path(out, \
-	TEX_NORTH, &lines->buffer[i])) || (str_startwith(lines->buffer[i], "EA") \
-	&& _extract_path(out, TEX_EAST, &lines->buffer[i])) \
-	|| (str_startwith(lines->buffer[i], "SO") && _extract_path(out, TEX_SOUTH, \
-	&lines->buffer[i])) || (str_startwith(lines->buffer[i], "WE") && \
-	_extract_path(out, TEX_WEST, &lines->buffer[i])))
+		if ((str_startwith(lines->buffer[i], "NO") &&
+			 _extract_path(out, TEX_NORTH, &lines->buffer[i])) ||
+			(str_startwith(lines->buffer[i], "EA") &&
+			 _extract_path(out, TEX_EAST, &lines->buffer[i])) ||
+			(str_startwith(lines->buffer[i], "SO") &&
+			 _extract_path(out, TEX_SOUTH, &lines->buffer[i])) ||
+			(str_startwith(lines->buffer[i], "WE") &&
+			 _extract_path(out, TEX_WEST, &lines->buffer[i])))
 			return (ERROR);
-		if (str_startwith(lines->buffer[i], "F") && _extract_color(out,
-				FLOOR_COLOR, &lines->buffer[i]))
+		if (str_startwith(lines->buffer[i], "F") &&
+			_extract_color(out, FLOOR_COLOR, &lines->buffer[i]))
 			return (ERROR);
-		if (str_startwith(lines->buffer[i], "C") && _extract_color(out,
-				CEIL__COLOR, &lines->buffer[i]))
+		if (str_startwith(lines->buffer[i], "C") &&
+			_extract_color(out, CEIL__COLOR, &lines->buffer[i]))
 			return (ERROR);
-		if (lines->buffer[i][0] != '\0' && str_is_charset(lines->buffer[i],
-				MAP_CHARSET))
+		if (lines->buffer[i][0] != '\0' &&
+			str_is_charset(lines->buffer[i], MAP_CHARSET))
 			return (*mstart_idx = i, NO_ERROR);
 		i++;
 	}
@@ -167,12 +166,12 @@ t_error	get_mapinfo(t_vec_str *lines, t_map_info *out, t_usize *mstart_idx)
 	return (cube_error("No map data found"), ERROR);
 }
 
-t_error	parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
+t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 {
-	t_usize	y;
-	t_usize	x;
-	t_usize	max_width;
-	t_usize	sp_count;
+	t_usize y;
+	t_usize x;
+	t_usize max_width;
+	t_usize sp_count;
 	char	tile;
 
 	y = map_start;
@@ -185,7 +184,6 @@ t_error	parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 	}
 	game->map.size.x = max_width;
 	game->map.size.y = lines.len - map_start;
-	game->map.inner = vec_tile_new(max_width * lines.len, NULL);
 	y = map_start;
 	sp_count = 0;
 	while (y < lines.len)
@@ -209,7 +207,8 @@ t_error	parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 			}
 			else
 				return (cube_error("Invalid map character: '%c'(%#02x)", tile,
-						tile), ERROR);
+								   tile),
+						ERROR);
 			x++;
 		}
 		while (x++ < max_width)
@@ -222,11 +221,11 @@ t_error	parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 	return (NO_ERROR);
 }
 
-t_error	read_whole_map(t_fd *file, t_vec_str *out);
+t_error read_whole_map(t_fd *file, t_vec_str *out);
 
-bool	map_contains_all_metadata(t_game *game)
+bool map_contains_all_metadata(t_game *game)
 {
-	t_texture	tex;
+	t_texture tex;
 
 	if (!(game->map.info.color_bitfield & FLOOR_COLOR))
 		return (cube_error("Missing Floor color"), false);
@@ -247,11 +246,11 @@ bool	map_contains_all_metadata(t_game *game)
 	return (true);
 }
 
-t_error	parse_map(t_game *game, t_const_str filename)
+t_error parse_map(t_game *game, t_const_str filename)
 {
-	t_fd		*file;
-	t_vec_str	lines;
-	t_usize		map_idx;
+	t_fd	 *file;
+	t_vec_str lines;
+	t_usize	  map_idx;
 
 	if (game == NULL || filename == NULL)
 		return (ERROR);
@@ -263,11 +262,9 @@ t_error	parse_map(t_game *game, t_const_str filename)
 	if (read_whole_map(file, &lines))
 		return (cube_error("Failed to read whole map"), ERROR);
 	close_fd(file);
-	game->map.info.textures_path = hmap_texture_path_new(hash_texture, \
-		cmp_texture, free_texture_path_pair);
 	if (get_mapinfo(&lines, &game->map.info, &map_idx))
 		return (hmap_texture_path_free(game->map.info.textures_path),
-			vec_str_free(lines), ERROR);
+				vec_str_free(lines), ERROR);
 	if (parse_map_inner(game, lines, map_idx))
 		return (ERROR);
 	if (!map_contains_all_metadata(game))

@@ -5,6 +5,7 @@ map/manipulate_map                                                            \
 map/parse_lines                                                               \
 map/read_whole_map                                                            \
 utils/cube_error                                                              \
+utils/init_game                                                               \
 utils/texture                                                                 \
 
 GEN_FILES =                                                                   \
