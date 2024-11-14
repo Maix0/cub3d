@@ -7,3 +7,4 @@ flake.lock
 *.o
 *.a
 /cub3d
+/cub3d_bonus

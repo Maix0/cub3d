@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/14 12:18:00 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 12:24:06 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,13 +200,9 @@ void handle_door(t_blx *ctx, t_game *game, t_vi2d pos)
 	if (!BONUS)
 		return;
 	(void)(ctx);
-	if (fabs(game->pos.x - (double)pos.x) < INC / 2 ||
-		fabs(game->pos.y - (double)pos.y) < INC / 2)
-		return;
-	door_tile = get_tile(&game->map, pos);
 	if (!is_key_released(ctx, KB_space))
 		return;
-	printf("pressed space\n");
+	door_tile = get_tile(&game->map, pos);
 	if (door_tile & TILE_SOLID)
 		door_tile &= ~TILE_SOLID;
 	else
@@ -235,7 +231,8 @@ bool game_loop(t_blx *ctx)
 		blx_draw_string(ctx, vi2d(0, 120), str.buf, new_color(255, 255, 255));
 		string_free(str);
 	}
-	if (BONUS && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0)
+	if (BONUS && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0 &&
+		ray.ray_len > INC)
 		handle_door(ctx, game, vi2d(ray.x, ray.y));
 	draw_player(ctx, game);
 	t_vi2d endline = vi2d(
