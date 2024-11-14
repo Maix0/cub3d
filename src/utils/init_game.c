@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 14:00:11 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 14:04:23 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:59:19 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,6 @@ void init_game(t_game *game)
 	game->map.inner = vec_tile_new(16, NULL);
 	game->map.info.textures_path = hmap_texture_path_new(
 		hash_texture, cmp_texture, free_texture_path_pair);
+	game->speed = 5;
+	game->rotate_speed = PI;
 }

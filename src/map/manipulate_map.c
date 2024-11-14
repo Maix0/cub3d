@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 12:31:46 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 12:37:03 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 12:11:02 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	set_tile(t_map *map, t_vi2d pos, t_tile tile)
 {
 	t_tile	*ptr;
 
-	if (0 <= pos.y && pos.y < map->size.y && 0 <= pos.x && pos.x < map->size.x)
+	if (!(0 <= pos.y && pos.y < map->size.y && 0 <= pos.x
+			&& pos.x < map->size.x))
 		return ;
 	ptr = vec_tile_get(&map->inner, (t_usize)(pos.y * map->size.x + pos.x));
 	if (ptr == NULL)
