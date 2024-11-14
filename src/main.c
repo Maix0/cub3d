@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 22:07:36 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 12:18:00 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,85 +27,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ROTATE_SPEED (PI * 2)
-#define SPEED 4
 #define CELLSIZE 50
 #define PLAYERSIZE 0.2
-
-#define INC 0.2
-
-bool is_wall_for_player(t_game *game, t_vf2d pos)
-{
-	bool is_wall;
-
-	is_wall = false;
-	// point itself
-	is_wall |= get_tile(&game->map, vi2d(pos.x, pos.y)) & TILE_SOLID;
-
-	// four neighbor points
-	is_wall |= get_tile(&game->map, vi2d(pos.x + INC, pos.y)) & TILE_SOLID;
-	is_wall |= get_tile(&game->map, vi2d(pos.x - INC, pos.y)) & TILE_SOLID;
-	is_wall |= get_tile(&game->map, vi2d(pos.x, pos.y + INC)) & TILE_SOLID;
-	is_wall |= get_tile(&game->map, vi2d(pos.x, pos.y - INC)) & TILE_SOLID;
-
-	// four diagonally neighbor points
-	is_wall |=
-		get_tile(&game->map, vi2d(pos.x + INC, pos.y + INC)) & TILE_SOLID;
-	is_wall |=
-		get_tile(&game->map, vi2d(pos.x + INC, pos.y - INC)) & TILE_SOLID;
-	is_wall |=
-		get_tile(&game->map, vi2d(pos.x - INC, pos.y + INC)) & TILE_SOLID;
-	is_wall |=
-		get_tile(&game->map, vi2d(pos.x - INC, pos.y - INC)) & TILE_SOLID;
-
-	// it basically makes a square of size 2*INC centered around `pos`
-	// meaning that if any point is inside a wall, the point will be considered
-	// inside the wall. this means that we can't get closer than INC to a wall
-	return (is_wall);
-}
-
-void perform_collision(t_blx *ctx, t_game *game)
-{
-	(void)(ctx);
-	if (!is_wall_for_player(game, vf2d(game->new_pos.x, game->pos.y)))
-		game->pos.x = game->new_pos.x;
-	if (!is_wall_for_player(game, vf2d(game->pos.x, game->new_pos.y)))
-		game->pos.y = game->new_pos.y;
-}
-
-bool handle_input(t_blx *ctx, t_game *game)
-{
-	game->new_pos = game->pos;
-	if (is_key_held(ctx, KB_Escape))
-		return (true);
-	if (is_key_held(ctx, KB_w) || is_key_held(ctx, KB_Up))
-	{
-		game->new_pos.x += cos(game->angle) * SPEED * ctx->elapsed;
-		game->new_pos.y += sin(game->angle) * SPEED * ctx->elapsed;
-	}
-	if (is_key_held(ctx, KB_s) || is_key_held(ctx, KB_Down))
-	{
-		game->new_pos.x -= cos(game->angle) * SPEED * ctx->elapsed;
-		game->new_pos.y -= sin(game->angle) * SPEED * ctx->elapsed;
-	}
-	if (is_key_held(ctx, KB_q))
-	{
-		game->new_pos.x += sin(game->angle) * SPEED * ctx->elapsed;
-		game->new_pos.y -= cos(game->angle) * SPEED * ctx->elapsed;
-	}
-	if (is_key_held(ctx, KB_e))
-	{
-		game->new_pos.x -= sin(game->angle) * SPEED * ctx->elapsed;
-		game->new_pos.y += cos(game->angle) * SPEED * ctx->elapsed;
-	}
-	if (is_key_held(ctx, KB_a) || is_key_held(ctx, KB_Left))
-		game->angle -= ROTATE_SPEED * ctx->elapsed;
-	if (is_key_held(ctx, KB_d) || is_key_held(ctx, KB_Right))
-		game->angle += ROTATE_SPEED * ctx->elapsed;
-
-	perform_collision(ctx, game);
-	return (false);
-}
 
 void draw_player(t_blx *ctx, t_game *game)
 {
@@ -121,15 +44,6 @@ void draw_player(t_blx *ctx, t_game *game)
 	blx_draw_circle(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
 					(PLAYERSIZE * CELLSIZE) - 1, new_color(255, 0, 0));
 	blx_draw(ctx, endline, new_color(0, 0, 255));
-}
-
-void sanitize_input(t_blx *ctx, t_game *game)
-{
-	(void)(ctx);
-	while (game->angle >= PI)
-		game->angle -= 2.0 * PI;
-	while (game->angle < -PI)
-		game->angle += 2.0 * PI;
 }
 
 void draw_map(t_blx *ctx, t_game *game)
@@ -166,6 +80,16 @@ void draw_map(t_blx *ctx, t_game *game)
 			else if (tile == (TILE_SOLID))
 			{
 				fill = new_color(0x00, 0x00, 0x00);
+				border = new_color(0xE1, 0xE1, 0xE1);
+			}
+			else if (tile == (TILE_DOOR | TILE_SOLID))
+			{
+				fill = new_color(0xff, 0x00, 0x00);
+				border = new_color(0xE1, 0xE1, 0xE1);
+			}
+			else if (tile == (TILE_DOOR))
+			{
+				fill = new_color(0x00, 0xff, 0x00);
 				border = new_color(0xE1, 0xE1, 0xE1);
 			}
 			else
@@ -220,7 +144,6 @@ bool hit_x_y(t_ray *ray)
 		else
 			ray->west = 1;
 	}
-
 	return false;
 }
 
@@ -239,7 +162,8 @@ t_ray my_ray(t_game *game, double direction)
 		ray.x = cos(direction) * ray.ray_len + game->pos.x;
 		ray.y = sin(direction) * ray.ray_len + game->pos.y;
 		// quelle tile je touche, len du ray, et sud est ,
-		if (get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_SOLID)
+		if (get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_SOLID ||
+			get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_DOOR)
 		{
 			ray.tile = get_tile(&game->map, vi2d(ray.x, ray.y));
 			hit_x_y(&ray);
@@ -269,19 +193,39 @@ void cast_rays(t_blx *ctx, t_game *game)
 	}
 }
 
+void handle_door(t_blx *ctx, t_game *game, t_vi2d pos)
+{
+	t_tile door_tile;
+
+	if (!BONUS)
+		return;
+	(void)(ctx);
+	if (fabs(game->pos.x - (double)pos.x) < INC / 2 ||
+		fabs(game->pos.y - (double)pos.y) < INC / 2)
+		return;
+	door_tile = get_tile(&game->map, pos);
+	if (!is_key_released(ctx, KB_space))
+		return;
+	printf("pressed space\n");
+	if (door_tile & TILE_SOLID)
+		door_tile &= ~TILE_SOLID;
+	else
+		door_tile |= TILE_SOLID;
+	set_tile(&game->map, pos, door_tile);
+}
+
 bool game_loop(t_blx *ctx)
 {
 	t_game	*game;
 	t_string str;
 
 	game = ctx->app.data;
-	if (handle_input(ctx, game))
-		return (true);
-	sanitize_input(ctx, game);
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
 	draw_map(ctx, game);
 
-	cast_rays(ctx, game);
+	if (handle_input(ctx, game))
+		return (true);
+	// cast_rays(ctx, game);
 	t_ray ray = my_ray(game, game->angle);
 	// TODO: remove this
 	{
@@ -291,6 +235,8 @@ bool game_loop(t_blx *ctx)
 		blx_draw_string(ctx, vi2d(0, 120), str.buf, new_color(255, 255, 255));
 		string_free(str);
 	}
+	if (BONUS && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0)
+		handle_door(ctx, game, vi2d(ray.x, ray.y));
 	draw_player(ctx, game);
 	t_vi2d endline = vi2d(
 		cos(game->angle) * CELLSIZE * ray.ray_len + game->pos.x * CELLSIZE,
@@ -341,7 +287,7 @@ int main(int argc, char **argv)
 					   },
 					   &blx))
 		return (cube_error("Failed to init mlx"), 1);
-	 if (fetch_textures(&blx))
+	if (fetch_textures(&blx))
 		return (game_free(&game), 1);
 	blx_run(blx);
 	return (0);

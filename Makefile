@@ -6,7 +6,7 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/10/25 21:33:29 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/11/14 12:00:50 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,13 @@ endif
 
 # TODO: ADD THIS WHEN FINISHING THIS:
 #CFLAGS_ADDITIONAL	+= -DNVALGRIND
+
+
+ifeq ($(MAKECMDGOALS), bonus)
+    CFLAGS_ADDITIONAL += -DBONUS=1
+    BUILD_DIR := $(BUILD_DIR)/bonus
+endif
+
 
 # TODO: REMOVE THIS WHEN FINISHING THIS:
 CFLAGS_ADDITIONAL	+= -gcolumn-info -g3 -fno-builtin

@@ -6,12 +6,13 @@
 #    By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/03 13:20:01 by maiboyer          #+#    #+#              #
-#    Updated: 2024/10/25 21:36:43 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/11/14 12:00:54 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 escape = $(subst ','\'',$(1))
+NAME			=	cub3d
 
 define noexpand
 ifeq ($$(origin $(1)),environment)
@@ -25,9 +26,14 @@ ifeq ($$(origin $(1)),command line)
 endif
 endef
 
+BUILD_DIR		?=	../build
+
+ifeq ($(MAKECMDGOALS), bonus)
+	NAME := $(NAME)_bonus 
+endif
+
 ANAME			=	c3
 
-BUILD_DIR		?=	../build
 SRC_DIR			=	src
 INCLUDE_DIR		=	include stdme/include
 LIBS_DIR		=	.
@@ -35,7 +41,6 @@ GEN_DIR			=	output/src
 GEN_INCLUDE		=	output/include stdme/output/include
 
 BASE_PATH		?=	$(shell pwd)
-NAME			=	cub3d
 LIB_NAME		?=	
 TARGET			=	$(NAME)
 CC				?=	cc
@@ -60,6 +65,7 @@ COL_GOLD		=	\033[93m
 .PHONY = all bonus clean re subject make_libs
 
 all: $(NAME)
+bonus: $(NAME)
 
 make_libs: 
 	@$(MAKE) -C ./stdme/ 	"LIB_NAME=$(shell realpath ./stdme)/"	libme.a

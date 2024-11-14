@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 14:45:17 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:48:29 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,9 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 			else if (tile == '1')
 				vec_tile_push(&game->map.inner, TILE_WALL);
 			else if (tile == ' ')
-				vec_tile_push(&game->map.inner, TILE_EMPTY | TILE_SOLID);
+				vec_tile_push(&game->map.inner, TILE_FLOOR);
+			else if (BONUS && tile == 'D')
+				vec_tile_push(&game->map.inner, TILE_DOOR);
 			else if (tile == 'N' || tile == 'S' || tile == 'E' || tile == 'W')
 			{
 				sp_count++;
