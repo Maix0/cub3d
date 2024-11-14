@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_pixel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 00:48:23 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:11:38 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:57:12 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_error sprite_get_pixel_normalized(t_sprite *spr, t_vf2d pos, t_color *out)
 		return (ERROR);
 	pos.x = f64_clamp(0, pos.x, 1);
 	pos.y = f64_clamp(0, pos.y, 1);
-	actual_pos = vi2d(pos.x * spr->width, pos.y * spr->height);
+	actual_pos = vi2d(pos.x * (spr->width - 1), pos.y * (spr->height - 1));
 	return (sprite_get_pixel(spr, actual_pos, out));
 
 }

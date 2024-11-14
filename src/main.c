@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/14 14:03:38 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/14 15:04:27 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,7 @@ bool hit_x_y(t_ray *ray)
 	double x;
 	double y;
 
-	ray->nord = 0;
-	ray->sud = 0;
-	ray->est = 0;
-	ray->west = 0;
+	ray->tex = TEX_NORTH;
 	x = modf(ray->x, &int_x);
 	y = modf(ray->y, &int_y);
 
@@ -131,18 +128,29 @@ bool hit_x_y(t_ray *ray)
 
 	if (distance_x > distance_y)
 	{
-		if (ray->direction > 0)
-			ray->sud = 1;
+		if (ray->direction > 0)	
+		{
+			ray->tex = TEX_SOUTH;
+			ray->percent_wall = 1 - x;
+		}
 		else
-			ray->nord = 1;
+		{
+			ray->tex = TEX_NORTH;
+			ray->percent_wall = x;
+		}	
 	}
 	else
 	{
 		if (x >= 0 && x <= 0.5)
-			ray->est = 1;
-
+		{
+			ray->tex = TEX_EAST;
+			ray->percent_wall = y;
+		}
 		else
-			ray->west = 1;
+		{
+			ray->percent_wall = 1 - y;
+			ray->tex = TEX_WEST;
+		}
 	}
 	return false;
 }
@@ -157,7 +165,7 @@ t_ray my_ray(t_game *game, double direction)
 
 	while (ray.ray_len < 50)
 	{
-		ray.ray_len += 0.01;
+		ray.ray_len += 0.005;
 		ray.x = cos(direction) * ray.ray_len + game->pos.x;
 		ray.y = sin(direction) * ray.ray_len + game->pos.y;
 		// quelle tile je touche, len du ray, et sud est ,
@@ -172,23 +180,64 @@ t_ray my_ray(t_game *game, double direction)
 	}
 	return (ray);
 }
+#define MAX_DIST 15.0
 
 void cast_rays(t_blx *ctx, t_game *game)
 {
-	double start_angle = game->angle - (FOV * PI / 180.0) / 2;
-	double angle_step = (FOV * PI / 180.0) / NUM_RAYS;
+	int i;
+	int y;
 
-	for (t_u32 i = 0; i < NUM_RAYS; i++)
+	i = 0;
+
+	while (i < (int)NUM_RAYS)
 	{
-		double ray_angle = start_angle + i * angle_step;
-		t_ray  ray = my_ray(game, ray_angle);
+		y = 0;
+		//double x = (i / ctx->app.size_x - 0.5) ;
+		//double angle = atan2(x * FOV, 0.8);
+		double angle = (game->angle - FOV / 2.0) + (i / (double)ctx->app.size_x) * FOV; 
+		t_ray  ray = my_ray(game, angle);
 
-		t_vi2d ray_end = vi2d(
-			cos(ray_angle) * ray.ray_len * CELLSIZE + game->pos.x * CELLSIZE,
-			sin(ray_angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
+		//ray.ray_len *= cos(angle);
+		
+		int ceiling = (((double)ctx->app.size_y / 2.0) - (double)ctx->app.size_y / ray.ray_len);
+		int floor = (double)ctx->app.size_y - ceiling;
 
-		blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
-					  ray_end, new_color(255, 0, 0));
+		while(y < (int)ctx->app.size_y)
+		{
+			if(y <= ceiling)
+			{
+				blx_draw(ctx, vi2d(i, y), game->map.info.ceiling_color);
+			}
+			else if (y > ceiling && y <= floor)
+			{
+				t_vf2d tex_pos;
+				t_sprite *texture;
+
+				texture = hmap_texture_get(game->textures, &ray.tex);
+				if (texture == NULL)
+					me_abort("halp");
+				tex_pos = vf2d(ray.percent_wall, (y - ((double)ceiling)) / (((double)floor) - ((double)ceiling)));
+				t_color col;
+
+				if (sprite_get_pixel_normalized(texture, tex_pos, &col))
+					me_abort("halp2");
+				blx_draw(ctx, vi2d(i, y), col);
+			}
+			else 
+			{
+				blx_draw(ctx, vi2d(i, y), game->map.info.floor_color);
+			}
+			y++;
+			
+		}
+
+		// t_vi2d ray_end = vi2d(
+		// 	cos(ray_angle) * ray.ray_len * CELLSIZE + game->pos.x * CELLSIZE,
+		// 	sin(ray_angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
+
+		// blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
+		// 	ray_end, new_color(255, 0, 0));
+		i++;
 	}
 }
 
@@ -216,11 +265,11 @@ bool game_loop(t_blx *ctx)
 
 	game = ctx->app.data;
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
-	draw_map(ctx, game);
+	//draw_map(ctx, game);
 
 	if (handle_input(ctx, game))
 		return (true);
-	// cast_rays(ctx, game);
+	cast_rays(ctx, game);
 	t_ray ray = my_ray(game, game->angle);
 	// TODO: remove this
 	{
@@ -233,12 +282,12 @@ bool game_loop(t_blx *ctx)
 	if (BONUS && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0 &&
 		ray.ray_len > INC)
 		handle_door(ctx, game, vi2d(ray.x, ray.y));
-	draw_player(ctx, game);
-	t_vi2d endline = vi2d(
-		cos(game->angle) * CELLSIZE * ray.ray_len + game->pos.x * CELLSIZE,
-		sin(game->angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
-	blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
-				  endline, new_color(120, 255, 0));
+	//draw_player(ctx, game);
+	//t_vi2d endline = vi2d(
+	//	cos(game->angle) * CELLSIZE * ray.ray_len + game->pos.x * CELLSIZE,
+	//	sin(game->angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
+	//blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
+				  //endline, new_color(120, 255, 0));
 	return (false);
 }
 
@@ -275,9 +324,9 @@ int main(int argc, char **argv)
 		return (game_free(&game), 1);
 	if (blx_initialize(game_loop, game_free_blx,
 					   (t_blx_app){
-						   .size_x = game.map.size.x * CELLSIZE,
-						   .size_y = game.map.size.y * CELLSIZE,
-						   .pixel_size = 2,
+						   .size_x = 900,
+						   .size_y = 500,
+						   .pixel_size = 1,
 						   .title = "Cub3d - Yes",
 						   .data = &game,
 					   },

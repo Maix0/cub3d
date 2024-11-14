@@ -6,16 +6,16 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/11 22:40:05 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:53:40 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STATE_H
 #define STATE_H
 
-#define FOV 90
+#define FOV (PI / 4.0)
+
 #define INC 0.2
-#define ANIMATION_TIME 1.0
 
 #define NUM_RAYS ctx->app.size_x
 #include "app/maps.h"
@@ -44,16 +44,14 @@ struct s_game
 
 struct s_ray
 {
-	double ray_len;
-	int	   sud;
-	int	   est;
-	int	   nord;
-	int	   west;
+	double 			ray_len;
+	t_texture	   tex;
 	bool   hit_wall;
 	double x;
 	double y;
 	double direction; // en degre
 	t_tile tile;
+	double percent_wall;
 };
 
 t_error fetch_textures(t_blx *game);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprite.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:59:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/01/05 00:09:47 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:56:20 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,14 @@ void					sprite_clear(t_sprite *img, t_color col);
 /// @param[out] out the color of the pixel
 /// @return true if an error occured, false otherwise
 t_error					sprite_get_pixel(t_sprite *spr, t_vi2d pos,
+							t_color *out);
+
+/// @brief Get the color of a pixel on a sprite
+/// @param spr the sprite to get the pixel from
+/// @param pos the position of the pixel
+/// @param[out] out the color of the pixel
+/// @return true if an error occured, false otherwise
+t_error					sprite_get_pixel_normalized(t_sprite *spr, t_vf2d pos,
 							t_color *out);
 
 /// @brief Draw a sprite onto another sprite
