@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 14:28:49 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:59:48 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,6 @@ bool hit_x_y(t_ray *ray)
 t_ray my_ray(t_game *game, double direction)
 {
 	t_ray ray;
-
 	ray.ray_len = 0;
 	ray.x = 0; // cos
 	ray.y = 0; // sin
