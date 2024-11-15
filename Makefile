@@ -6,7 +6,7 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/11/14 12:00:50 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/11/15 13:33:22 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ endif
 
 
 # TODO: REMOVE THIS WHEN FINISHING THIS:
+CFLAGS_ADDITIONAL	+= -O2
 CFLAGS_ADDITIONAL	+= -gcolumn-info -g3 -fno-builtin
 CFLAGS_ADDITIONAL	+= '-DERROR=((void)printf("ERROR HERE: " __FILE__ ":%d in %s\n", __LINE__, __func__), 1)'
 

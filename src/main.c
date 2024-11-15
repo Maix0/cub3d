@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/14 15:04:27 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/15 13:52:04 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ bool hit_x_y(t_ray *ray)
 
 	if (distance_x > distance_y)
 	{
-		if (ray->direction > 0)	
+		if (ray->direction > 0)
 		{
 			ray->tex = TEX_SOUTH;
 			ray->percent_wall = 1 - x;
@@ -137,7 +137,7 @@ bool hit_x_y(t_ray *ray)
 		{
 			ray->tex = TEX_NORTH;
 			ray->percent_wall = x;
-		}	
+		}
 	}
 	else
 	{
@@ -155,7 +155,7 @@ bool hit_x_y(t_ray *ray)
 	return false;
 }
 
-t_ray my_ray(t_game *game, double direction)
+t_ray my_ray(t_game *game, double direction, bool check_door)
 {
 	t_ray ray;
 	ray.ray_len = 0;
@@ -170,7 +170,8 @@ t_ray my_ray(t_game *game, double direction)
 		ray.y = sin(direction) * ray.ray_len + game->pos.y;
 		// quelle tile je touche, len du ray, et sud est ,
 		if (get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_SOLID ||
-			get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_DOOR)
+			(check_door &&
+			 get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_DOOR))
 		{
 			ray.tile = get_tile(&game->map, vi2d(ray.x, ray.y));
 			hit_x_y(&ray);
@@ -192,51 +193,54 @@ void cast_rays(t_blx *ctx, t_game *game)
 	while (i < (int)NUM_RAYS)
 	{
 		y = 0;
-		//double x = (i / ctx->app.size_x - 0.5) ;
-		//double angle = atan2(x * FOV, 0.8);
-		double angle = (game->angle - FOV / 2.0) + (i / (double)ctx->app.size_x) * FOV; 
-		t_ray  ray = my_ray(game, angle);
+		// double x = (i / ctx->app.size_x - 0.5) ;
+		// double angle = atan2(x * FOV, 0.8);
+		double angle =
+			(game->angle - FOV / 2.0) + (i / (double)ctx->app.size_x) * FOV;
+		t_ray ray = my_ray(game, angle, false);
 
-		//ray.ray_len *= cos(angle);
-		
-		int ceiling = (((double)ctx->app.size_y / 2.0) - (double)ctx->app.size_y / ray.ray_len);
+		// ray.ray_len *= cos(angle);
+
+		int ceiling = (((double)ctx->app.size_y / 2.0) -
+					   (double)ctx->app.size_y / ray.ray_len);
 		int floor = (double)ctx->app.size_y - ceiling;
 
-		while(y < (int)ctx->app.size_y)
+		while (y < (int)ctx->app.size_y)
 		{
-			if(y <= ceiling)
+			if (y <= ceiling)
 			{
 				blx_draw(ctx, vi2d(i, y), game->map.info.ceiling_color);
 			}
 			else if (y > ceiling && y <= floor)
 			{
-				t_vf2d tex_pos;
+				t_vf2d	  tex_pos;
 				t_sprite *texture;
 
 				texture = hmap_texture_get(game->textures, &ray.tex);
 				if (texture == NULL)
 					me_abort("halp");
-				tex_pos = vf2d(ray.percent_wall, (y - ((double)ceiling)) / (((double)floor) - ((double)ceiling)));
+				tex_pos = vf2d(ray.percent_wall,
+							   (y - ((double)ceiling)) /
+								   (((double)floor) - ((double)ceiling)));
 				t_color col;
 
 				if (sprite_get_pixel_normalized(texture, tex_pos, &col))
 					me_abort("halp2");
 				blx_draw(ctx, vi2d(i, y), col);
 			}
-			else 
+			else
 			{
 				blx_draw(ctx, vi2d(i, y), game->map.info.floor_color);
 			}
 			y++;
-			
 		}
 
 		// t_vi2d ray_end = vi2d(
 		// 	cos(ray_angle) * ray.ray_len * CELLSIZE + game->pos.x * CELLSIZE,
 		// 	sin(ray_angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
 
-		// blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
-		// 	ray_end, new_color(255, 0, 0));
+		// blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y *
+		// CELLSIZE), 	ray_end, new_color(255, 0, 0));
 		i++;
 	}
 }
@@ -265,12 +269,12 @@ bool game_loop(t_blx *ctx)
 
 	game = ctx->app.data;
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
-	//draw_map(ctx, game);
+	// draw_map(ctx, game);
 
 	if (handle_input(ctx, game))
 		return (true);
 	cast_rays(ctx, game);
-	t_ray ray = my_ray(game, game->angle);
+	t_ray ray = my_ray(game, game->angle, true);
 	// TODO: remove this
 	{
 		str = string_new(1024);
@@ -282,12 +286,12 @@ bool game_loop(t_blx *ctx)
 	if (BONUS && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0 &&
 		ray.ray_len > INC)
 		handle_door(ctx, game, vi2d(ray.x, ray.y));
-	//draw_player(ctx, game);
-	//t_vi2d endline = vi2d(
+	// draw_player(ctx, game);
+	// t_vi2d endline = vi2d(
 	//	cos(game->angle) * CELLSIZE * ray.ray_len + game->pos.x * CELLSIZE,
 	//	sin(game->angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
-	//blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
-				  //endline, new_color(120, 255, 0));
+	// blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
+	// endline, new_color(120, 255, 0));
 	return (false);
 }
 
