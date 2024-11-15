@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:05:45 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/24 16:56:00 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:12:00 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,5 +150,9 @@ void blx_draw_circle(t_blx *app, t_vi2d center, t_i32 r, t_color col);
 void blx_draw_line(t_blx *ctx, t_vi2d p1, t_vi2d p2, t_color col);
 void blx_draw_rect(t_blx *ctx, t_vi2d p1, t_vi2d p2, t_color col);
 void blx_fill_rect(t_blx *ctx, t_vi2d p1, t_vi2d p2, t_color col);
+
+
+t_vi2d blx_get_mouse_delta(t_blx *blx);
+void blx_set_mouse_pos(t_blx *blx, t_vi2d pos);
 
 #endif

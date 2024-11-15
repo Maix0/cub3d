@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 18:06:06 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/22 14:46:54 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:28:19 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "sys/time.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+void _blx_get_mouse_pos(t_blx *blx);
 
 static void blx_stop(t_blx *app)
 {
@@ -62,6 +64,7 @@ int blx_loop_func(t_blx *ctx)
 		diff.tv_sec = now.tv_sec - ctx->_data.timer.tv_sec;
 		diff.tv_usec = now.tv_usec - ctx->_data.timer.tv_usec;
 	}
+	_blx_get_mouse_pos(ctx);
 	ctx->elapsed = ((t_f64)diff.tv_sec) + ((t_f64)diff.tv_usec / 1000000.0);
 	ctx->_data.timer = now;
 	mlx_put_image_to_window(ctx->mlx, ctx->win, ctx->_data.screen.img, 0, 0);

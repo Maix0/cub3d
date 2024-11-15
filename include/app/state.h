@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/14 14:53:40 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/15 14:31:57 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,20 @@ struct s_game
 	t_hashmap_texture *textures;
 	t_f64			   speed;
 	t_f64			   rotate_speed;
-	t_f64			   animation_timer;
+	t_f64			   timer;
+	bool			   mouse_enable;
 };
 
 struct s_ray
 {
-	double 			ray_len;
-	t_texture	   tex;
-	bool   hit_wall;
-	double x;
-	double y;
-	double direction; // en degre
-	t_tile tile;
-	double percent_wall;
+	double	  ray_len;
+	t_texture tex;
+	bool	  hit_wall;
+	double	  x;
+	double	  y;
+	double	  direction; // en degre
+	t_tile	  tile;
+	double	  percent_wall;
 };
 
 t_error fetch_textures(t_blx *game);

@@ -6,6 +6,7 @@ map/parse_lines                                                               \
 map/read_whole_map                                                            \
 movement/collision                                                            \
 movement/input                                                                \
+movement/mouse                                                                \
 utils/cube_error                                                              \
 utils/init_game                                                               \
 utils/texture                                                                 \

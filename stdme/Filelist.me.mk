@@ -29,6 +29,7 @@ blx/draw/draw_sprite                                                          \
 blx/draw/draw_string                                                          \
 blx/inputs                                                                    \
 blx/logic                                                                     \
+blx/mouse                                                                     \
 blx/sprite/draw_image                                                         \
 blx/sprite/draw_pixel_onto                                                    \
 blx/sprite/draw_string                                                        \
