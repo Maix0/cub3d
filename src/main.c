@@ -6,12 +6,13 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/15 13:52:04 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:00:23 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "app/maps.h"
 #include "app/state.h"
+#include "app/textures.h"
 #include "app/tile.h"
 #include "me/blx/blx.h"
 #include "me/blx/blx_key.h"
@@ -155,6 +156,7 @@ bool hit_x_y(t_ray *ray)
 	return false;
 }
 
+#define MAX_DIST 500.0
 t_ray my_ray(t_game *game, double direction, bool check_door)
 {
 	t_ray ray;
@@ -163,7 +165,7 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 	ray.y = 0; // sin
 	ray.direction = direction;
 
-	while (ray.ray_len < 50)
+	while (ray.ray_len < MAX_DIST)
 	{
 		ray.ray_len += 0.005;
 		ray.x = cos(direction) * ray.ray_len + game->pos.x;
@@ -173,15 +175,20 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 			(check_door &&
 			 get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_DOOR))
 		{
+			ray.hit_wall = true;
 			ray.tile = get_tile(&game->map, vi2d(ray.x, ray.y));
 			hit_x_y(&ray);
 			// printf("hit wall at [ray = %f] %f %f\n",ray,  mx, my);
 			break;
 		}
 	}
+	if (ray.ray_len >= MAX_DIST)
+	{
+		ray.ray_len = MAX_DIST;
+		ray.hit_wall = false;
+	}
 	return (ray);
 }
-#define MAX_DIST 15.0
 
 void cast_rays(t_blx *ctx, t_game *game)
 {
@@ -200,9 +207,9 @@ void cast_rays(t_blx *ctx, t_game *game)
 		t_ray ray = my_ray(game, angle, false);
 
 		// ray.ray_len *= cos(angle);
-
+		
 		int ceiling = (((double)ctx->app.size_y / 2.0) -
-					   (double)ctx->app.size_y / ray.ray_len);
+					   ((double)ctx->app.size_y / ray.ray_len) * ray.hit_wall);
 		int floor = (double)ctx->app.size_y - ceiling;
 
 		while (y < (int)ctx->app.size_y)
