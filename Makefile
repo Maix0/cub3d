@@ -6,7 +6,7 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/11/18 22:07:25 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/11/18 22:54:59 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ PMAKE =
 ifndef PMAKE_DISABLE
 ifeq ($(shell uname), Linux)
 	PMAKE = -j$(shell grep -c ^processor /proc/cpuinfo)
-	CFLAGS_ADDITIONAL	+= -DPRINT_BACKTRACE
+	#CFLAGS_ADDITIONAL	+= -DPRINT_BACKTRACE
 endif
 ifeq ($(shell uname), Darwin)
 	PMAKE = -j$(shell sysctl -n hw.ncpu)
@@ -53,9 +53,10 @@ endif
 
 CFLAGS_ADDITIONAL	+= -DNVALGRIND
 # TODO: REMOVE THIS WHEN FINISHING THIS:
-CFLAGS_ADDITIONAL	+= -O0 -Wno-\#warnings 
+#CFLAGS_ADDITIONAL	+= -O0 -Wno-\#warnings 
 CFLAGS_ADDITIONAL	+= -gcolumn-info -g3 -fno-builtin
 CFLAGS_ADDITIONAL	+= '-DERROR=((void)printf("ERROR HERE: " __FILE__ ":%d in %s\n", __LINE__, __func__), 1)'
+CFLAGS_ADDITIONAL	+= -fsanitize=address
 
 export CFLAGS_ADDITIONAL
 export CC

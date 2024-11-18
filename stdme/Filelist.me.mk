@@ -157,9 +157,6 @@ convert/u16_to_str                                                            \
 convert/u32_to_str                                                            \
 convert/u64_to_str                                                            \
 convert/u8_to_str                                                             \
-vec/buf_str/buf_str                                                           \
-vec/buf_str/buf_str_functions2                                                \
-vec/buf_str/buf_str_functions3                                                \
 vec/str/str                                                                   \
 vec/str/str_functions2                                                        \
 vec/str/str_functions3                                                        \
