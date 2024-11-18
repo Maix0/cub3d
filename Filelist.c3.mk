@@ -1,5 +1,6 @@
 SRC_FILES =                                                                   \
 main                                                                          \
+map/flood_fill                                                                \
 map/load_textures                                                             \
 map/manipulate_map                                                            \
 map/parse_lines                                                               \

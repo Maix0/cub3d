@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:36:32 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/11 21:58:14 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:15:31 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,14 @@
 typedef enum e_tile t_tile;
 enum e_tile
 {
-	TILE_EMPTY = 0,
-	TILE_SOLID = 1,
-	TILE_DOOR = 1 << 2,
-	TILE_ANIMATING = 1 << 3,
+	TILE_EMPTY = 1 << 1,
+	TILE_SOLID = 1 << 2,
+	TILE_DOOR = 1 << 3,
+	TILE_FLOODFILL = 1 << 4,
 
 	TILE_FLOOR = 1 << 16,
 	TILE_WALL = 1 << 16 | TILE_SOLID,
+
 };
 
 bool tile_is_solid(t_tile tile);

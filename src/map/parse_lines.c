@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 15:34:24 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:12:56 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include "me/vec/vec_str.h"
 
 #define MAP_CHARSET "01 NSWED"
+
+bool is_map_open(t_game *game);
 
 t_const_str tex_name(t_texture tex)
 {
@@ -192,12 +194,10 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 		while (lines.buffer[y][x] != 0)
 		{
 			tile = lines.buffer[y][x];
-			if (tile == '0')
+			if (tile == '0' || tile == '_')
 				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			else if (tile == '1')
 				vec_tile_push(&game->map.inner, TILE_WALL);
-			else if (tile == ' ')
-				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			else if (BONUS && tile == 'D')
 				vec_tile_push(&game->map.inner, TILE_DOOR | TILE_SOLID);
 			else if (tile == 'N' || tile == 'S' || tile == 'E' || tile == 'W')
@@ -214,7 +214,7 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 			x++;
 		}
 		while (x++ < max_width)
-			vec_tile_push(&game->map.inner, TILE_EMPTY | TILE_SOLID);
+			vec_tile_push(&game->map.inner, TILE_EMPTY);
 		y++;
 	}
 	vec_str_free(lines);
@@ -270,5 +270,7 @@ t_error parse_map(t_game *game, t_const_str filename)
 		return (ERROR);
 	if (!map_contains_all_metadata(game))
 		return (ERROR);
+	if (is_map_open(game))
+		return (cube_error("Map is open !"), ERROR);
 	return (NO_ERROR);
 }
