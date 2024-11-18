@@ -6,7 +6,7 @@
 /*   By: maix <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 17:38:21 by maix              #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:28 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/17 23:06:47 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,11 @@ t_string	get_next_line(int fd, bool *error)
 		.empty_read = false,
 	};
 	temp_buffer = mem_alloc(sizeof(char) * (BUFFER_SIZE + 2));
+	if (temp_buffer == NULL)
+		return (*error = true, (t_string){0});
 	buf = string_new(32);
+	if (buf.buf == NULL)
+		return (mem_free(temp_buffer), *error = true, (t_string){0});
 	if (handle_leftovers(fd, temp_buffer, &buf))
 		return (buf);
 	while (!read_and_copy(fd, &buf, temp_buffer, &flags) && !flags.empty_read)

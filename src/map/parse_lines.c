@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/14 11:48:29 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/18 15:34:24 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include "me/string/string.h"
 #include "me/vec/vec_str.h"
 
-#define MAP_CHARSET "01 NSWE"
+#define MAP_CHARSET "01 NSWED"
 
 t_const_str tex_name(t_texture tex)
 {
@@ -199,7 +199,7 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 			else if (tile == ' ')
 				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			else if (BONUS && tile == 'D')
-				vec_tile_push(&game->map.inner, TILE_DOOR);
+				vec_tile_push(&game->map.inner, TILE_DOOR | TILE_SOLID);
 			else if (tile == 'N' || tile == 'S' || tile == 'E' || tile == 'W')
 			{
 				sp_count++;

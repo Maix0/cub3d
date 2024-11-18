@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:56:28 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/14 14:48:46 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/18 17:16:15 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ enum e_texture
 	TEX_SOUTH,
 	TEX_EAST,
 	TEX_WEST,
+	TEX_DOOR,
 };
 
 void	hash_texture(t_hasher *hasher, t_texture *texture);
