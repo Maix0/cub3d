@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 18:06:06 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/15 14:28:19 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/18 22:09:37 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "sys/time.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "me/mem/_allocator.h"
+#include "me/fs/fs.h"
 
 void _blx_get_mouse_pos(t_blx *blx);
 
@@ -25,6 +27,8 @@ static void blx_stop(t_blx *app)
 {
 	mlx_loop_end(app->mlx);
 	blx_free(*app);
+	uninit_global_allocator();
+	close_all_slots();
 	exit(0);
 }
 

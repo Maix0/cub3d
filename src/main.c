@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 21:34:43 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/18 22:10:53 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "me/blx/blx_key.h"
 #include "me/blx/colors.h"
 #include "me/hashmap/hashmap_texture.h"
+#include "me/mem/_allocator.h"
 #include "me/mem/mem.h"
 #include "me/printf/printf.h"
 #include "me/str/str.h"
@@ -187,6 +188,8 @@ bool game_loop(t_blx *ctx)
 	t_string str;
 
 	game = ctx->app.data;
+	if (game->exit)
+		return (true);
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
 	// draw_map(ctx, game);
 
@@ -236,7 +239,7 @@ int main(int argc, char **argv)
 	init_game(&game);
 	mem_set_zero(&blx, sizeof(blx));
 	if (parse_map(&game, argv[1]))
-		return (game_free(&game), 1);
+		return (game_free(&game), uninit_global_allocator(), 1);
 	if (blx_initialize(game_loop, game_free_blx,
 					   (t_blx_app){
 						   .size_x = 900,
@@ -246,9 +249,10 @@ int main(int argc, char **argv)
 						   .data = &game,
 					   },
 					   &blx))
-		return (cube_error("Failed to init mlx"), game_free(&game), 1);
+		return (cube_error("Failed to init mlx"), game_free(&game),
+				uninit_global_allocator(), 1);
 	if (fetch_textures(&blx))
-		return (game_free(&game), 1);
+		game.exit = true;
 	blx_run(blx);
 	return (0);
 }
