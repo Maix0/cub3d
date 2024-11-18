@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 20:58:12 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 21:14:49 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:18:14 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,11 @@ void flood_fill(t_game *game, t_vi2d pos, bool *is_open)
 		return;
 	if (tile & TILE_EMPTY)
 	{
-		printf("found an empty tile\n");
 		*is_open = true;
 		return;
 	}
 	if ((tile & TILE_SOLID) && !(tile & TILE_DOOR))
 		return;
-
-	printf("flood_fill (%i,%i)\n", pos.x, pos.y);
 	set_tile(&game->map, pos, tile | TILE_FLOODFILL);
 	flood_fill(game, vi2d(pos.x + 1, pos.y), is_open);
 	flood_fill(game, vi2d(pos.x - 1, pos.y), is_open);

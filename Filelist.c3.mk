@@ -1,4 +1,5 @@
 SRC_FILES =                                                                   \
+bonus/draw_minimap                                                            \
 main                                                                          \
 map/flood_fill                                                                \
 map/load_textures                                                             \

@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/15 14:31:57 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:21:16 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ t_error parse_map(t_game *game, t_const_str filename);
 void	init_game(t_game *game);
 void	cube_error(t_const_str fmt, ...);
 bool	handle_input(t_blx *ctx, t_game *game);
+void draw_minimap(t_blx *ctx, t_game *game);
 
 #endif /* STATE_H */

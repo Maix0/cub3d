@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 17:22:26 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:34:43 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,130 +29,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define CELLSIZE 20
-#define PLAYERSIZE 0.48
-
-#define MINIMAPSIZE 5
-
-void draw_player(t_blx *ctx, t_game *game)
-{
-	t_vi2d endline =
-		vi2d(((MINIMAPSIZE + (cos(game->angle)) * (t_f64)PLAYERSIZE) *
-			  (t_f64)CELLSIZE),
-			 ((MINIMAPSIZE + (sin(game->angle)) * (t_f64)PLAYERSIZE) *
-			  (t_f64)CELLSIZE));
-	blx_draw_line(
-		ctx, vi2d(MINIMAPSIZE * (t_f64)CELLSIZE, MINIMAPSIZE * (t_f64)CELLSIZE),
-		endline, new_color(0, 255, 0));
-	blx_draw_circle(ctx, vi2d(MINIMAPSIZE * CELLSIZE, MINIMAPSIZE * CELLSIZE),
-					(PLAYERSIZE * CELLSIZE) - 1, new_color(255, 0, 0));
-	blx_draw(ctx, endline, new_color(0, 0, 255));
-}
-
-void draw_minimap(t_blx *ctx, t_game *game)
-{
-	t_vi2d	pos;
-	t_tile	tile;
-	t_color fill;
-	t_color border;
-
-	pos = vi2d(game->pos.x - MINIMAPSIZE, game->pos.y - MINIMAPSIZE);
-	while (pos.y < game->pos.y + MINIMAPSIZE)
-	{
-		pos.x = game->pos.x - MINIMAPSIZE;
-		while (pos.x < game->pos.x + MINIMAPSIZE)
-		{
-			tile = get_tile(&game->map, pos);
-			if (tile == TILE_EMPTY)
-			{
-				fill = new_color(0, 0, 0);
-				border = new_color(0, 0, 0);
-			}
-			else if (tile == (TILE_FLOOR))
-			{
-				// fill = new_color(0x1E, 0x1E, 0x1E);
-				fill = game->map.info.floor_color;
-				border = new_color(0xE1, 0xE1, 0xE1);
-			}
-			else if (tile == (TILE_WALL))
-			{
-				// fill = new_color(127, 127, 127);
-				fill = game->map.info.ceiling_color;
-				border = new_color(0xE1, 0xE1, 0xE1);
-			}
-			else if (tile == (TILE_SOLID))
-			{
-				fill = new_color_with_alpha(0x00, 0x00, 0x00, 255);
-				border = new_color_with_alpha(0x00, 0x00, 0x00, 0x00);
-			}
-			else if (tile == (TILE_DOOR | TILE_SOLID))
-			{
-				fill = new_color(0xff, 0x00, 0x00);
-				border = new_color(0xE1, 0xE1, 0xE1);
-			}
-			else if (tile == (TILE_DOOR))
-			{
-				fill = new_color(0x00, 0xff, 0x00);
-				border = new_color(0xE1, 0xE1, 0xE1);
-			}
-			else
-			{
-				fill = new_color(0, 0, 255);
-				border = new_color(0, 0, 255);
-			}
-
-			if (fill.a == 0)
-			{
-				blx_fill_rect(
-					ctx,
-					vi2d((pos.x - game->pos.x + MINIMAPSIZE) * CELLSIZE,
-						 (pos.y - game->pos.y + MINIMAPSIZE) * CELLSIZE),
-					vi2d(((pos.x - game->pos.x + MINIMAPSIZE) + 1) * CELLSIZE -
-							 1,
-						 ((pos.y - game->pos.y + MINIMAPSIZE) + 1) * CELLSIZE -
-							 1),
-					fill);
-				blx_draw_rect(
-					ctx,
-					vi2d((pos.x - game->pos.x + MINIMAPSIZE) * CELLSIZE,
-						 (pos.y - game->pos.y + MINIMAPSIZE) * CELLSIZE),
-					vi2d((pos.x - game->pos.x + MINIMAPSIZE + 1) * CELLSIZE - 1,
-						 (pos.y - game->pos.y + MINIMAPSIZE + 1) * CELLSIZE -
-							 1),
-					border);
-			}
-			pos.x++;
-		}
-		pos.y++;
-	}
-	draw_player(ctx, game);
-}
-
 bool hit_x_y(t_ray *ray)
 {
 	double int_y;
 	double int_x;
-	double x;
-	double y;
+	t_vf2d pos;
 
 	ray->tex = TEX_NORTH;
-	x = modf(ray->x, &int_x);
-	y = modf(ray->y, &int_y);
+	pos.x = modf(ray->x, &int_x);
+	pos.y = modf(ray->y, &int_y);
 
-	double distance_x = fmin(x, 1 - x);
-	double distance_y = fmin(y, 1 - y);
+	double distance_x = fmin(pos.x, 1 - pos.x);
+	double distance_y = fmin(pos.y, 1 - pos.y);
 
-	if (distance_x > distance_y)
+	if (distance_x >= distance_y)
 	{
 		if (ray->direction >= 0)
 		{
 			ray->tex = TEX_SOUTH;
-			ray->percent_wall = 1 - x;
+			ray->percent_wall = 1 - pos.x;
 		}
 		else
 		{
 			ray->tex = TEX_NORTH;
-			ray->percent_wall = x;
+			ray->percent_wall = pos.x;
 		}
 	}
 	else
@@ -160,11 +60,11 @@ bool hit_x_y(t_ray *ray)
 		if (ray->direction >= PI / 2 || ray->direction <= -PI / 2)
 		{
 			ray->tex = TEX_EAST;
-			ray->percent_wall = 1 - y;
+			ray->percent_wall = 1 - pos.y;
 		}
 		else
 		{
-			ray->percent_wall = y;
+			ray->percent_wall = pos.y;
 			ray->tex = TEX_WEST;
 		}
 	}
@@ -224,7 +124,7 @@ void cast_rays(t_blx *ctx, t_game *game)
 			(game->angle - FOV / 2.0) + (i / (double)ctx->app.size_x) * FOV;
 		t_ray ray = my_ray(game, angle, false);
 
-		// ray.ray_len *= cos(angle);
+		ray.ray_len *= cos(angle - game->angle);
 
 		int ceiling = (((double)ctx->app.size_y / 2.0) -
 					   ((double)ctx->app.size_y / ray.ray_len) * ray.hit_wall);
@@ -260,13 +160,6 @@ void cast_rays(t_blx *ctx, t_game *game)
 			}
 			y++;
 		}
-
-		t_vi2d ray_end =
-			vi2d(cos(ray.direction) * ray.ray_len * CELLSIZE + 20 * CELLSIZE,
-				 sin(ray.direction) * ray.ray_len * CELLSIZE + 20 * CELLSIZE);
-
-		blx_draw_line(ctx, vi2d(20 * CELLSIZE, 20 * CELLSIZE), ray_end,
-					  new_color(255, 0, 0));
 		i++;
 	}
 }
@@ -306,7 +199,10 @@ bool game_loop(t_blx *ctx)
 		str = string_new(1024);
 		snprintf(str.buf, 1024, "FPS: %02.2f\nx: %f\ny: %f\nangle: %f",
 				 1. / ctx->elapsed, game->pos.x, game->pos.y, game->angle);
-		blx_draw_string(ctx, vi2d(0, 120), str.buf, new_color(255, 255, 255));
+		blx_fill_rect(ctx, vi2d(0, ctx->app.size_y - 8 * 4),
+					  vi2d(8 * 16, ctx->app.size_y), new_color(0, 0, 0));
+		blx_draw_string(ctx, vi2d(0, ctx->app.size_y - 8 * 4), str.buf,
+						new_color(255, 255, 255));
 		string_free(str);
 	}
 	if (BONUS && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0 &&
@@ -314,12 +210,6 @@ bool game_loop(t_blx *ctx)
 		handle_door(ctx, game, vi2d(ray.x, ray.y));
 	if (BONUS)
 		draw_minimap(ctx, game);
-	// draw_player(ctx, game);
-	// t_vi2d endline = vi2d(
-	//	cos(game->angle) * CELLSIZE * ray.ray_len + game->pos.x * CELLSIZE,
-	//	sin(game->angle) * ray.ray_len * CELLSIZE + game->pos.y * CELLSIZE);
-	// blx_draw_line(ctx, vi2d(game->pos.x * CELLSIZE, game->pos.y * CELLSIZE),
-	// endline, new_color(120, 255, 0));
 	return (false);
 }
 
@@ -333,13 +223,6 @@ void game_free(t_game *game)
 void game_free_blx(t_blx_app app)
 {
 	game_free(app.data);
-}
-
-void printdata(t_game *game)
-{
-	printf("PLAYER X = [%f]\n", game->pos.x);
-	printf("PLAYER Y = [%f]\n", game->pos.y);
-	printf("DIRECTION = [%f]\n", game->angle * 180 / PI);
 }
 
 int main(int argc, char **argv)
