@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 14:08:07 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/19 14:12:34 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,6 @@ void handle_door(t_blx *ctx, t_game *game, t_vi2d pos)
 {
 	t_tile door_tile;
 
-	ctx->elapsed;
 	if (!BONUS)
 		return;
 	(void)(ctx);
