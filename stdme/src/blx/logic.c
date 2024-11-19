@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 18:06:06 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 22:09:37 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:12:56 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ static void blx_stop(t_blx *app)
 {
 	mlx_loop_end(app->mlx);
 	blx_free(*app);
-	uninit_global_allocator();
-	close_all_slots();
-	exit(0);
+	me_exit(0);
 }
 
 // TODO: implement mouse buttons when needed

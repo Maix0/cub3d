@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:08:52 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:37 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/19 15:34:04 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ void	me_exit(t_i32 exit_code)
 {
 	(get_stdin(), get_stdout(), get_stderr());
 	close_all_slots();
+	uninit_global_allocator();
 	exit(exit_code);
 }

@@ -21,7 +21,9 @@ t_error hmap_C__PREFIX___iter(t_hashmap_C__PREFIX__ *self,
 	t_usize				 bucket_id;
 	t_usize				 all_id;
 	t_entry_C__PREFIX__ *cur;
-
+	
+	if (self == NULL)
+		return (ERROR);
 	bucket_id = 0;
 	all_id = 0;
 	while (bucket_id < self->num_buckets)

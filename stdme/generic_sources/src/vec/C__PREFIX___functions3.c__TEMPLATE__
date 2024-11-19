@@ -20,6 +20,8 @@ t_error vec_C__PREFIX___push_front(t_vec_C__PREFIX__ *vec,
 {
 	t_usize i;
 
+	if (vec == NULL || vec->buffer == NULL)
+		return (ERROR);
 	if (vec->len == 0)
 		return (vec_C__PREFIX___push(vec, element));
 	i = vec->len - 1;
@@ -41,6 +43,8 @@ t_error vec_C__PREFIX___pop_front(t_vec_C__PREFIX__ *vec, C__TYPENAME__ *value)
 {
 	t_usize i;
 
+	if (vec == NULL || vec->buffer == NULL)
+		return (ERROR);
 	if (vec->len <= 1)
 		return (vec_C__PREFIX___pop(vec, value));
 	i = 0;
@@ -60,6 +64,8 @@ void vec_C__PREFIX___reverse(t_vec_C__PREFIX__ *vec)
 	C__TYPENAME__ temporary;
 	t_usize		  i;
 
+	if (vec == NULL || vec->buffer == NULL)
+		return ;
 	i = 0;
 	while (i < vec->len / 2)
 	{
@@ -74,9 +80,11 @@ t_error vec_C__PREFIX___back(t_vec_C__PREFIX__ *vec, C__TYPENAME__ **out)
 {
 	C__TYPENAME__ *temporary;
 
+	if (vec == NULL || vec->buffer == NULL)
+		return (ERROR);
 	if (out == NULL)
 		out = &temporary;
 	if (vec->len != 0)
 		return (*out = &vec->buffer[vec->len - 1], true);
-	return (false);
+	return (NO_ERROR);
 }

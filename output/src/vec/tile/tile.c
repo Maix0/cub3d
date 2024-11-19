@@ -31,9 +31,10 @@ t_vec_tile vec_tile_new(t_usize				  capacity,
 /// Return true in case of an error
 t_error vec_tile_push(t_vec_tile *vec, t_tile element)
 {
-	if (vec == NULL)
+	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);
-	vec_tile_reserve(vec, vec->len + 1);
+	if (vec_tile_reserve(vec, vec->len + 1))
+		return (ERROR);
 	vec->buffer[vec->len] = element;
 	vec->len += 1;
 	return (NO_ERROR);
@@ -44,7 +45,7 @@ t_error vec_tile_reserve(t_vec_tile *vec, t_usize wanted_capacity)
 {
 	size_t new_capacity;
 
-	if (vec == NULL)
+	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);
 	if (wanted_capacity > vec->capacity)
 	{
@@ -53,6 +54,8 @@ t_error vec_tile_reserve(t_vec_tile *vec, t_usize wanted_capacity)
 			new_capacity = (new_capacity * 3) / 2 + 1;
 		vec->buffer =
 			mem_realloc_array(vec->buffer, new_capacity, sizeof(t_tile));
+		if (vec->buffer == NULL)
+			return (ERROR);
 		vec->capacity = new_capacity;
 	}
 	return (NO_ERROR);
@@ -65,7 +68,7 @@ t_error vec_tile_pop(t_vec_tile *vec, t_tile *value)
 	t_tile  temp_value;
 	t_tile *ptr;
 
-	if (vec == NULL || vec->len == 0)
+	if (vec == NULL || vec->buffer == NULL || vec->len == 0)
 		return (ERROR);
 	ptr = value;
 	if (value == NULL)

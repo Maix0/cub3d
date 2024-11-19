@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 14:12:34 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/19 15:14:41 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ void game_free_blx(t_blx_app app)
 	game_free(app.data);
 }
 
-int main(int argc, char **argv)
+int real_main(int argc, t_str argv[])
 {
 	t_game game;
 	t_blx  blx;
@@ -236,10 +236,11 @@ int main(int argc, char **argv)
 	(void)(&argv[argc]);
 	if (argc != 2)
 		return (cube_error("Usage: %s <map>", argv[0]), 1);
-	init_game(&game);
+	if (init_game(&game))
+		return (cube_error("Failed allocation"), 1);
 	mem_set_zero(&blx, sizeof(blx));
 	if (parse_map(&game, argv[1]))
-		return (game_free(&game), uninit_global_allocator(), 1);
+		return (game_free(&game), 1);
 	if (blx_initialize(game_loop, game_free_blx,
 					   (t_blx_app){
 						   .size_x = 900,
@@ -249,10 +250,14 @@ int main(int argc, char **argv)
 						   .data = &game,
 					   },
 					   &blx))
-		return (cube_error("Failed to init mlx"), game_free(&game),
-				uninit_global_allocator(), 1);
+		return (cube_error("Failed to init mlx"), game_free(&game), 1);
 	if (fetch_textures(&blx))
 		game.exit = true;
 	blx_run(blx);
 	return (0);
+}
+
+int main(int argc, char **argv)
+{
+	me_exit(real_main(argc, argv));
 }

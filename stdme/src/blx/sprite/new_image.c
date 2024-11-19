@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 21:59:04 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/22 13:24:29 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:34:09 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "me/blx/colors.h"
 #include "me/blx/sprite.h"
 #include <mlx.h>
+#include <stdio.h>
 
 t_error	blx_sprite_from_xpm(t_blx *ctx, t_str path, t_sprite *out)
 {

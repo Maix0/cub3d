@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 22:04:04 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:49:14 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ struct s_ray
 
 t_error fetch_textures(t_blx *game);
 t_error parse_map(t_game *game, t_const_str filename);
-void	init_game(t_game *game);
+t_error init_game(t_game *game);
 void	cube_error(t_const_str fmt, ...);
 bool	handle_input(t_blx *ctx, t_game *game);
 void	draw_minimap(t_blx *ctx, t_game *game);

@@ -20,7 +20,7 @@ void vec_tile_sort(t_vec_tile		   *v,
 	t_usize		  i;
 	t_tile tmp;
 
-	if (v == NULL)
+	if (v == NULL || v->buffer == NULL)
 		return;
 	sorted_part = v->len;
 	while (sorted_part > 0)

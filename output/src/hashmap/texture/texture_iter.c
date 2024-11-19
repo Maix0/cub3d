@@ -21,7 +21,9 @@ t_error hmap_texture_iter(t_hashmap_texture *self,
 	t_usize				 bucket_id;
 	t_usize				 all_id;
 	t_entry_texture *cur;
-
+	
+	if (self == NULL)
+		return (ERROR);
 	bucket_id = 0;
 	all_id = 0;
 	while (bucket_id < self->num_buckets)

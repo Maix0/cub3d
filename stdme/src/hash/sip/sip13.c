@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/10 19:32:28 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:30 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/19 15:07:53 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_hasher	hasher_sip13_new(void)
 	t_sip13		*inner;
 
 	inner = mem_alloc(sizeof(t_sip13));
+	if (inner == NULL)
+		return ((t_hasher){0});
 	inner->state = create_state_with_key(0, 0);
 	inner->k0 = 0;
 	inner->k1 = 0;

@@ -23,6 +23,8 @@ C__VALTYPE__ *hmap_C__PREFIX___get(t_hashmap_C__PREFIX__ *hmap,
 	t_entry_C__PREFIX__ *entry;
 	t_entry_C__PREFIX__ *prev;
 
+	if (hmap == NULL)
+		return (NULL);
 	hmap->hfunc(&hmap->hasher, key);
 	hashed_key = hasher_reset_and_finish(&hmap->hasher);
 	entry = hmap_C__PREFIX___get_entry(hmap, hashed_key, key, &prev);
@@ -37,6 +39,8 @@ void hmap_C__PREFIX___remove(t_hashmap_C__PREFIX__ *hmap, C__KEYTYPE__ *key)
 	t_entry_C__PREFIX__ *prev;
 	t_entry_C__PREFIX__ *entry;
 
+	if (hmap == NULL || key == NULL)
+		return ;
 	hmap->hfunc(&hmap->hasher, key);
 	hashed_key = hasher_reset_and_finish(&hmap->hasher);
 	prev = NULL;

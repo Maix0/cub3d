@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 14:17:55 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:21:56 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 								   tile),
 						ERROR);
 			if (game->map.inner.buffer == NULL)
-				return (cube_error("Allocation Failed"), vec_str_free(lines),
+				return (vec_str_free(lines), cube_error("Allocation Failed"),
 						ERROR);
 			x++;
 		}

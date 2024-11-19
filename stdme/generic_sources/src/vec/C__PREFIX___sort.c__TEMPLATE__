@@ -20,7 +20,7 @@ void vec_C__PREFIX___sort(t_vec_C__PREFIX__		   *v,
 	t_usize		  i;
 	C__TYPENAME__ tmp;
 
-	if (v == NULL)
+	if (v == NULL || v->buffer == NULL)
 		return;
 	sorted_part = v->len;
 	while (sorted_part > 0)

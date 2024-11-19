@@ -26,6 +26,8 @@ t_error hmap_texture_clone(t_hashmap_texture *self,
 	t_kv_texture		kv;
 	t_hashmap_texture	*ret;
 
+	if (self == NULL)
+		return (ERROR);
 	bucket_id = 0;
 	ret = hmap_texture_new_with_buckets(self->hfunc, self->cfunc, self->free, self->num_buckets);
 	if (ret == NULL)

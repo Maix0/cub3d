@@ -23,6 +23,8 @@ t_sprite *hmap_texture_get(t_hashmap_texture *hmap,
 	t_entry_texture *entry;
 	t_entry_texture *prev;
 
+	if (hmap == NULL)
+		return (NULL);
 	hmap->hfunc(&hmap->hasher, key);
 	hashed_key = hasher_reset_and_finish(&hmap->hasher);
 	entry = hmap_texture_get_entry(hmap, hashed_key, key, &prev);
@@ -37,6 +39,8 @@ void hmap_texture_remove(t_hashmap_texture *hmap, t_texture *key)
 	t_entry_texture *prev;
 	t_entry_texture *entry;
 
+	if (hmap == NULL || key == NULL)
+		return ;
 	hmap->hfunc(&hmap->hasher, key);
 	hashed_key = hasher_reset_and_finish(&hmap->hasher);
 	prev = NULL;

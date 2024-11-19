@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 19:18:44 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/22 13:20:42 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:33:25 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 
 #define FONT_SHEET_PATH "textures/font.xpm"
 
-void	blx_create_fontsheet(t_blx *app)
+t_error	blx_create_fontsheet(t_blx *app)
 {
 	if (blx_sprite_from_xpm(app, FONT_SHEET_PATH, &app->_data.font))
 	{
 		me_eprintf("Error:\nCouldn't open font sheet !\n");
-		exit(5);
+		return (ERROR);
 	}
+	return (NO_ERROR);
 }

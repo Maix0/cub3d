@@ -31,9 +31,10 @@ t_vec_C__PREFIX__ vec_C__PREFIX___new(t_usize				  capacity,
 /// Return true in case of an error
 t_error vec_C__PREFIX___push(t_vec_C__PREFIX__ *vec, C__TYPENAME__ element)
 {
-	if (vec == NULL)
+	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);
-	vec_C__PREFIX___reserve(vec, vec->len + 1);
+	if (vec_C__PREFIX___reserve(vec, vec->len + 1))
+		return (ERROR);
 	vec->buffer[vec->len] = element;
 	vec->len += 1;
 	return (NO_ERROR);
@@ -44,7 +45,7 @@ t_error vec_C__PREFIX___reserve(t_vec_C__PREFIX__ *vec, t_usize wanted_capacity)
 {
 	size_t new_capacity;
 
-	if (vec == NULL)
+	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);
 	if (wanted_capacity > vec->capacity)
 	{
@@ -53,6 +54,8 @@ t_error vec_C__PREFIX___reserve(t_vec_C__PREFIX__ *vec, t_usize wanted_capacity)
 			new_capacity = (new_capacity * 3) / 2 + 1;
 		vec->buffer =
 			mem_realloc_array(vec->buffer, new_capacity, sizeof(C__TYPENAME__));
+		if (vec->buffer == NULL)
+			return (ERROR);
 		vec->capacity = new_capacity;
 	}
 	return (NO_ERROR);
@@ -65,7 +68,7 @@ t_error vec_C__PREFIX___pop(t_vec_C__PREFIX__ *vec, C__TYPENAME__ *value)
 	C__TYPENAME__  temp_value;
 	C__TYPENAME__ *ptr;
 
-	if (vec == NULL || vec->len == 0)
+	if (vec == NULL || vec->buffer == NULL || vec->len == 0)
 		return (ERROR);
 	ptr = value;
 	if (value == NULL)

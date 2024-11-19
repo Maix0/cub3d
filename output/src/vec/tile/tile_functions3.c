@@ -20,6 +20,8 @@ t_error vec_tile_push_front(t_vec_tile *vec,
 {
 	t_usize i;
 
+	if (vec == NULL || vec->buffer == NULL)
+		return (ERROR);
 	if (vec->len == 0)
 		return (vec_tile_push(vec, element));
 	i = vec->len - 1;
@@ -41,6 +43,8 @@ t_error vec_tile_pop_front(t_vec_tile *vec, t_tile *value)
 {
 	t_usize i;
 
+	if (vec == NULL || vec->buffer == NULL)
+		return (ERROR);
 	if (vec->len <= 1)
 		return (vec_tile_pop(vec, value));
 	i = 0;
@@ -60,6 +64,8 @@ void vec_tile_reverse(t_vec_tile *vec)
 	t_tile temporary;
 	t_usize		  i;
 
+	if (vec == NULL || vec->buffer == NULL)
+		return ;
 	i = 0;
 	while (i < vec->len / 2)
 	{
@@ -74,9 +80,11 @@ t_error vec_tile_back(t_vec_tile *vec, t_tile **out)
 {
 	t_tile *temporary;
 
+	if (vec == NULL || vec->buffer == NULL)
+		return (ERROR);
 	if (out == NULL)
 		out = &temporary;
 	if (vec->len != 0)
 		return (*out = &vec->buffer[vec->len - 1], true);
-	return (false);
+	return (NO_ERROR);
 }

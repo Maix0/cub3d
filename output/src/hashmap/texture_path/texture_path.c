@@ -35,13 +35,15 @@ t_hashmap_texture_path *hmap_texture_path_new_with_buckets(
 	if (hmap == NULL)
 		return (NULL);
 	hmap->buckets = mem_alloc_array(buckets, sizeof(t_entry_texture_path *));
+	if (hmap->buckets == NULL)
+		return (mem_free(hmap), NULL);
 	hmap->num_buckets = buckets;
 	hmap->hasher = hasher_sip13_new();
+	if (hmap->hasher.hasher == NULL)
+		return (mem_free(hmap->buckets), mem_free(hmap), NULL);
 	hmap->hfunc = hfunc;
 	hmap->cfunc = cfunc;
 	hmap->free = free;
-	if (hmap->buckets == NULL)
-		return ((void)mem_free(hmap), NULL);
 	return (hmap);
 }
 
@@ -51,6 +53,8 @@ void hmap_texture_path_free(t_hashmap_texture_path *hmap)
 	t_entry_texture_path *entry;
 	t_entry_texture_path *tmp;
 
+	if (hmap == NULL)
+		return;
 	index = 0;
 	while (index < hmap->num_buckets)
 	{
@@ -106,6 +110,8 @@ bool hmap_texture_path_insert(t_hashmap_texture_path *hmap, t_texture key,
 	if (entry == NULL)
 	{
 		entry = mem_alloc(sizeof(t_entry_texture_path));
+		if (entry == NULL)
+			return (hmap->free((typeof(entry->kv)){.key=key, .val=value}), false);
 		entry->hash_id = hashed_key;
 		entry->kv = (t_kv_texture_path){.key = key, .val = value};
 		entry->next = NULL;

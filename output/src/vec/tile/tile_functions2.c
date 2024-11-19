@@ -101,7 +101,7 @@ void vec_tile_iter(t_vec_tile *vec,
 {
 	t_usize idx;
 
-	if (vec == NULL || fn == NULL)
+	if (vec == NULL || fn == NULL || vec->buffer == NULL)
 		return;
 	idx = 0;
 	while (idx < vec->len)

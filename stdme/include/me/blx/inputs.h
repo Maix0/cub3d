@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:38:22 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/15 14:13:57 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:27:07 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ typedef struct s_blx_input
 /// @param ctx the BLX context
 /// @return the created input manager
 /// @note this is an internal function, you should not call it yourself
-t_blx_input				create_inputs_manager(t_blx *ctx);
+t_error				create_inputs_manager(t_blx *ctx);
 
 #endif

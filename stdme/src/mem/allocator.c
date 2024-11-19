@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 18:26:27 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 14:06:52 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:12:01 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_allocator	*global_allocator(void)
 	if (!init)
 	{
 		init = true;
-		global_alloc = lc_init();
+		global_alloc = m_init();
 	}
 	return (&global_alloc);
 }

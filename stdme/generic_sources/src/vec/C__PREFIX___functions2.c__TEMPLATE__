@@ -101,7 +101,7 @@ void vec_C__PREFIX___iter(t_vec_C__PREFIX__ *vec,
 {
 	t_usize idx;
 
-	if (vec == NULL || fn == NULL)
+	if (vec == NULL || fn == NULL || vec->buffer == NULL)
 		return;
 	idx = 0;
 	while (idx < vec->len)

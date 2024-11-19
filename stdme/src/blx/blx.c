@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:01:06 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/17 23:13:43 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:17:35 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void blx_create_fontsheet(t_blx *app);
+t_error blx_create_fontsheet(t_blx *app);
+void	free_input_manager(t_blx_input);
 
 t_error blx_initialize(t_run_function func, t_free_function free_fn,
 					   t_blx_app data, t_blx *ctx)
@@ -33,17 +34,23 @@ t_error blx_initialize(t_run_function func, t_free_function free_fn,
 	ctx->mlx = mlx_init();
 	if (ctx->mlx == NULL)
 		return (ERROR);
-	ctx->inputs = create_inputs_manager(ctx);
-	if (ctx->inputs.keysyms_released.buffer == NULL ||
-		ctx->inputs.keysyms_held.buffer == NULL ||
-		ctx->inputs.keysyms_pressed.buffer == NULL)
+	if (create_inputs_manager(ctx))
 		return (mlx_destroy_display(ctx->mlx), free(ctx->mlx), ERROR);
-	ctx->win = mlx_new_window(ctx->mlx, data.size_x * data.pixel_size,
-							  data.size_y * data.pixel_size, data.title);
 	if (blx_sprite_new(ctx, data.size_x * data.pixel_size,
 					   data.size_y * data.pixel_size, &ctx->_data.screen))
-		return (ERROR);
-	blx_create_fontsheet(ctx);
+		return (free_input_manager(ctx->inputs), mlx_destroy_display(ctx->mlx),
+				free(ctx->mlx), ERROR);
+	if (blx_create_fontsheet(ctx))
+		return (free_input_manager(ctx->inputs),
+				blx_sprite_free(ctx->_data.screen),
+				mlx_destroy_display(ctx->mlx), free(ctx->mlx), ERROR);
+	ctx->win = mlx_new_window(ctx->mlx, data.size_x * data.pixel_size,
+							  data.size_y * data.pixel_size, data.title);
+	if (ctx->win == NULL)
+		return (free_input_manager(ctx->inputs),
+				blx_sprite_free(ctx->_data.screen),
+				blx_sprite_free(ctx->_data.font), mlx_destroy_display(ctx->mlx),
+				free(ctx->mlx), ERROR);
 	return (NO_ERROR);
 }
 
