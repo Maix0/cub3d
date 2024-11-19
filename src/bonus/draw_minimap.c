@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 21:18:51 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 17:37:58 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:05:51 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ bool	_minimap_get_col(t_tile tile, t_color *fill, t_color *border)
 void	draw_minimap(t_blx *ctx, t_game *game)
 {
 	t_vi2d	pos;
-	t_tile	tile;
 	t_color	fill;
 	t_color	border;
 

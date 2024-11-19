@@ -5,6 +5,9 @@ map/flood_fill                                                                \
 map/load_textures                                                             \
 map/manipulate_map                                                            \
 map/parse_lines                                                               \
+map/parse_lines_extract_color                                                 \
+map/parse_lines_map                                                           \
+map/parse_lines_utils                                                         \
 map/read_whole_map                                                            \
 movement/collision                                                            \
 movement/input                                                                \

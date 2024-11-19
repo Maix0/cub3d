@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 16:57:59 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:07:59 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ bool hit_x_y(t_ray *ray)
 	}
 	return false;
 }
-#define MAX_DIST 500.0
+#define MAX_DIST 100.0
 
 t_ray my_ray(t_game *game, double direction, bool check_door)
 {
@@ -114,18 +114,6 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 
 	while (ray.ray_len < MAX_DIST)
 	{
-
-		/*
-			if ray_length1d.x < ray_length1d.y {
-				map_check.x += step.x;
-				distance = ray_length1d.x;
-				ray_length1d.x += ray_unit_step_size.x;
-			} else {
-				map_check.y += step.y;
-				distance = ray_length1d.y;
-				ray_length1d.y += ray_unit_step_size.y;
-			}
-		*/
 		if (ray_length1d.x < ray_length1d.y)
 		{
 			map_check.x += step.x;
