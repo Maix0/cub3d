@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 18:20:39 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:35:48 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 		{
 			ray.hit_wall = true;
 			ray.tile = get_tile(&game->map, map_check);
+			ray.tile_pos = map_check;
 			hit_x_y(&ray);
 			break;
 		}
@@ -235,9 +236,9 @@ bool game_loop(t_blx *ctx)
 		string_clear(&game->str);
 	}
 	ray = my_ray(game, game->angle, true);
-	if (BONUS && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0 &&
+	if (BONUS && ray.hit_wall && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0 &&
 		ray.ray_len > INC)
-		handle_door(ctx, game, vi2d(ray.x, ray.y));
+		handle_door(ctx, game, ray.tile_pos);
 	if (BONUS)
 		draw_minimap(ctx, game);
 	return (false);

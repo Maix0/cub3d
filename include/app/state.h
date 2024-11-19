@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 17:00:02 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:35:25 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ struct					s_ray
 	double				direction;
 	t_tile				tile;
 	double				percent_wall;
+	t_vi2d				tile_pos;
 };
 
 bool					handle_input(t_blx *ctx, t_game *game);
