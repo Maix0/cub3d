@@ -6,7 +6,7 @@
 #    By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/03 13:20:01 by maiboyer          #+#    #+#              #
-#    Updated: 2024/11/14 12:00:54 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/11/19 18:13:09 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ BASE_PATH		?=	$(shell pwd)
 LIB_NAME		?=	
 TARGET			=	$(NAME)
 CC				?=	cc
-CFLAGS			=	-Wall -Werror -Wextra -MMD -DBASE_PATH='"$(BASE_PATH)/"'
+CFLAGS			=	-Wall -Werror -Wextra -MMD -DBASE_PATH='"$(BASE_PATH)/"' -O2
 CFLAGS			+=	$(CFLAGS_ADDITIONAL)
 CLDFLAGS		=	-L$(BUILD_DIR) -lme -lmlx -lX11 -lXext -lm
 
@@ -69,7 +69,7 @@ bonus: $(NAME)
 
 make_libs: 
 	@$(MAKE) -C ./stdme/ 	"LIB_NAME=$(shell realpath ./stdme)/"	libme.a
-	@$(MAKE) -C ./mlx/ -f Makefile.mk 'CFLAGS=-O3 $(call escape, $(CFLAGS_ADDITIONAL))' "OBJ_DIR=$(BUILD_DIR)/mlx" "NAME=$(BUILD_DIR)/libmlx.a"
+	@$(MAKE) -C ./mlx/ -f Makefile.mk 'CFLAGS=-O3 $(call escape, $(CFLAGS_ADDITIONAL))' "OBJ_DIR=$(BUILD_DIR)/mlx" "NAME=$(BUILD_DIR)/libmlx.a" "NAME_UNAME=/dev/null"
 
 $(TARGET): $(OBJ) $(BUILD_DIR)/libme.a $(BUILD_DIR)/libmlx.a
 	@echo -e '$(COL_GRAY) Linking \t$(COL_GOLD)$(TARGET)$(COL_RESET)'

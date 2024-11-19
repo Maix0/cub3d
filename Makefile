@@ -6,7 +6,7 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/11/19 18:06:58 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/11/19 18:13:13 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,6 @@ endif
 
 
 CFLAGS_ADDITIONAL	+= -DNVALGRIND
-CFLAGS_ADDITIONAL	+= -O2
 # TODO: REMOVE THIS WHEN FINISHING THIS:
 #CFLAGS_ADDITIONAL	+= -O0 -Wno-\#warnings 
 CFLAGS_ADDITIONAL	+= -gcolumn-info -g3 -fno-builtin

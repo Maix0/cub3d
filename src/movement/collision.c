@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:41:01 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 17:25:33 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:08:27 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "app/textures.h"
 #include "app/tile.h"
 
-bool	is_wall_for_player(t_game *game, t_vf2d pos)
+static inline bool	is_wall_for_player(t_game *game, t_vf2d pos)
 {
 	bool	is_wall;
 

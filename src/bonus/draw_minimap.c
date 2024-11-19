@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 21:18:51 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 18:05:51 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:08:59 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #define P_SIZE 0.48
 #define M_SIZE 5
 
-void	draw_player(t_blx *ctx, t_game *game)
+static inline void	draw_player(t_blx *ctx, t_game *game)
 {
 	t_vi2d	endline;
 
@@ -36,7 +36,8 @@ void	draw_player(t_blx *ctx, t_game *game)
 	blx_draw(ctx, endline, new_color(0, 0, 255));
 }
 
-bool	_minimap_get_col(t_tile tile, t_color *fill, t_color *border)
+static inline bool	_minimap_get_col(\
+				t_tile tile, t_color *fill, t_color *border)
 {
 	if (tile == (TILE_FLOOR))
 	{

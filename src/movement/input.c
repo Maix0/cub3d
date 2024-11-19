@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:42:31 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 17:27:43 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:08:40 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void	perform_collision(t_blx *ctx, t_game *game);
 void	handle_mouse_movement(t_blx *ctx, t_game *game);
 
-void	sanitize_input(t_blx *ctx, t_game *game)
+static inline void	sanitize_input(t_blx *ctx, t_game *game)
 {
 	(void)(ctx);
 	while (game->angle >= PI)
@@ -26,7 +26,7 @@ void	sanitize_input(t_blx *ctx, t_game *game)
 		game->angle += 2.0 * PI;
 }
 
-void	movement_keys(t_blx *ctx, t_game *game)
+static inline void	movement_keys(t_blx *ctx, t_game *game)
 {
 	if (is_key_held(ctx, KB_w) || is_key_held(ctx, KB_Up))
 	{
