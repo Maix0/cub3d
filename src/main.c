@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 18:35:48 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 20:22:57 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,13 +126,12 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 			ray.ray_len = ray_length1d.y;
 			ray_length1d.y += ray_step_size.y;
 		}
-		//ray.ray_len += 0.01;
+		// ray.ray_len += 0.01;
 		ray.x = cos(direction) * ray.ray_len + game->pos.x;
 		ray.y = sin(direction) * ray.ray_len + game->pos.y;
 		// quelle tile je touche, len du ray, et sud est ,
 		if (get_tile(&game->map, map_check) & TILE_SOLID ||
-			(check_door &&
-			 get_tile(&game->map, map_check) & TILE_DOOR))
+			(check_door && get_tile(&game->map, map_check) & TILE_DOOR))
 		{
 			ray.hit_wall = true;
 			ray.tile = get_tile(&game->map, map_check);
@@ -158,16 +157,17 @@ void cast_rays(t_blx *ctx, t_game *game)
 	while (i < (int)ctx->app.size_x)
 	{
 		double angle;
-		t_ray ray;
-		int ceiling;
-		int floor;
-		
+		t_ray  ray;
+		int	   ceiling;
+		int	   floor;
+
 		y = 0;
-		angle = (game->angle - game->fov / 2.0) + (i / (double)ctx->app.size_x) * game->fov;
+		angle = (game->angle - game->fov / 2.0) +
+				(i / (double)ctx->app.size_x) * game->fov;
 		ray = my_ray(game, angle, false);
 		ray.ray_len *= cos(angle - game->angle);
 		ceiling = (((double)ctx->app.size_y / 2.0) -
-					   ((double)ctx->app.size_y / ray.ray_len) * ray.hit_wall);
+				   ((double)ctx->app.size_y / ray.ray_len) * ray.hit_wall);
 		floor = (double)ctx->app.size_y - ceiling;
 		if (ray.tile & TILE_DOOR)
 			ray.tex = TEX_DOOR;
@@ -179,13 +179,13 @@ void cast_rays(t_blx *ctx, t_game *game)
 			{
 				t_vf2d	  tex_pos;
 				t_sprite *texture;
-				t_color col;
+				t_color	  col;
 
 				texture = hmap_texture_get(game->textures, &ray.tex);
 				tex_pos = vf2d(ray.percent_wall,
 							   (y - ((double)ceiling)) /
 								   (((double)floor) - ((double)ceiling)));
-				col = new_color(0,0,0);
+				col = new_color(0, 0, 0);
 				sprite_get_pixel_normalized(texture, tex_pos, &col);
 				blx_draw(ctx, vi2d(i, y), col);
 			}
@@ -216,8 +216,8 @@ void handle_door(t_blx *ctx, t_game *game, t_vi2d pos)
 
 bool game_loop(t_blx *ctx)
 {
-	t_game	*game;
-	t_ray ray;
+	t_game *game;
+	t_ray	ray;
 
 	game = ctx->app.data;
 	if (game->exit)
@@ -227,11 +227,13 @@ bool game_loop(t_blx *ctx)
 		return (true);
 	cast_rays(ctx, game);
 	{
-		snprintf(game->str.buf, 1024, "FPS: %02.2f\nx: %.1f\ny: %.1f\n[a/d] angle: %.0f\n[i/o/p] FOV: %.0f",
-				 1. / ctx->elapsed, game->pos.x, game->pos.y, game->angle/ (2.0 * PI) * 360, game->fov / (2.0 * PI) * 360);
-		blx_fill_rect(ctx, vi2d(0, ctx->app.size_y - 8 * 5),
-					  vi2d(8 * 16, ctx->app.size_y), new_color(0, 0, 0));
-		blx_draw_string(ctx, vi2d(0, ctx->app.size_y - 8 * 5), game->str.buf,
+		me_printf_str(
+			&game->str, "FPS:% 3i\n[a/d] angle:% 3i\n[i/o/p] FOV:% 3i",
+			(int)(1. / ctx->elapsed), (int)(game->angle / (2.0 * PI) * 360),
+			(int)(game->fov / (2.0 * PI) * 360));
+		blx_fill_rect(ctx, vi2d(ctx->app.size_x - 8 * 16, 0),
+					  vi2d(ctx->app.size_x, 3 * 8), new_color(0, 0, 0));
+		blx_draw_string(ctx, vi2d(ctx->app.size_x - 8 * 16, 0), game->str.buf,
 						new_color(255, 255, 255));
 		string_clear(&game->str);
 	}
