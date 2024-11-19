@@ -6,7 +6,7 @@
 #    By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/12 11:05:05 by rparodi           #+#    #+#              #
-#    Updated: 2024/11/18 22:54:59 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/11/19 14:19:03 by maiboyer         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ CFLAGS_ADDITIONAL	+= -DNVALGRIND
 #CFLAGS_ADDITIONAL	+= -O0 -Wno-\#warnings 
 CFLAGS_ADDITIONAL	+= -gcolumn-info -g3 -fno-builtin
 CFLAGS_ADDITIONAL	+= '-DERROR=((void)printf("ERROR HERE: " __FILE__ ":%d in %s\n", __LINE__, __func__), 1)'
-CFLAGS_ADDITIONAL	+= -fsanitize=address
+#CFLAGS_ADDITIONAL	+= -fsanitize=address
 
 export CFLAGS_ADDITIONAL
 export CC

@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 18:46:28 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 22:47:45 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:18:32 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_vec_str	vec_str_new(t_usize capacity, t_free_str_item free_function)
 /// Return true in case of an error
 t_error	vec_str_push(t_vec_str *vec, t_str element)
 {
-	if (vec == NULL)
+	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);
 	vec_str_reserve(vec, vec->len + 1);
 	if (vec->buffer == NULL)
@@ -45,7 +45,7 @@ t_error	vec_str_reserve(t_vec_str *vec, t_usize wanted_capacity)
 {
 	size_t	new_capacity;
 
-	if (vec == NULL)
+	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);
 	if (wanted_capacity > vec->capacity)
 	{

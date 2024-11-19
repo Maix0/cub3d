@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 22:43:31 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 14:17:55 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,9 +208,10 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 				vec_tile_push(&game->map.inner, TILE_FLOOR);
 			}
 			else
-				return (cube_error("Invalid map character: '%c'(%#02x)", tile,
+				return (vec_str_free(lines),
+						cube_error("Invalid map character: '%c'(%#02x)", tile,
 								   tile),
-						vec_str_free(lines), ERROR);
+						ERROR);
 			if (game->map.inner.buffer == NULL)
 				return (cube_error("Allocation Failed"), vec_str_free(lines),
 						ERROR);
@@ -219,8 +220,9 @@ t_error parse_map_inner(t_game *game, t_vec_str lines, t_usize map_start)
 		while (x++ < max_width)
 		{
 			vec_tile_push(&game->map.inner, TILE_EMPTY);
-			return (cube_error("Allocation Failed"), vec_str_free(lines),
-					ERROR);
+			if (game->map.inner.buffer == NULL)
+				return (cube_error("Allocation Failed"), vec_str_free(lines),
+						ERROR);
 		}
 		y++;
 	}
