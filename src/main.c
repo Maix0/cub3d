@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 15:14:41 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:55:00 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include "me/blx/blx_key.h"
 #include "me/blx/colors.h"
 #include "me/hashmap/hashmap_texture.h"
-#include "me/mem/_allocator.h"
 #include "me/mem/mem.h"
 #include "me/printf/printf.h"
 #include "me/str/str.h"
@@ -84,10 +83,62 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 	while (direction < -PI)
 		direction += 2 * PI;
 	ray.direction = direction;
+	t_vf2d ray_dir = vf2d(cos(direction), sin(direction));
+	t_vf2d ray_step_size =
+		vf2d(sqrt(1.0 + (ray_dir.y / ray_dir.x) * (ray_dir.y / ray_dir.x)),
+			 sqrt(1.0 + (ray_dir.x / ray_dir.y) * (ray_dir.x / ray_dir.y)));
+	t_vf2d ray_length1d = vf2d(0.0, 0.0);
+	t_vi2d step = vi2d(0, 0);
+	t_vi2d map_check = vi2d(game->pos.x, game->pos.y);
+
+	if (ray_dir.x < 0)
+	{
+		step.x = -1;
+		ray_length1d.x = (game->pos.x - (map_check.x)) * ray_step_size.x;
+	}
+	else
+	{
+		step.x = 1;
+		ray_length1d.x = ((map_check.x + 1.0) - game->pos.x) * ray_step_size.x;
+	}
+	if (ray_dir.y < 0)
+	{
+		step.y = -1;
+		ray_length1d.y = (game->pos.y - (map_check.y)) * ray_step_size.y;
+	}
+	else
+	{
+		step.y = 1;
+		ray_length1d.y = ((map_check.y + 1.0) - game->pos.y) * ray_step_size.y;
+	}
 
 	while (ray.ray_len < MAX_DIST)
 	{
-		ray.ray_len += 0.01;
+
+		/*
+			if ray_length1d.x < ray_length1d.y {
+				map_check.x += step.x;
+				distance = ray_length1d.x;
+				ray_length1d.x += ray_unit_step_size.x;
+			} else {
+				map_check.y += step.y;
+				distance = ray_length1d.y;
+				ray_length1d.y += ray_unit_step_size.y;
+			}
+		*/
+		if (ray_length1d.x < ray_length1d.y)
+		{
+			map_check.x += step.x;
+			ray.ray_len = ray_length1d.x;
+			ray_length1d.x += ray_step_size.x;
+		}
+		else
+		{
+			map_check.y += step.y;
+			ray.ray_len = ray_length1d.y;
+			ray_length1d.y += ray_step_size.y;
+		}
+		//ray.ray_len += 0.01;
 		ray.x = cos(direction) * ray.ray_len + game->pos.x;
 		ray.y = sin(direction) * ray.ray_len + game->pos.y;
 		// quelle tile je touche, len du ray, et sud est ,
