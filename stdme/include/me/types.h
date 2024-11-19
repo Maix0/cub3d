@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 14:31:12 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:25:55 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:36:53 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 #  undef PI
 # endif
 
-#define PI 3.14159265358979323846264338327950288
+# define PI 3.14159265358979323846264338327950288
 
 /// @brief A string, null terminated
 typedef char		*t_str;

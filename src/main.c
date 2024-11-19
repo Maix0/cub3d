@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 16:34:35 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:57:59 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,50 +166,42 @@ void cast_rays(t_blx *ctx, t_game *game)
 	int y;
 
 	i = 0;
-
-	while (i < (int)NUM_RAYS)
+	while (i < (int)ctx->app.size_x)
 	{
+		double angle;
+		t_ray ray;
+		int ceiling;
+		int floor;
+		
 		y = 0;
-		// double x = (i / ctx->app.size_x - 0.5) ;
-		// double angle = atan2(x * FOV, 0.8);
-		double angle =
-			(game->angle - FOV / 2.0) + (i / (double)ctx->app.size_x) * FOV;
-		t_ray ray = my_ray(game, angle, false);
-
+		angle = (game->angle - game->fov / 2.0) + (i / (double)ctx->app.size_x) * game->fov;
+		ray = my_ray(game, angle, false);
 		ray.ray_len *= cos(angle - game->angle);
-
-		int ceiling = (((double)ctx->app.size_y / 2.0) -
+		ceiling = (((double)ctx->app.size_y / 2.0) -
 					   ((double)ctx->app.size_y / ray.ray_len) * ray.hit_wall);
-		int floor = (double)ctx->app.size_y - ceiling;
+		floor = (double)ctx->app.size_y - ceiling;
 		if (ray.tile & TILE_DOOR)
 			ray.tex = TEX_DOOR;
 		while (y < (int)ctx->app.size_y)
 		{
 			if (y <= ceiling)
-			{
 				blx_draw(ctx, vi2d(i, y), game->map.info.ceiling_color);
-			}
-			else if (y > ceiling && y <= floor)
+			else if (y <= floor)
 			{
 				t_vf2d	  tex_pos;
 				t_sprite *texture;
+				t_color col;
 
 				texture = hmap_texture_get(game->textures, &ray.tex);
-				if (texture == NULL)
-					me_abort("halp");
 				tex_pos = vf2d(ray.percent_wall,
 							   (y - ((double)ceiling)) /
 								   (((double)floor) - ((double)ceiling)));
-				t_color col;
-
-				if (sprite_get_pixel_normalized(texture, tex_pos, &col))
-					me_abort("halp2");
+				col = new_color(0,0,0);
+				sprite_get_pixel_normalized(texture, tex_pos, &col);
 				blx_draw(ctx, vi2d(i, y), col);
 			}
 			else
-			{
 				blx_draw(ctx, vi2d(i, y), game->map.info.floor_color);
-			}
 			y++;
 		}
 		i++;
@@ -236,29 +228,25 @@ void handle_door(t_blx *ctx, t_game *game, t_vi2d pos)
 bool game_loop(t_blx *ctx)
 {
 	t_game	*game;
-	t_string str;
+	t_ray ray;
 
 	game = ctx->app.data;
 	if (game->exit)
 		return (true);
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
-	// draw_map(ctx, game);
-
 	if (handle_input(ctx, game))
 		return (true);
 	cast_rays(ctx, game);
-	t_ray ray = my_ray(game, game->angle, true);
-	// TODO: remove this
 	{
-		str = string_new(1024);
-		snprintf(str.buf, 1024, "FPS: %02.2f\nx: %f\ny: %f\nangle: %f",
-				 1. / ctx->elapsed, game->pos.x, game->pos.y, game->angle);
-		blx_fill_rect(ctx, vi2d(0, ctx->app.size_y - 8 * 4),
+		snprintf(game->str.buf, 1024, "FPS: %02.2f\nx: %.1f\ny: %.1f\n[a/d] angle: %.0f\n[i/o/p] FOV: %.0f",
+				 1. / ctx->elapsed, game->pos.x, game->pos.y, game->angle/ (2.0 * PI) * 360, game->fov / (2.0 * PI) * 360);
+		blx_fill_rect(ctx, vi2d(0, ctx->app.size_y - 8 * 5),
 					  vi2d(8 * 16, ctx->app.size_y), new_color(0, 0, 0));
-		blx_draw_string(ctx, vi2d(0, ctx->app.size_y - 8 * 4), str.buf,
+		blx_draw_string(ctx, vi2d(0, ctx->app.size_y - 8 * 5), game->str.buf,
 						new_color(255, 255, 255));
-		string_free(str);
+		string_clear(&game->str);
 	}
+	ray = my_ray(game, game->angle, true);
 	if (BONUS && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0 &&
 		ray.ray_len > INC)
 		handle_door(ctx, game, vi2d(ray.x, ray.y));
@@ -272,6 +260,7 @@ void game_free(t_game *game)
 	vec_tile_free(game->map.inner);
 	hmap_texture_path_free(game->map.info.textures_path);
 	hmap_texture_free(game->textures);
+	string_free(game->str);
 }
 
 void game_free_blx(t_blx_app app)

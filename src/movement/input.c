@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:42:31 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/15 14:26:20 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:51:48 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,12 @@ bool handle_input(t_blx *ctx, t_game *game)
 		game->angle -= game->rotate_speed * ctx->elapsed;
 	if (is_key_held(ctx, KB_d) || is_key_held(ctx, KB_Right))
 		game->angle += game->rotate_speed * ctx->elapsed;
+	if (is_key_held(ctx, KB_p))
+		game->fov += 0.25 * PI * ctx->elapsed;
+	if (is_key_held(ctx, KB_i))
+		game->fov -= 0.25 * PI * ctx->elapsed;
+	if (is_key_held(ctx, KB_o))
+		game->fov = PI / 4;
 	if (BONUS && is_key_pressed(ctx, KB_m))
 		game->mouse_enable = !game->mouse_enable;
 	handle_mouse_movement(ctx, game);

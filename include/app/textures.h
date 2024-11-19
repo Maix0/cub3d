@@ -6,17 +6,17 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:56:28 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/18 17:16:15 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:42:55 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TEXTURES_H
-#define TEXTURES_H
+# define TEXTURES_H
 
-#include "me/types.h"
-#include "me/hash/hasher.h"
+# include "me/types.h"
+# include "me/hash/hasher.h"
 
-typedef enum e_texture t_texture;
+typedef enum e_texture	t_texture;
 
 enum e_texture
 {

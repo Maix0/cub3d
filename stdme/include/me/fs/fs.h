@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 15:12:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:03 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/19 16:39:28 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,8 +259,7 @@ void						put_char_fd(t_fd *fd, t_u8 c);
 /// @note will return NULL in case of error (either fd is null or dup failed)
 t_fd						*dup_fd(t_fd *fd);
 
-
-t_error	getline_fd(t_fd *fd, t_string *out);
+t_error						getline_fd(t_fd *fd, t_string *out);
 
 /* _____ _____ _____  ______ _____ _______ ____  _______     __
   |  __ \_   _|  __ \|  ____/ ____|__   __/ __ \|  __ \ \   / /

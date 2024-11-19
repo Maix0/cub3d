@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:05:45 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/15 14:12:00 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:39:10 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ int							blx_loop_func(t_blx *ctx);
 /// @param free_fn the free function
 /// @param data the application data
 /// @return 
-t_error blx_initialize(t_run_function func, t_free_function free_fn, \
-						t_blx_app data, t_blx *ctx);
+t_error						blx_initialize(t_run_function func, \
+						t_free_function free_fn, t_blx_app data, t_blx *ctx);
 
 /// @brief Draw a sprite onto the screen
 /// @param app The blx context
@@ -145,14 +145,16 @@ static inline void	set_draw_mode(t_blx *app, t_draw_mode mode)
 	app->_data.draw_mode = mode;
 }
 
+void						blx_draw_circle(t_blx *app, \
+								t_vi2d center, t_i32 r, t_color col);
+void						blx_draw_line(t_blx *ctx, \
+								t_vi2d p1, t_vi2d p2, t_color col);
+void						blx_draw_rect(t_blx *ctx, \
+								t_vi2d p1, t_vi2d p2, t_color col);
+void						blx_fill_rect(t_blx *ctx, \
+								t_vi2d p1, t_vi2d p2, t_color col);
 
-void blx_draw_circle(t_blx *app, t_vi2d center, t_i32 r, t_color col);
-void blx_draw_line(t_blx *ctx, t_vi2d p1, t_vi2d p2, t_color col);
-void blx_draw_rect(t_blx *ctx, t_vi2d p1, t_vi2d p2, t_color col);
-void blx_fill_rect(t_blx *ctx, t_vi2d p1, t_vi2d p2, t_color col);
-
-
-t_vi2d blx_get_mouse_delta(t_blx *blx);
-void blx_set_mouse_pos(t_blx *blx, t_vi2d pos);
+t_vi2d						blx_get_mouse_delta(t_blx *blx);
+void						blx_set_mouse_pos(t_blx *blx, t_vi2d pos);
 
 #endif
