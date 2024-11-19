@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 15:55:00 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:34:35 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ bool hit_x_y(t_ray *ray)
 	{
 		if (ray->direction >= PI / 2 || ray->direction <= -PI / 2)
 		{
-			ray->tex = TEX_EAST;
+			ray->tex = TEX_WEST;
 			ray->percent_wall = 1 - pos.y;
 		}
 		else
 		{
 			ray->percent_wall = pos.y;
-			ray->tex = TEX_WEST;
+			ray->tex = TEX_EAST;
 		}
 	}
 	return false;
@@ -142,12 +142,12 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 		ray.x = cos(direction) * ray.ray_len + game->pos.x;
 		ray.y = sin(direction) * ray.ray_len + game->pos.y;
 		// quelle tile je touche, len du ray, et sud est ,
-		if (get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_SOLID ||
+		if (get_tile(&game->map, map_check) & TILE_SOLID ||
 			(check_door &&
-			 get_tile(&game->map, vi2d(ray.x, ray.y)) & TILE_DOOR))
+			 get_tile(&game->map, map_check) & TILE_DOOR))
 		{
 			ray.hit_wall = true;
-			ray.tile = get_tile(&game->map, vi2d(ray.x, ray.y));
+			ray.tile = get_tile(&game->map, map_check);
 			hit_x_y(&ray);
 			break;
 		}
