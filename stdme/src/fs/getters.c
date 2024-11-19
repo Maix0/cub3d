@@ -6,7 +6,7 @@
 /*   By: rparodi <rparodi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 16:27:28 by rparodi           #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:28 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/17 23:16:44 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_fd	*get_stdin(void)
 		out = &slot->slot.fd;
 		out->fd = STDIN_FILENO;
 		out->perms = FD_READ;
-		out->name = str_clone("<stdin>");
+		out->name = NULL;
 		slot->ty = SLOT_FD;
 		value = out;
 	}
@@ -52,7 +52,7 @@ t_fd	*get_stdout(void)
 		out = &slot->slot.fd;
 		out->fd = STDOUT_FILENO;
 		out->perms = FD_WRITE;
-		out->name = str_clone("<stdout>");
+		out->name = NULL;
 		slot->ty = SLOT_FD;
 		value = out;
 	}
@@ -71,7 +71,7 @@ t_fd	*get_stderr(void)
 		out = &slot->slot.fd;
 		out->fd = STDERR_FILENO;
 		out->perms = FD_WRITE;
-		out->name = str_clone("<stderr>");
+		out->name = NULL;
 		slot->ty = SLOT_FD;
 		value = out;
 	}

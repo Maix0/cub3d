@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 17:38:22 by maiboyer          #+#    #+#             */
-/*   Updated: 2023/12/21 20:15:54 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:13:57 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "me/types.h"
 # include "me/vec/vec_u8.h"
+# include "me/vec2/vec2.h"
 
 # ifndef BLX_H
 
@@ -28,6 +29,8 @@ typedef struct s_blx_input
 	t_vec_u8			keysyms_held;
 	t_vec_u8			keysyms_released;
 	t_u8				mouse;
+	t_vi2d				mouse_pos;
+	t_vi2d				mouse_old_pos;
 
 }						t_blx_input;
 

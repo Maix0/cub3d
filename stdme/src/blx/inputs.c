@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 16:38:08 by maiboyer          #+#    #+#             */
-/*   Updated: 2023/12/30 18:15:42 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/17 23:12:24 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static t_vec_u8	alloc_input_vector(void)
 	t_vec_u8	out;
 
 	out = vec_u8_new(64, NULL);
+	if (out.buffer == NULL)
+		return (out);
 	while (out.len < 64)
 		vec_u8_push(&out, 0);
 	return (out);

@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 18:46:28 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:21 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/18 22:47:45 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ t_error	vec_str_push(t_vec_str *vec, t_str element)
 	if (vec == NULL)
 		return (ERROR);
 	vec_str_reserve(vec, vec->len + 1);
+	if (vec->buffer == NULL)
+		return (ERROR);
 	vec->buffer[vec->len] = element;
 	vec->len += 1;
 	return (NO_ERROR);
