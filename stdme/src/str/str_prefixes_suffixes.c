@@ -6,16 +6,16 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:31:57 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 14:59:15 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:17:06 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "me/str/str.h"
 #include <stdio.h>
 
-bool str_startwith(t_const_str self, t_const_str str)
+bool	str_startwith(t_const_str self, t_const_str str)
 {
-	t_usize i;
+	t_usize	i;
 
 	if (self == NULL || str == NULL)
 		return (false);
@@ -25,10 +25,10 @@ bool str_startwith(t_const_str self, t_const_str str)
 	return (str[i] == '\0');
 }
 
-bool str_endwith(t_const_str self, t_const_str str)
+bool	str_endwith(t_const_str self, t_const_str str)
 {
-	t_usize i;
-	t_usize of;
+	t_usize	i;
+	t_usize	of;
 
 	if (self == NULL || str == NULL)
 		return (false);

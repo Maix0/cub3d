@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 00:48:23 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/14 14:57:12 by lgasqui          ###   ########.fr       */
+/*   Updated: 2024/11/19 17:16:02 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "me/blx/sprite.h"
 #include "me/num/f64.h"
 
-static t_error sprite_get_pixel_other_bpp(t_sprite *spr, t_vi2d pos, t_color *out)
+static t_error	sprite_get_pixel_other_bpp(\
+									t_sprite *spr, t_vi2d pos, t_color *out)
 {
 	(void)(spr);
 	(void)(pos);
@@ -22,12 +23,13 @@ static t_error sprite_get_pixel_other_bpp(t_sprite *spr, t_vi2d pos, t_color *ou
 	return (ERROR);
 }
 
-t_error sprite_get_pixel(t_sprite *spr, t_vi2d pos, t_color *out)
+t_error	sprite_get_pixel(t_sprite *spr, t_vi2d pos, t_color *out)
 {
-	t_u8   *addr;
-	t_color col;
+	t_u8	*addr;
+	t_color	col;
 
-	if (!(pos.x >= 0 && pos.x < spr->width && pos.y >= 0 && pos.y < spr->height))
+	if (!(pos.x >= 0 && pos.x < spr->width && pos.y >= 0 && \
+		pos.y < spr->height))
 		return (ERROR);
 	if (spr->bpp != 32)
 		return (sprite_get_pixel_other_bpp(spr, pos, out));
@@ -50,15 +52,15 @@ t_error sprite_get_pixel(t_sprite *spr, t_vi2d pos, t_color *out)
 	return (NO_ERROR);
 }
 
-t_error sprite_get_pixel_normalized(t_sprite *spr, t_vf2d pos, t_color *out)
+t_error	sprite_get_pixel_normalized(t_sprite *spr, t_vf2d pos, t_color *out)
 {
-	t_vi2d actual_pos;
+	t_vi2d	actual_pos;
 
 	if (spr == NULL)
 		return (ERROR);
 	pos.x = f64_clamp(0, pos.x, 1);
 	pos.y = f64_clamp(0, pos.y, 1);
-	actual_pos = vi2d(pos.x * (spr->width - 1), pos.y * (spr->height - 1));
+	actual_pos = \
+			vi2d(pos.x * (spr->width - 1), pos.y * (spr->height - 1));
 	return (sprite_get_pixel(spr, actual_pos, out));
-
 }

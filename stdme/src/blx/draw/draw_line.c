@@ -6,76 +6,90 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:58:47 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/24 15:26:57 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:14:25 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "me/blx/blx.h"
 
-struct s_draw_line_state
+t_i32	_abs_sub(t_i32 lhs, t_i32 rhs)
 {
-	t_vi2d d;
-	t_i32  p;
-	t_i32  idx;
-	t_i32  dir;
-};
+	t_i32	res;
 
-t_i32 _abs_sub(t_i32 lhs, t_i32 rhs)
-{
-	t_i32 res;
 	res = (lhs - rhs);
 	if (res < 0)
 		res = -res;
 	return (res);
 }
-void _swap_vi2d(t_vi2d *lhs, t_vi2d *rhs)
+
+void	_swap_vi2d(t_vi2d *lhs, t_vi2d *rhs)
 {
-	t_vi2d tmp;
+	t_vi2d	tmp;
 
 	tmp = *lhs;
 	*lhs = *rhs;
 	*rhs = tmp;
 }
 
-#define PLOTLINE(name, major, minor)                                                               \
-	void _line_##name(t_blx *ctx, t_vi2d p0, t_vi2d p1, t_color col)                               \
-	{                                                                                              \
-		t_vi2d d;                                                                                  \
-		t_i32  D;                                                                                  \
-		t_i32  x;                                                                                  \
-		t_i32  y;                                                                                  \
-		t_i32  major##i;                                                                           \
-		d.x = p1.x - p0.x;                                                                         \
-		d.y = p1.y - p0.y;                                                                         \
-		major##i = 1;                                                                              \
-		if (d.major < 0)                                                                           \
-		{                                                                                          \
-			major##i = -1;                                                                         \
-			d.major = -d.major;                                                                    \
-		}                                                                                          \
-		D = (2 * d.major) - d.minor;                                                               \
-		x = p0.x;                                                                                  \
-		y = p0.y;                                                                                  \
-		while (minor <= p1.minor)                                                                  \
-		{                                                                                          \
-			blx_draw(ctx, vi2d(x, y), col);                                                        \
-			if (D > 0)                                                                             \
-			{                                                                                      \
-				major += major##i;                                                                 \
-				D += 2 * (d.major - d.minor);                                                      \
-			}                                                                                      \
-			else                                                                                   \
-			{                                                                                      \
-				D += 2 * d.major;                                                                  \
-			}                                                                                      \
-			minor++;                                                                               \
-		}                                                                                          \
+void	_line_low(t_blx *ctx, t_vi2d p0, t_vi2d p1, t_color col)
+{
+	t_vi2d	d;
+	t_i32	delta;
+	t_vi2d	p;
+	t_i32	yi;
+
+	d = vi2d(p1.x - p0.x, p1.y - p0.y);
+	yi = 1;
+	if (d.y < 0)
+	{
+		yi = -1;
+		d.y = -d.y;
 	}
+	delta = (2 * d.y) - d.x;
+	p = p0;
+	while (p.x <= p1.x)
+	{
+		blx_draw(ctx, vi2d(p.x++, p.y), col);
+		if (delta > 0)
+		{
+			p.y += yi;
+			delta += 2 * (d.y - d.x);
+		}
+		else
+			delta += 2 * d.y;
+	}
+}
 
-PLOTLINE(low, y, x);
-PLOTLINE(high, x, y);
+void	_line_high(t_blx *ctx, t_vi2d p0, t_vi2d p1, t_color col)
+{
+	t_vi2d	d;
+	t_i32	delta;
+	t_vi2d	p;
+	t_i32	xi;
 
-void blx_draw_line(t_blx *ctx, t_vi2d p0, t_vi2d p1, t_color col)
+	d = vi2d(p1.x - p0.x, p1.y - p0.y);
+	xi = 1;
+	if (d.x < 0)
+	{
+		xi = -1;
+		d.x = -d.x;
+	}
+	delta = (2 * d.x) - d.y;
+	p = p0;
+	while (p.y <= p1.y)
+	{
+		blx_draw(ctx, vi2d(p.x, p.y++), col);
+		if (delta > 0)
+		{
+			p.x += xi;
+			delta += 2 * (d.x - d.y);
+		}
+		else
+			delta += 2 * d.x;
+	}
+}
+
+void	blx_draw_line(t_blx *ctx, t_vi2d p0, t_vi2d p1, t_color col)
 {
 	if (_abs_sub(p1.y, p0.y) < _abs_sub(p1.x, p0.x))
 	{

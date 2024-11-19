@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 23:43:42 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/07 13:29:42 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:17:15 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ t_str	str_trim(t_const_str str, t_const_str charset)
 	str_l_copy(out, &((t_str)str)[start_idx], buf_size);
 	return (out);
 }
-
 
 t_str	str_trim_end(t_const_str str, t_const_str charset)
 {

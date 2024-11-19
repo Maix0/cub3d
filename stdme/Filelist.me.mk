@@ -57,6 +57,7 @@ fs/getline                                                                    \
 fs/getters                                                                    \
 fs/putfd                                                                      \
 gnl/get_next_line                                                             \
+gnl/gnl2                                                                      \
 hash/hash_signed                                                              \
 hash/hash_str                                                                 \
 hash/hash_unsigned                                                            \

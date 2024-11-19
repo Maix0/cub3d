@@ -6,16 +6,16 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:12:24 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/05 15:04:07 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:16:41 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "me/str/str.h"
 #include "me/types.h"
 
-bool str_is_charset(t_const_str self, t_const_str charset)
+bool	str_is_charset(t_const_str self, t_const_str charset)
 {
-	t_usize i;
+	t_usize	i;
 
 	if (self == NULL || charset == NULL)
 		return (false);

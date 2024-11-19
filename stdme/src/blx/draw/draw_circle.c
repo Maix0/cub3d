@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 12:41:45 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/24 14:09:14 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:08:44 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "me/vec2/vec2.h"
 #include <stdio.h>
 
-static inline void _print_point(t_blx *app, t_vi2d center, t_vi2d pos, t_color col)
+static inline void	_print_point(\
+		t_blx *app, t_vi2d center, t_vi2d pos, t_color col)
 {
 	blx_draw(app, vi2d(center.x + pos.x, center.y + pos.y), col);
 	blx_draw(app, vi2d(center.x - pos.x, center.y + pos.y), col);
@@ -26,10 +27,10 @@ static inline void _print_point(t_blx *app, t_vi2d center, t_vi2d pos, t_color c
 	blx_draw(app, vi2d(center.x - pos.y, center.y - pos.x), col);
 }
 
-void blx_draw_circle(t_blx *app, t_vi2d center, t_i32 r, t_color col)
+void	blx_draw_circle(t_blx *app, t_vi2d center, t_i32 r, t_color col)
 {
-	t_vi2d pos;
-	t_i32  p;
+	t_vi2d	pos;
+	t_i32	p;
 
 	pos = vi2d(0, -r);
 	p = -r;

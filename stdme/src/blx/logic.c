@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 18:06:06 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 15:12:56 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:05:50 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,10 @@
 #include "sys/time.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "me/mem/_allocator.h"
-#include "me/fs/fs.h"
 
-void _blx_get_mouse_pos(t_blx *blx);
+void	_blx_get_mouse_pos(t_blx *blx);
 
-static void blx_stop(t_blx *app)
+static void	blx_stop(t_blx *app)
 {
 	mlx_loop_end(app->mlx);
 	blx_free(*app);
@@ -31,14 +29,16 @@ static void blx_stop(t_blx *app)
 }
 
 // TODO: implement mouse buttons when needed
-void blx_post_func(t_blx *ctx)
+void	blx_post_func(t_blx *ctx)
 {
-	t_usize idx;
+	t_usize	idx;
 
 	idx = 0;
-	while (idx < ctx->inputs.keysyms_pressed.len && idx < ctx->inputs.keysyms_held.len)
+	while (idx < ctx->inputs.keysyms_pressed.len && \
+		idx < ctx->inputs.keysyms_held.len)
 	{
-		ctx->inputs.keysyms_held.buffer[idx] |= ctx->inputs.keysyms_pressed.buffer[idx];
+		ctx->inputs.keysyms_held.buffer[idx] |= \
+			ctx->inputs.keysyms_pressed.buffer[idx];
 		ctx->inputs.keysyms_pressed.buffer[idx] = 0;
 		idx++;
 	}
@@ -50,10 +50,10 @@ void blx_post_func(t_blx *ctx)
 		ctx->inputs.keysyms_released.buffer[idx++] = 0;
 }
 
-int blx_loop_func(t_blx *ctx)
+int	blx_loop_func(t_blx *ctx)
 {
-	struct timeval now;
-	struct timeval diff;
+	struct timeval	now;
+	struct timeval	diff;
 
 	gettimeofday(&now, NULL);
 	if (now.tv_usec < ctx->_data.timer.tv_usec)
