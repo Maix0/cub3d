@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 16:48:19 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/12 17:51:07 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/19 18:24:39 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ static void	*_realloc_alloc(struct s_allocator_melloc *self, t_usize size)
 	if (chunk == NULL)
 	{
 		if (alloc_new_page(self, size + sizeof(t_chunk) * 2))
-			return (m_alloc_error(self, "Unable to alloc page"));
+			return (NULL);
 		chunk = find_chunk_of_size(self, size);
 		if (chunk == NULL)
-			return (m_alloc_error(self, "Unable to find block"));
+			return (NULL);
 	}
 	vg_mem_defined((void *)chunk, sizeof(*chunk));
 	chunk->used = true;
@@ -97,6 +97,6 @@ void	*m_realloc_array(struct s_allocator_melloc *self, void *ptr,
 		t_usize size, t_usize count)
 {
 	if (size != 0 && count > SIZE_MAX / size)
-		return (m_alloc_error(self, "Realloc array overflow"));
+		return (NULL);
 	return (m_realloc(self, ptr, size * count));
 }
