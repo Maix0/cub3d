@@ -10,19 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "me/types.h"
-
-
-
 #include "me/hashmap/hashmap_texture.h"
 #include "me/mem/mem.h"
-
+#include "me/types.h"
 
 void	hmap_texture_clear(t_hashmap_texture *self)
 {
-	t_usize					bucket_id;
-	t_entry_texture		*cur;
-	t_entry_texture		*next;
+	t_usize			bucket_id;
+	t_entry_texture	*cur;
+	t_entry_texture	*next;
 
 	bucket_id = 0;
 	while (bucket_id < self->num_buckets)

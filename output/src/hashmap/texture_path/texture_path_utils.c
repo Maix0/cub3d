@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashmap_texture_path_utils.c                        :+:      :+:    :+:   */
+/*   hashmap_texture_path_utils.c                        :+:      :+:    :+: */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,12 +16,11 @@
 #include "me/types.h"
 #include <stdlib.h>
 
-t_string *hmap_texture_path_get(t_hashmap_texture_path *hmap,
-								   t_texture			 *key)
+t_string	*hmap_texture_path_get(t_hashmap_texture_path *hmap, t_texture *key)
 {
-	t_usize				 hashed_key;
-	t_entry_texture_path *entry;
-	t_entry_texture_path *prev;
+	t_usize					hashed_key;
+	t_entry_texture_path	*entry;
+	t_entry_texture_path	*prev;
 
 	if (hmap == NULL)
 		return (NULL);
@@ -33,11 +32,11 @@ t_string *hmap_texture_path_get(t_hashmap_texture_path *hmap,
 	return (&entry->kv.val);
 }
 
-void hmap_texture_path_remove(t_hashmap_texture_path *hmap, t_texture *key)
+void	hmap_texture_path_remove(t_hashmap_texture_path *hmap, t_texture *key)
 {
-	t_usize				 hashed_key;
-	t_entry_texture_path *prev;
-	t_entry_texture_path *entry;
+	t_usize					hashed_key;
+	t_entry_texture_path	*prev;
+	t_entry_texture_path	*entry;
 
 	if (hmap == NULL || key == NULL)
 		return ;
@@ -46,7 +45,7 @@ void hmap_texture_path_remove(t_hashmap_texture_path *hmap, t_texture *key)
 	prev = NULL;
 	entry = hmap_texture_path_get_entry(hmap, hashed_key, key, &prev);
 	if (entry == NULL)
-		return;
+		return ;
 	if (prev == NULL)
 		hmap->buckets[hashed_key % hmap->num_buckets] = entry->next;
 	else

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashmap_texture_path.c                              :+:      :+:    :+:   */
+/*   hashmap_texture_path.c                              :+:      :+:    :+: */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -17,19 +17,18 @@
 #include "me/types.h"
 #include <stdlib.h>
 
-t_hashmap_texture_path *hmap_texture_path_new(t_hash_texture_path_fn hfunc,
-											t_eq_texture_path_fn	  cfunc,
-											t_free_texture_path_fn free)
+t_hashmap_texture_path	*hmap_texture_path_new(t_hash_texture_path_fn hfunc,
+		t_eq_texture_path_fn cfunc, t_free_texture_path_fn free)
 {
-	return (
-		hmap_texture_path_new_with_buckets(hfunc, cfunc, free, DEFAULT_BUCKETS));
+	return (hmap_texture_path_new_with_buckets(hfunc, cfunc, free,
+			DEFAULT_BUCKETS));
 }
 
-t_hashmap_texture_path *hmap_texture_path_new_with_buckets(
-	t_hash_texture_path_fn hfunc, t_eq_texture_path_fn cfunc,
-	t_free_texture_path_fn free, t_usize buckets)
+t_hashmap_texture_path	*hmap_texture_path_new_with_buckets(t_hash_texture_path_fn hfunc,
+		t_eq_texture_path_fn cfunc, t_free_texture_path_fn free,
+		t_usize buckets)
 {
-	t_hashmap_texture_path *hmap;
+	t_hashmap_texture_path	*hmap;
 
 	hmap = mem_alloc(sizeof(*hmap));
 	if (hmap == NULL)
@@ -47,14 +46,14 @@ t_hashmap_texture_path *hmap_texture_path_new_with_buckets(
 	return (hmap);
 }
 
-void hmap_texture_path_free(t_hashmap_texture_path *hmap)
+void	hmap_texture_path_free(t_hashmap_texture_path *hmap)
 {
-	t_usize index;
-	t_entry_texture_path *entry;
-	t_entry_texture_path *tmp;
+	t_usize					index;
+	t_entry_texture_path	*entry;
+	t_entry_texture_path	*tmp;
 
 	if (hmap == NULL)
-		return;
+		return ;
 	index = 0;
 	while (index < hmap->num_buckets)
 	{
@@ -73,12 +72,10 @@ void hmap_texture_path_free(t_hashmap_texture_path *hmap)
 	mem_free(hmap);
 }
 
-t_entry_texture_path *hmap_texture_path_get_entry(t_hashmap_texture_path *hmap,
-												t_usize		  hashed_key,
-												t_texture *key,
-												t_entry_texture_path **prev)
+t_entry_texture_path	*hmap_texture_path_get_entry(t_hashmap_texture_path *hmap,
+		t_usize hashed_key, t_texture *key, t_entry_texture_path **prev)
 {
-	t_entry_texture_path *entry;
+	t_entry_texture_path	*entry;
 
 	entry = hmap->buckets[hashed_key % hmap->num_buckets];
 	while (entry != NULL)
@@ -96,12 +93,12 @@ t_entry_texture_path *hmap_texture_path_get_entry(t_hashmap_texture_path *hmap,
 	return (NULL);
 }
 
-bool hmap_texture_path_insert(t_hashmap_texture_path *hmap, t_texture key,
-							 t_string value)
+bool	hmap_texture_path_insert(t_hashmap_texture_path *hmap, t_texture key,
+		t_string value)
 {
-	t_usize				 hashed_key;
-	t_entry_texture_path *prev;
-	t_entry_texture_path *entry;
+	t_usize					hashed_key;
+	t_entry_texture_path	*prev;
+	t_entry_texture_path	*entry;
 
 	hmap->hfunc(&hmap->hasher, &key);
 	hashed_key = hasher_reset_and_finish(&hmap->hasher);
@@ -111,7 +108,8 @@ bool hmap_texture_path_insert(t_hashmap_texture_path *hmap, t_texture key,
 	{
 		entry = mem_alloc(sizeof(t_entry_texture_path));
 		if (entry == NULL)
-			return (hmap->free((typeof(entry->kv)){.key=key, .val=value}), false);
+			return (hmap->free((typeof(entry->kv)){.key = key, .val = value}),
+				false);
 		entry->hash_id = hashed_key;
 		entry->kv = (t_kv_texture_path){.key = key, .val = value};
 		entry->next = NULL;

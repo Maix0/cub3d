@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashmap_texture_path.h                              :+:      :+:    :+:   */
+/*   hashmap_texture_path.h                              :+:      :+:    :+: */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,16 +12,14 @@
 
 #include "me/hashmap/hashmap_texture_path.h"
 
-t_error hmap_texture_path_iter(t_hashmap_texture_path *self,
-								 t_error (*func)(t_usize			 idx,
-												 const t_texture *key,
-												 t_string *val, void *ctx),
-								 void *ctx)
+t_error	hmap_texture_path_iter(t_hashmap_texture_path *self,
+		t_error (*func)(t_usize idx, const t_texture *key, t_string *val,
+			void *ctx), void *ctx)
 {
-	t_usize				 bucket_id;
-	t_usize				 all_id;
-	t_entry_texture_path *cur;
-	
+	t_usize					bucket_id;
+	t_usize					all_id;
+	t_entry_texture_path	*cur;
+
 	if (self == NULL)
 		return (ERROR);
 	bucket_id = 0;

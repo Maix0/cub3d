@@ -15,7 +15,7 @@
 #include "me/vec/vec_tile.h"
 #include <stdlib.h>
 
-t_tile *vec_tile_get(t_vec_tile *vec, t_usize i)
+t_tile	*vec_tile_get(t_vec_tile *vec, t_usize i)
 {
 	if (vec == NULL || vec->buffer == NULL)
 		return (NULL);
@@ -24,14 +24,14 @@ t_tile *vec_tile_get(t_vec_tile *vec, t_usize i)
 	return (NULL);
 }
 
-t_tile *vec_tile_last(t_vec_tile *vec)
+t_tile	*vec_tile_last(t_vec_tile *vec)
 {
 	if (vec == NULL || vec->buffer == NULL || vec->len == 0)
 		return (NULL);
 	return (&vec->buffer[vec->len - 1]);
 }
 
-void vec_tile_copy_into(t_vec_tile *vec, t_vec_tile *dest)
+void	vec_tile_copy_into(t_vec_tile *vec, t_vec_tile *dest)
 {
 	if (vec == NULL || dest == NULL)
 		return ;

@@ -16,12 +16,11 @@
 #include "me/types.h"
 #include <stdlib.h>
 
-t_sprite *hmap_texture_get(t_hashmap_texture *hmap,
-								   t_texture			 *key)
+t_sprite	*hmap_texture_get(t_hashmap_texture *hmap, t_texture *key)
 {
-	t_usize				 hashed_key;
-	t_entry_texture *entry;
-	t_entry_texture *prev;
+	t_usize			hashed_key;
+	t_entry_texture	*entry;
+	t_entry_texture	*prev;
 
 	if (hmap == NULL)
 		return (NULL);
@@ -33,11 +32,11 @@ t_sprite *hmap_texture_get(t_hashmap_texture *hmap,
 	return (&entry->kv.val);
 }
 
-void hmap_texture_remove(t_hashmap_texture *hmap, t_texture *key)
+void	hmap_texture_remove(t_hashmap_texture *hmap, t_texture *key)
 {
-	t_usize				 hashed_key;
-	t_entry_texture *prev;
-	t_entry_texture *entry;
+	t_usize			hashed_key;
+	t_entry_texture	*prev;
+	t_entry_texture	*entry;
 
 	if (hmap == NULL || key == NULL)
 		return ;
@@ -46,7 +45,7 @@ void hmap_texture_remove(t_hashmap_texture *hmap, t_texture *key)
 	prev = NULL;
 	entry = hmap_texture_get_entry(hmap, hashed_key, key, &prev);
 	if (entry == NULL)
-		return;
+		return ;
 	if (prev == NULL)
 		hmap->buckets[hashed_key % hmap->num_buckets] = entry->next;
 	else

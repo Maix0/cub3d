@@ -13,15 +13,14 @@
 #include "me/types.h"
 #include "me/vec/vec_tile.h"
 
-void vec_tile_sort(t_vec_tile		   *v,
-						  t_vec_tile_sort_fn is_sorted_fn)
+void	vec_tile_sort(t_vec_tile *v, t_vec_tile_sort_fn is_sorted_fn)
 {
-	t_usize		  sorted_part;
-	t_usize		  i;
-	t_tile tmp;
+	t_usize	sorted_part;
+	t_usize	i;
+	t_tile	tmp;
 
 	if (v == NULL || v->buffer == NULL)
-		return;
+		return ;
 	sorted_part = v->len;
 	while (sorted_part > 0)
 	{

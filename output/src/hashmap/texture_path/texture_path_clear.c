@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashmap_texture_path.h                              :+:      :+:    :+:   */
+/*   hashmap_texture_path.h                              :+:      :+:    :+: */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,19 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "me/types.h"
-
-
-
 #include "me/hashmap/hashmap_texture_path.h"
 #include "me/mem/mem.h"
-
+#include "me/types.h"
 
 void	hmap_texture_path_clear(t_hashmap_texture_path *self)
 {
 	t_usize					bucket_id;
-	t_entry_texture_path		*cur;
-	t_entry_texture_path		*next;
+	t_entry_texture_path	*cur;
+	t_entry_texture_path	*next;
 
 	bucket_id = 0;
 	while (bucket_id < self->num_buckets)

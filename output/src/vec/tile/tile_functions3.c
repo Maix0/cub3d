@@ -15,18 +15,17 @@
 #include "me/vec/vec_tile.h"
 #include <stdlib.h>
 
-t_error vec_tile_push_front(t_vec_tile *vec,
-								   t_tile	  element)
+t_error	vec_tile_push_front(t_vec_tile *vec, t_tile element)
 {
-	t_usize i;
+	t_usize	i;
 
 	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);
 	if (vec->len == 0)
 		return (vec_tile_push(vec, element));
 	i = vec->len - 1;
-	if (vec->capacity < vec->len + 1 &&
-		vec_tile_reserve(vec, 3 * vec->len / 2 + 1))
+	if (vec->capacity < vec->len + 1 && vec_tile_reserve(vec, 3 * vec->len / 2
+			+ 1))
 		return (ERROR);
 	while (i > 0)
 	{
@@ -39,9 +38,9 @@ t_error vec_tile_push_front(t_vec_tile *vec,
 	return (NO_ERROR);
 }
 
-t_error vec_tile_pop_front(t_vec_tile *vec, t_tile *value)
+t_error	vec_tile_pop_front(t_vec_tile *vec, t_tile *value)
 {
-	t_usize i;
+	t_usize	i;
 
 	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);
@@ -59,10 +58,10 @@ t_error vec_tile_pop_front(t_vec_tile *vec, t_tile *value)
 	return (NO_ERROR);
 }
 
-void vec_tile_reverse(t_vec_tile *vec)
+void	vec_tile_reverse(t_vec_tile *vec)
 {
-	t_tile temporary;
-	t_usize		  i;
+	t_tile	temporary;
+	t_usize	i;
 
 	if (vec == NULL || vec->buffer == NULL)
 		return ;
@@ -76,9 +75,9 @@ void vec_tile_reverse(t_vec_tile *vec)
 	}
 }
 
-t_error vec_tile_back(t_vec_tile *vec, t_tile **out)
+t_error	vec_tile_back(t_vec_tile *vec, t_tile **out)
 {
-	t_tile *temporary;
+	t_tile	*temporary;
 
 	if (vec == NULL || vec->buffer == NULL)
 		return (ERROR);

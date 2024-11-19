@@ -12,16 +12,13 @@
 
 #include "me/hashmap/hashmap_texture.h"
 
-t_error hmap_texture_iter(t_hashmap_texture *self,
-								 t_error (*func)(t_usize			 idx,
-												 const t_texture *key,
-												 t_sprite *val, void *ctx),
-								 void *ctx)
+t_error	hmap_texture_iter(t_hashmap_texture *self, t_error (*func)(t_usize idx,
+			const t_texture *key, t_sprite *val, void *ctx), void *ctx)
 {
-	t_usize				 bucket_id;
-	t_usize				 all_id;
-	t_entry_texture *cur;
-	
+	t_usize			bucket_id;
+	t_usize			all_id;
+	t_entry_texture	*cur;
+
 	if (self == NULL)
 		return (ERROR);
 	bucket_id = 0;
