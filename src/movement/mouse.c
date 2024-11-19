@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:14:23 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/15 14:34:06 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:28:29 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 #define THRESHOLD 2
 
-void handle_mouse_movement(t_blx *ctx, t_game *game)
+void	handle_mouse_movement(t_blx *ctx, t_game *game)
 {
-	t_vi2d movement;
-	if (!BONUS)
-		return;
-	if (!game->mouse_enable)
-		return;
+	t_vi2d	movement;
 
+	if (!BONUS)
+		return ;
+	if (!game->mouse_enable)
+		return ;
 	movement = blx_get_mouse_delta(ctx);
 	if (movement.x < -THRESHOLD)
 		game->angle -= PI / 32.0;

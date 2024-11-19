@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 21:42:31 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 16:51:48 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:27:43 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 #include "me/blx/blx.h"
 #include <math.h>
 
-void perform_collision(t_blx *ctx, t_game *game);
+void	perform_collision(t_blx *ctx, t_game *game);
+void	handle_mouse_movement(t_blx *ctx, t_game *game);
 
-void sanitize_input(t_blx *ctx, t_game *game)
+void	sanitize_input(t_blx *ctx, t_game *game)
 {
 	(void)(ctx);
 	while (game->angle >= PI)
@@ -24,13 +25,9 @@ void sanitize_input(t_blx *ctx, t_game *game)
 	while (game->angle < -PI)
 		game->angle += 2.0 * PI;
 }
-void handle_mouse_movement(t_blx *ctx, t_game *game);
 
-bool handle_input(t_blx *ctx, t_game *game)
+void	movement_keys(t_blx *ctx, t_game *game)
 {
-	game->new_pos = game->pos;
-	if (is_key_held(ctx, KB_Escape))
-		return (true);
 	if (is_key_held(ctx, KB_w) || is_key_held(ctx, KB_Up))
 	{
 		game->new_pos.x += cos(game->angle) * game->speed * ctx->elapsed;
@@ -51,6 +48,14 @@ bool handle_input(t_blx *ctx, t_game *game)
 		game->new_pos.x -= sin(game->angle) * game->speed * ctx->elapsed;
 		game->new_pos.y += cos(game->angle) * game->speed * ctx->elapsed;
 	}
+}
+
+bool	handle_input(t_blx *ctx, t_game *game)
+{
+	game->new_pos = game->pos;
+	movement_keys(ctx, game);
+	if (is_key_held(ctx, KB_Escape))
+		return (true);
 	if (is_key_held(ctx, KB_a) || is_key_held(ctx, KB_Left))
 		game->angle -= game->rotate_speed * ctx->elapsed;
 	if (is_key_held(ctx, KB_d) || is_key_held(ctx, KB_Right))

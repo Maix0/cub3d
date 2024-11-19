@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:09:07 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 15:11:01 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:28:55 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 
 /// Read a whole file as lines and puts every lines into the vector. removes the
 /// newline at the end if there are some
-t_error read_whole_map(t_fd *file, t_vec_str *out)
+t_error	read_whole_map(t_fd *file, t_vec_str *out)
 {
-	t_string  l;
-	t_str	  trimmed;
-	t_vec_str ret;
+	t_string	l;
+	t_str		trimmed;
+	t_vec_str	ret;
 
 	ret = vec_str_new(1, str_free);
 	if (ret.buffer == NULL)
