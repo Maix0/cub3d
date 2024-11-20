@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 18:35:25 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:11:24 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define STATE_H
 
 # define INC 0.2
+# define MAX_DIST 500.0
 
 # include "app/maps.h"
 # include "me/hashmap/hashmap_texture.h"

@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 20:22:57 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:11:08 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ bool hit_x_y(t_ray *ray)
 	}
 	return false;
 }
-#define MAX_DIST 250.0
 
 t_ray my_ray(t_game *game, double direction, bool check_door)
 {
@@ -143,7 +142,9 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 	if (ray.ray_len >= MAX_DIST)
 	{
 		ray.ray_len = MAX_DIST;
-		ray.hit_wall = false;
+		ray.hit_wall = true;
+		ray.tile = TILE_EMPTY;
+		ray.tex = TEX_NONE;
 	}
 	return (ray);
 }
@@ -181,12 +182,15 @@ void cast_rays(t_blx *ctx, t_game *game)
 				t_sprite *texture;
 				t_color	  col;
 
-				texture = hmap_texture_get(game->textures, &ray.tex);
-				tex_pos = vf2d(ray.percent_wall,
-							   (y - ((double)ceiling)) /
-								   (((double)floor) - ((double)ceiling)));
 				col = new_color(0, 0, 0);
-				sprite_get_pixel_normalized(texture, tex_pos, &col);
+				texture = hmap_texture_get(game->textures, &ray.tex);
+				if (texture != NULL)
+				{
+					tex_pos = vf2d(ray.percent_wall,
+								   (y - ((double)ceiling)) /
+									   (((double)floor) - ((double)ceiling)));
+					sprite_get_pixel_normalized(texture, tex_pos, &col);
+				}
 				blx_draw(ctx, vi2d(i, y), col);
 			}
 			else
