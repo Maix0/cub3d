@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:12:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 16:43:44 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:13:33 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ typedef struct s_map_info	t_map_info;
 
 struct s_map_info
 {
-	t_u8					color_bitfield;
-	t_hashmap_texture_path	*textures_path;
-	t_color					floor_color;
 	t_color					ceiling_color;
+	t_color					floor_color;
+	t_hashmap_texture_path	*textures_path;
+	t_u8					color_bitfield;
 };
 
 struct s_map
 {
+	t_map_info	info;
 	t_vec_tile	inner;
 	t_vi2d		size;
-	t_map_info	info;
 };
 
 t_tile	get_tile(t_map *map, t_vi2d p);

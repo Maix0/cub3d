@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/20 13:11:24 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:12:56 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,30 +31,30 @@ typedef struct s_ray	t_ray;
 
 struct					s_game
 {
-	double				fov;
 	bool				exit;
-	t_vf2d				pos;
-	t_vf2d				new_pos;
-	t_f64				angle;
-	t_map				map;
-	t_hashmap_texture	*textures;
-	t_f64				speed;
-	t_f64				rotate_speed;
-	t_f64				timer;
 	bool				mouse_enable;
+	double				fov;
+	t_f64				angle;
+	t_f64				rotate_speed;
+	t_f64				speed;
+	t_f64				timer;
+	t_hashmap_texture	*textures;
+	t_map				map;
 	t_string			str;
+	t_vf2d				new_pos;
+	t_vf2d				pos;
 };
 
 struct					s_ray
 {
-	double				ray_len;
-	t_texture			tex;
 	bool				hit_wall;
+	double				direction;
+	double				percent_wall;
+	double				ray_len;
 	double				x;
 	double				y;
-	double				direction;
+	t_texture			tex;
 	t_tile				tile;
-	double				percent_wall;
 	t_vi2d				tile_pos;
 };
 
