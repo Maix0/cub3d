@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:56:28 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/20 13:13:55 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:22:38 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ enum e_texture
 	TEX_NORTH,
 	TEX_SOUTH,
 	TEX_WEST,
+	TEX_DOOR_T1,
+	TEX_DOOR_T2,
+	TEX_DOOR_T3,
+	TEX_DOOR_T4,
 };
 
 bool	cmp_texture(t_texture *lhs, t_texture *rhs);

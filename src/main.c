@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/20 13:11:08 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:28:50 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,16 @@ void cast_rays(t_blx *ctx, t_game *game)
 				   ((double)ctx->app.size_y / ray.ray_len) * ray.hit_wall);
 		floor = (double)ctx->app.size_y - ceiling;
 		if (ray.tile & TILE_DOOR)
-			ray.tex = TEX_DOOR;
+		{
+			if (game->door_timer >= 0 && game->door_timer < 1.0)
+				ray.tex = TEX_DOOR_T1;
+			else if (game->door_timer >= 1.0 && game->door_timer < 2.0)
+				ray.tex = TEX_DOOR_T2;
+			else if (game->door_timer >= 2.0 && game->door_timer < 3.0)
+				ray.tex = TEX_DOOR_T3;
+			else if (game->door_timer >= 3.0 && game->door_timer < 4.0)
+				ray.tex = TEX_DOOR_T4;
+		}
 		while (y < (int)ctx->app.size_y)
 		{
 			if (y <= ceiling)
@@ -229,6 +238,9 @@ bool game_loop(t_blx *ctx)
 	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
 	if (handle_input(ctx, game))
 		return (true);
+	game->door_timer += ctx->elapsed;
+	if (game->door_timer >= 4.0)
+		game->door_timer = 0.0;
 	cast_rays(ctx, game);
 	{
 		me_printf_str(

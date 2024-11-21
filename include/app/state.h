@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/20 13:12:56 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:27:03 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ struct					s_game
 	t_string			str;
 	t_vf2d				new_pos;
 	t_vf2d				pos;
+	double				door_timer;
 };
 
 struct					s_ray

@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:39:39 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/21 14:18:07 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:26:00 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,40 @@ t_error	_load_single(t_usize _idx, const t_texture *id, t_string *path, \
 	return (NO_ERROR);
 }
 
+t_error	_append_strings_for_door(t_game *game)
+{
+	t_string	s;
+
+	s = string_new(64);
+	if (s.buf == NULL)
+		return (ERROR);
+	string_push(&s, "./textures/door.xpm");
+	hmap_texture_path_insert(game->map.info.textures_path, TEX_DOOR_T1, s);
+	s = string_new(64);
+	if (s.buf == NULL)
+		return (ERROR);
+	string_push(&s, "./textures/door_text1.xpm");
+	hmap_texture_path_insert(game->map.info.textures_path, TEX_DOOR_T2, s);
+	s = string_new(64);
+	if (s.buf == NULL)
+		return (ERROR);
+	string_push(&s, "./textures/door_text2.xpm");
+	hmap_texture_path_insert(game->map.info.textures_path, TEX_DOOR_T3, s);
+	s = string_new(64);
+	if (s.buf == NULL)
+		return (ERROR);
+	string_push(&s, "./textures/door_text3.xpm");
+	hmap_texture_path_insert(game->map.info.textures_path, TEX_DOOR_T4, s);
+	return (NO_ERROR);
+}
+
 t_error	fetch_textures(t_blx *ctx)
 {
 	t_game		*game;
-	t_string	door_string;
 
 	game = ctx->app.data;
-	if (BONUS)
-	{
-		door_string = string_new(16);
-		string_push(&door_string, "./textures/door_text1.xpm");
-		hmap_texture_path_insert(game->map.info.textures_path, TEX_DOOR, \
-									door_string);
-	}
+	if (BONUS && _append_strings_for_door(game))
+		return (ERROR);
 	return (hmap_texture_path_iter(game->map.info.textures_path, _load_single, \
 								ctx));
 }
