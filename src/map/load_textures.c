@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:39:39 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 17:30:20 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:18:07 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_error	fetch_textures(t_blx *ctx)
 	if (BONUS)
 	{
 		door_string = string_new(16);
-		string_push(&door_string, "./textures/door.xpm");
+		string_push(&door_string, "./textures/door_text1.xpm");
 		hmap_texture_path_insert(game->map.info.textures_path, TEX_DOOR, \
 									door_string);
 	}
