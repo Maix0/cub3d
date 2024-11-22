@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/21 14:27:03 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 19:26:10 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,18 @@ struct					s_ray
 	t_vi2d				tile_pos;
 };
 
+bool					game_loop(t_blx *ctx);
 bool					handle_input(t_blx *ctx, t_game *game);
 t_error					fetch_textures(t_blx *game);
 t_error					init_game(t_game *game);
 t_error					parse_map(t_game *game, t_const_str filename);
+t_ray					my_ray(t_game *game, double direction, bool check_door);
+void					cast_rays(t_blx *ctx, t_game *game);
 void					cube_error(t_const_str fmt, ...);
 void					draw_minimap(t_blx *ctx, t_game *game);
+void					game_free(t_game *game);
+void					game_free_blx(t_blx_app app);
+void					handle_door(t_blx *ctx, t_game *game, t_vi2d pos);
+void					hit_x_y(t_ray *ray);
 
 #endif /* STATE_H */

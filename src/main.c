@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/21 14:28:50 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 19:25:49 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,80 +16,34 @@
 #include "app/tile.h"
 #include "me/blx/blx.h"
 #include "me/blx/blx_key.h"
-#include "me/blx/colors.h"
-#include "me/hashmap/hashmap_texture.h"
 #include "me/mem/mem.h"
-#include "me/printf/printf.h"
-#include "me/str/str.h"
-#include "me/string/string.h"
-#include "me/vec/vec_str.h"
-#include "me/vec/vec_tile.h"
 #include "me/vec2/vec2.h"
 #include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-bool hit_x_y(t_ray *ray)
+t_ray	my_ray(t_game *game, double direction, bool check_door)
 {
-	double int_y;
-	double int_x;
-	t_vf2d pos;
+	t_ray	ray;
+	t_vf2d	ray_dir;
+	t_vf2d	ray_step_size;
+	t_vf2d	ray_length1d;
+	t_vi2d	step;
+	t_vi2d	map_check;
 
-	ray->tex = TEX_NORTH;
-	pos.x = modf(ray->x, &int_x);
-	pos.y = modf(ray->y, &int_y);
-
-	double distance_x = fmin(pos.x, 1 - pos.x);
-	double distance_y = fmin(pos.y, 1 - pos.y);
-
-	if (distance_x >= distance_y)
-	{
-		if (ray->direction >= 0)
-		{
-			ray->tex = TEX_SOUTH;
-			ray->percent_wall = 1 - pos.x;
-		}
-		else
-		{
-			ray->tex = TEX_NORTH;
-			ray->percent_wall = pos.x;
-		}
-	}
-	else
-	{
-		if (ray->direction >= PI / 2 || ray->direction <= -PI / 2)
-		{
-			ray->tex = TEX_WEST;
-			ray->percent_wall = 1 - pos.y;
-		}
-		else
-		{
-			ray->percent_wall = pos.y;
-			ray->tex = TEX_EAST;
-		}
-	}
-	return false;
-}
-
-t_ray my_ray(t_game *game, double direction, bool check_door)
-{
-	t_ray ray;
 	ray.ray_len = 0;
-	ray.x = 0; // cos
-	ray.y = 0; // sin
+	ray.x = 0;
+	ray.y = 0;
 	while (direction > PI)
 		direction -= 2 * PI;
 	while (direction < -PI)
 		direction += 2 * PI;
 	ray.direction = direction;
-	t_vf2d ray_dir = vf2d(cos(direction), sin(direction));
-	t_vf2d ray_step_size =
-		vf2d(sqrt(1.0 + (ray_dir.y / ray_dir.x) * (ray_dir.y / ray_dir.x)),
-			 sqrt(1.0 + (ray_dir.x / ray_dir.y) * (ray_dir.x / ray_dir.y)));
-	t_vf2d ray_length1d = vf2d(0.0, 0.0);
-	t_vi2d step = vi2d(0, 0);
-	t_vi2d map_check = vi2d(game->pos.x, game->pos.y);
-
+	ray_dir = vf2d(cos(direction), sin(direction));
+	ray_step_size = vf2d(sqrt(1.0 + (ray_dir.y / ray_dir.x) * (ray_dir.y
+					/ ray_dir.x)), sqrt(1.0 + (ray_dir.x / ray_dir.y)
+				* (ray_dir.x / ray_dir.y)));
+	ray_length1d = vf2d(0.0, 0.0);
+	step = vi2d(0, 0);
+	map_check = vi2d(game->pos.x, game->pos.y);
 	if (ray_dir.x < 0)
 	{
 		step.x = -1;
@@ -110,7 +64,6 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 		step.y = 1;
 		ray_length1d.y = ((map_check.y + 1.0) - game->pos.y) * ray_step_size.y;
 	}
-
 	while (ray.ray_len < MAX_DIST)
 	{
 		if (ray_length1d.x < ray_length1d.y)
@@ -125,18 +78,16 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 			ray.ray_len = ray_length1d.y;
 			ray_length1d.y += ray_step_size.y;
 		}
-		// ray.ray_len += 0.01;
 		ray.x = cos(direction) * ray.ray_len + game->pos.x;
 		ray.y = sin(direction) * ray.ray_len + game->pos.y;
-		// quelle tile je touche, len du ray, et sud est ,
-		if (get_tile(&game->map, map_check) & TILE_SOLID ||
-			(check_door && get_tile(&game->map, map_check) & TILE_DOOR))
+		if (get_tile(&game->map, map_check) & TILE_SOLID || (check_door
+				&& get_tile(&game->map, map_check) & TILE_DOOR))
 		{
 			ray.hit_wall = true;
 			ray.tile = get_tile(&game->map, map_check);
 			ray.tile_pos = map_check;
 			hit_x_y(&ray);
-			break;
+			break ;
 		}
 	}
 	if (ray.ray_len >= MAX_DIST)
@@ -149,136 +100,11 @@ t_ray my_ray(t_game *game, double direction, bool check_door)
 	return (ray);
 }
 
-void cast_rays(t_blx *ctx, t_game *game)
+int	real_main(int argc, t_str argv[])
 {
-	int i;
-	int y;
-
-	i = 0;
-	while (i < (int)ctx->app.size_x)
-	{
-		double angle;
-		t_ray  ray;
-		int	   ceiling;
-		int	   floor;
-
-		y = 0;
-		angle = (game->angle - game->fov / 2.0) +
-				(i / (double)ctx->app.size_x) * game->fov;
-		ray = my_ray(game, angle, false);
-		ray.ray_len *= cos(angle - game->angle);
-		ceiling = (((double)ctx->app.size_y / 2.0) -
-				   ((double)ctx->app.size_y / ray.ray_len) * ray.hit_wall);
-		floor = (double)ctx->app.size_y - ceiling;
-		if (ray.tile & TILE_DOOR)
-		{
-			if (game->door_timer >= 0 && game->door_timer < 1.0)
-				ray.tex = TEX_DOOR_T1;
-			else if (game->door_timer >= 1.0 && game->door_timer < 2.0)
-				ray.tex = TEX_DOOR_T2;
-			else if (game->door_timer >= 2.0 && game->door_timer < 3.0)
-				ray.tex = TEX_DOOR_T3;
-			else if (game->door_timer >= 3.0 && game->door_timer < 4.0)
-				ray.tex = TEX_DOOR_T4;
-		}
-		while (y < (int)ctx->app.size_y)
-		{
-			if (y <= ceiling)
-				blx_draw(ctx, vi2d(i, y), game->map.info.ceiling_color);
-			else if (y <= floor)
-			{
-				t_vf2d	  tex_pos;
-				t_sprite *texture;
-				t_color	  col;
-
-				col = new_color(0, 0, 0);
-				texture = hmap_texture_get(game->textures, &ray.tex);
-				if (texture != NULL)
-				{
-					tex_pos = vf2d(ray.percent_wall,
-								   (y - ((double)ceiling)) /
-									   (((double)floor) - ((double)ceiling)));
-					sprite_get_pixel_normalized(texture, tex_pos, &col);
-				}
-				blx_draw(ctx, vi2d(i, y), col);
-			}
-			else
-				blx_draw(ctx, vi2d(i, y), game->map.info.floor_color);
-			y++;
-		}
-		i++;
-	}
-}
-
-void handle_door(t_blx *ctx, t_game *game, t_vi2d pos)
-{
-	t_tile door_tile;
-
-	if (!BONUS)
-		return;
-	(void)(ctx);
-	if (!is_key_released(ctx, KB_space))
-		return;
-	door_tile = get_tile(&game->map, pos);
-	if (door_tile & TILE_SOLID)
-		door_tile &= ~TILE_SOLID;
-	else
-		door_tile |= TILE_SOLID;
-	set_tile(&game->map, pos, door_tile);
-}
-
-bool game_loop(t_blx *ctx)
-{
-	t_game *game;
-	t_ray	ray;
-
-	game = ctx->app.data;
-	if (game->exit)
-		return (true);
-	blx_clear(ctx, new_color(0x1E, 0x1E, 0x1E));
-	if (handle_input(ctx, game))
-		return (true);
-	game->door_timer += ctx->elapsed;
-	if (game->door_timer >= 4.0)
-		game->door_timer = 0.0;
-	cast_rays(ctx, game);
-	{
-		me_printf_str(
-			&game->str, "FPS:% 3i\n[a/d] angle:% 3i\n[i/o/p] FOV:% 3i",
-			(int)(1. / ctx->elapsed), (int)(game->angle / (2.0 * PI) * 360),
-			(int)(game->fov / (2.0 * PI) * 360));
-		blx_fill_rect(ctx, vi2d(ctx->app.size_x - 8 * 16, 0),
-					  vi2d(ctx->app.size_x, 3 * 8), new_color(0, 0, 0));
-		blx_draw_string(ctx, vi2d(ctx->app.size_x - 8 * 16, 0), game->str.buf,
-						new_color(255, 255, 255));
-		string_clear(&game->str);
-	}
-	ray = my_ray(game, game->angle, true);
-	if (BONUS && ray.hit_wall && (ray.tile & TILE_DOOR) && ray.ray_len < 1.0 &&
-		ray.ray_len > INC)
-		handle_door(ctx, game, ray.tile_pos);
-	if (BONUS)
-		draw_minimap(ctx, game);
-	return (false);
-}
-
-void game_free(t_game *game)
-{
-	vec_tile_free(game->map.inner);
-	hmap_texture_path_free(game->map.info.textures_path);
-	hmap_texture_free(game->textures);
-	string_free(game->str);
-}
-
-void game_free_blx(t_blx_app app)
-{
-	game_free(app.data);
-}
-
-int real_main(int argc, t_str argv[])
-{
-	t_game game;
-	t_blx  blx;
+	t_game		game;
+	t_blx		blx;
+	t_blx_app	app_data;
 
 	(void)(&argv[argc]);
 	if (argc != 2)
@@ -288,23 +114,16 @@ int real_main(int argc, t_str argv[])
 	mem_set_zero(&blx, sizeof(blx));
 	if (parse_map(&game, argv[1]))
 		return (game_free(&game), 1);
-	if (blx_initialize(game_loop, game_free_blx,
-					   (t_blx_app){
-						   .size_x = 900,
-						   .size_y = 700,
-						   .pixel_size = 1,
-						   .title = "Cub3d - Yes",
-						   .data = &game,
-					   },
-					   &blx))
+	app_data = (t_blx_app){.size_x = 900, .size_y = 700, .pixel_size = 1, \
+		.title = "Cub3d - Yes", .data = &game};
+	if (blx_initialize(game_loop, game_free_blx, app_data, &blx))
 		return (cube_error("Failed to init mlx"), game_free(&game), 1);
 	if (fetch_textures(&blx))
 		game.exit = true;
-	blx_run(blx);
-	return (0);
+	return (blx_run(blx), 0);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	me_exit(real_main(argc, argv));
 }

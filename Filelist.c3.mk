@@ -1,5 +1,7 @@
 SRC_FILES =                                                                   \
 bonus/draw_minimap                                                            \
+bonus/handle_doors                                                            \
+game_loop                                                                     \
 main                                                                          \
 map/flood_fill                                                                \
 map/load_textures                                                             \
@@ -12,6 +14,8 @@ map/read_whole_map                                                            \
 movement/collision                                                            \
 movement/input                                                                \
 movement/mouse                                                                \
+ray/ray_cast_rays                                                             \
+ray/ray_find_hitdirection                                                     \
 utils/cube_error                                                              \
 utils/init_game                                                               \
 utils/texture                                                                 \
