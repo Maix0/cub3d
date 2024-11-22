@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashmap_texture_path.h                              :+:      :+:    :+: */
+/*   hashmap_texture_path.h                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:00:22 by maiboyer          #+#    #+#             */
-/*   Updated: 2023/12/11 15:24:44 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:29:01 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ typedef struct s_kv_texture_path
 }								t_kv_texture_path;
 
 /// @typedef A function that hashes a key
-typedef void					(*t_hash_texture_path_fn)(t_hasher *hasher,
+typedef void	(*t_hash_texture_path_fn)(t_hasher *hasher,
 						t_texture *key);
 /// @typedef A function that drops a key-value pair
-typedef void					(*t_free_texture_path_fn)(t_kv_texture_path val);
+typedef void	(*t_free_texture_path_fn)(t_kv_texture_path val);
 /// @typedef A function that compares two keys and returns true if they are
 /// equal
-typedef bool					(*t_eq_texture_path_fn)(t_texture *lhs,
+typedef bool	(*t_eq_texture_path_fn)(t_texture *lhs,
 						t_texture *rhs);
 
 /// @struct A single entry in the hashmap
@@ -76,9 +76,9 @@ typedef struct s_hashmap_texture_path
 /// @param cmp The comparison function
 /// @param free The free function
 /// @return A new hashmap
-t_hashmap_texture_path			*hmap_texture_path_new(t_hash_texture_path_fn hash,
-									t_eq_texture_path_fn cmp,
-									t_free_texture_path_fn free);
+t_hashmap_texture_path			*hmap_texture_path_new(\
+	t_hash_texture_path_fn hash, t_eq_texture_path_fn cmp, \
+	t_free_texture_path_fn free);
 
 /// @brief Creates a new hashmap with the given hash, comparison, and free
 /// functions
@@ -87,39 +87,41 @@ t_hashmap_texture_path			*hmap_texture_path_new(t_hash_texture_path_fn hash,
 /// @param free The free function
 /// @param cap The number of buckets
 /// @return A new hashmap
-t_hashmap_texture_path			*hmap_texture_path_new_with_buckets(t_hash_texture_path_fn hash,
-									t_eq_texture_path_fn cmp,
-									t_free_texture_path_fn free, size_t cap);
+t_hashmap_texture_path			*hmap_texture_path_new_with_buckets(\
+	t_hash_texture_path_fn hash, t_eq_texture_path_fn cmp, \
+	t_free_texture_path_fn free, size_t cap);
 
 /// @brief Free the hashmap and all of its entries
 /// @param hmap The hashmap to free
-void							hmap_texture_path_free(t_hashmap_texture_path *hmap);
+void							hmap_texture_path_free(\
+	t_hashmap_texture_path *hmap);
 
 /// @brief Clear the hashmap, removing all of its entries
 /// @param hmap The hashmap to clear
-void							hmap_texture_path_clear(t_hashmap_texture_path *hmap);
+void							hmap_texture_path_clear(\
+	t_hashmap_texture_path *hmap);
 
 /// @brief Inserts a key-value pair into the hashmap
 /// @param hmap The hashmap
 /// @param key The key
 /// @param value The value
 /// @return true if the key already existed before, false otherwise
-bool							hmap_texture_path_insert(t_hashmap_texture_path *hmap,
-									t_texture key, t_string value);
+bool							hmap_texture_path_insert(\
+	t_hashmap_texture_path *hmap, t_texture key, t_string value);
 
 /// @brief Gets the value associated with the key
 /// @param hmap The hashmap
 /// @param key The key
 /// @return The value associated with the key, or NULL if the key is not in the
 /// hashmap
-t_string						*hmap_texture_path_get(t_hashmap_texture_path *hmap,
-									t_texture *key);
+t_string						*hmap_texture_path_get(\
+	t_hashmap_texture_path *hmap, t_texture *key);
 
 /// @brief Removes the key-value pair from the hashmap
 /// @param hmap The hashmap
 /// @param key The key
-void							hmap_texture_path_remove(t_hashmap_texture_path *hmap,
-									t_texture *key);
+void							hmap_texture_path_remove(\
+	t_hashmap_texture_path *hmap, t_texture *key);
 
 /// @brief Get an entry from the hashmap
 /// @param hmap The hashmap
@@ -128,8 +130,8 @@ void							hmap_texture_path_remove(t_hashmap_texture_path *hmap,
 /// @param prev The previous entry in the bucket
 /// @return The entry, or NULL if the key is not in the hashmap
 /// @note this is an internal function
-t_entry_texture_path			*hmap_texture_path_get_entry(t_hashmap_texture_path *hmap,
-									t_usize hash, t_texture *key,
+t_entry_texture_path			*hmap_texture_path_get_entry(\
+	t_hashmap_texture_path *hmap, t_usize hash, t_texture *key,
 									t_entry_texture_path **prev);
 
 /// @brief Iterates over the hashmap and calls the given function for each
@@ -140,7 +142,8 @@ t_entry_texture_path			*hmap_texture_path_get_entry(t_hashmap_texture_path *hmap
 /// @return An error code
 /// @note The iteration can be stopped by returning an error code from the
 /// function
-t_error							hmap_texture_path_iter(t_hashmap_texture_path *self,
+t_error							hmap_texture_path_iter(\
+	t_hashmap_texture_path *self, \
 									t_error (*func)(t_usize idx,
 										const t_texture *key, t_string *val,
 										void *ctx), void *ctx);
@@ -152,8 +155,9 @@ t_error							hmap_texture_path_iter(t_hashmap_texture_path *self,
 /// @param ctx The context to pass to the function
 /// @param out The cloned hashmap
 /// @return An error code
-t_error							hmap_texture_path_clone(t_hashmap_texture_path *self,
-									t_error (*clone)(const t_kv_texture_path *val,
+t_error							hmap_texture_path_clone(\
+	t_hashmap_texture_path *self, \
+	t_error (*clone)(const t_kv_texture_path *val,
 										void *ctx, t_kv_texture_path *out),
 									void *ctx, t_hashmap_texture_path **out);
 

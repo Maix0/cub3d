@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashmap_texture.h                              :+:      :+:    :+:   */
+/*   hashmap_texture.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 11:00:22 by maiboyer          #+#    #+#             */
-/*   Updated: 2023/12/11 15:24:44 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:26:53 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ t_hashmap_texture			*hmap_texture_new(t_hash_texture_fn hash,
 /// @param free The free function
 /// @param cap The number of buckets
 /// @return A new hashmap
-t_hashmap_texture			*hmap_texture_new_with_buckets(t_hash_texture_fn hash,
-								t_eq_texture_fn cmp, t_free_texture_fn free,
-								size_t cap);
+t_hashmap_texture			*hmap_texture_new_with_buckets(\
+		t_hash_texture_fn hash, t_eq_texture_fn cmp, t_free_texture_fn free, \
+		size_t cap);
 
 /// @brief Free the hashmap and all of its entries
 /// @param hmap The hashmap to free

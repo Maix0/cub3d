@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashmap_texture.c                              :+:      :+:    :+:   */
+/*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 10:58:20 by maiboyer          #+#    #+#             */
-/*   Updated: 2023/12/11 15:32:51 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:52:33 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ t_hashmap_texture	*hmap_texture_new_with_buckets(t_hash_texture_fn hfunc,
 		return (mem_free(hmap->buckets), mem_free(hmap), NULL);
 	hmap->hfunc = hfunc;
 	hmap->cfunc = cfunc;
-	hmap->free = free;
-	return (hmap);
+	return (hmap->free = free, hmap);
 }
 
 void	hmap_texture_free(t_hashmap_texture *hmap)
@@ -92,7 +91,7 @@ t_entry_texture	*hmap_texture_get_entry(t_hashmap_texture *hmap,
 }
 
 bool	hmap_texture_insert(t_hashmap_texture *hmap, t_texture key,
-		t_sprite value)
+		t_sprite v)
 {
 	t_usize			hashed_key;
 	t_entry_texture	*prev;
@@ -106,10 +105,9 @@ bool	hmap_texture_insert(t_hashmap_texture *hmap, t_texture key,
 	{
 		entry = mem_alloc(sizeof(t_entry_texture));
 		if (entry == NULL)
-			return (hmap->free((typeof(entry->kv)){.key = key, .val = value}),
-				false);
+			return (hmap->free((typeof(entry->kv)){.key = key, .val = v}), 0);
 		entry->hash_id = hashed_key;
-		entry->kv = (t_kv_texture){.key = key, .val = value};
+		entry->kv = (t_kv_texture){.key = key, .val = v};
 		entry->next = NULL;
 		if (prev == NULL)
 			hmap->buckets[hashed_key % hmap->num_buckets] = entry;
@@ -118,10 +116,6 @@ bool	hmap_texture_insert(t_hashmap_texture *hmap, t_texture key,
 		return (false);
 	}
 	else
-	{
-		hmap->free(entry->kv);
-		entry->kv.key = key;
-		entry->kv.val = value;
-		return (true);
-	}
+		return (hmap->free(entry->kv), entry->kv = \
+			(t_kv_texture){.key = key, .val = v}, true);
 }

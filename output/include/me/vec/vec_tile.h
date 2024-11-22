@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec_tile.h                                  :+:      :+:    :+:   */
+/*   vec_tile.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 18:46:53 by maiboyer          #+#    #+#             */
-/*   Updated: 2023/12/09 17:53:00 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:30:04 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,13 +170,5 @@ t_tile								*vec_tile_last(t_vec_tile *vec);
 /// @param dest The vec_tile to be copied to
 void								vec_tile_copy_into(t_vec_tile *vec,
 										t_vec_tile *dest);
-
-/// read code lol
-void								vec_tile_splice(t_vec_tile *self,
-										struct s_vec_tile_splice_arguments args);
-
-struct s_vec_tile_splice_arguments	vec_tile_splice_args(t_usize index,
-										t_usize old_count, t_usize new_count,
-										const t_tile *elements);
 
 #endif

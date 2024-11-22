@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 23:30:46 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/22 14:52:28 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:29:27 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ t_str		str_map(t_const_str s, char (*f)(t_usize, char));
 /// @param out[out] the returned value, a vector of words
 /// @return True in case of error, false otherwise
 t_error		str_split(t_const_str str, t_const_str chrs, t_vec_str *out);
-
 
 /// @brief Split a string into a vector of strings
 /// @param str the string to be split
