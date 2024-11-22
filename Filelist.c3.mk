@@ -14,6 +14,7 @@ map/read_whole_map                                                            \
 movement/collision                                                            \
 movement/input                                                                \
 movement/mouse                                                                \
+ray/ray_cast                                                                  \
 ray/ray_cast_rays                                                             \
 ray/ray_find_hitdirection                                                     \
 utils/cube_error                                                              \

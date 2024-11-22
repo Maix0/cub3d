@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 14:52:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/22 19:25:49 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 19:28:17 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,86 +19,6 @@
 #include "me/mem/mem.h"
 #include "me/vec2/vec2.h"
 #include <math.h>
-
-t_ray	my_ray(t_game *game, double direction, bool check_door)
-{
-	t_ray	ray;
-	t_vf2d	ray_dir;
-	t_vf2d	ray_step_size;
-	t_vf2d	ray_length1d;
-	t_vi2d	step;
-	t_vi2d	map_check;
-
-	ray.ray_len = 0;
-	ray.x = 0;
-	ray.y = 0;
-	while (direction > PI)
-		direction -= 2 * PI;
-	while (direction < -PI)
-		direction += 2 * PI;
-	ray.direction = direction;
-	ray_dir = vf2d(cos(direction), sin(direction));
-	ray_step_size = vf2d(sqrt(1.0 + (ray_dir.y / ray_dir.x) * (ray_dir.y
-					/ ray_dir.x)), sqrt(1.0 + (ray_dir.x / ray_dir.y)
-				* (ray_dir.x / ray_dir.y)));
-	ray_length1d = vf2d(0.0, 0.0);
-	step = vi2d(0, 0);
-	map_check = vi2d(game->pos.x, game->pos.y);
-	if (ray_dir.x < 0)
-	{
-		step.x = -1;
-		ray_length1d.x = (game->pos.x - (map_check.x)) * ray_step_size.x;
-	}
-	else
-	{
-		step.x = 1;
-		ray_length1d.x = ((map_check.x + 1.0) - game->pos.x) * ray_step_size.x;
-	}
-	if (ray_dir.y < 0)
-	{
-		step.y = -1;
-		ray_length1d.y = (game->pos.y - (map_check.y)) * ray_step_size.y;
-	}
-	else
-	{
-		step.y = 1;
-		ray_length1d.y = ((map_check.y + 1.0) - game->pos.y) * ray_step_size.y;
-	}
-	while (ray.ray_len < MAX_DIST)
-	{
-		if (ray_length1d.x < ray_length1d.y)
-		{
-			map_check.x += step.x;
-			ray.ray_len = ray_length1d.x;
-			ray_length1d.x += ray_step_size.x;
-		}
-		else
-		{
-			map_check.y += step.y;
-			ray.ray_len = ray_length1d.y;
-			ray_length1d.y += ray_step_size.y;
-		}
-		ray.x = cos(direction) * ray.ray_len + game->pos.x;
-		ray.y = sin(direction) * ray.ray_len + game->pos.y;
-		if (get_tile(&game->map, map_check) & TILE_SOLID || (check_door
-				&& get_tile(&game->map, map_check) & TILE_DOOR))
-		{
-			ray.hit_wall = true;
-			ray.tile = get_tile(&game->map, map_check);
-			ray.tile_pos = map_check;
-			hit_x_y(&ray);
-			break ;
-		}
-	}
-	if (ray.ray_len >= MAX_DIST)
-	{
-		ray.ray_len = MAX_DIST;
-		ray.hit_wall = true;
-		ray.tile = TILE_EMPTY;
-		ray.tex = TEX_NONE;
-	}
-	return (ray);
-}
 
 int	real_main(int argc, t_str argv[])
 {

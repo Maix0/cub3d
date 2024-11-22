@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 19:24:01 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/22 19:24:29 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 19:28:03 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,3 @@ void	handle_door(t_blx *ctx, t_game *game, t_vi2d pos)
 		door_tile |= TILE_SOLID;
 	set_tile(&game->map, pos, door_tile);
 }
-

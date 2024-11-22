@@ -6,7 +6,7 @@
 /*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:11:18 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/22 19:26:10 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 19:39:08 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ struct					s_ray
 	t_texture			tex;
 	t_tile				tile;
 	t_vi2d				tile_pos;
+	t_vf2d				_dir;
+	t_vf2d				_ssize;
+	t_vf2d				_length1d;
+	t_vi2d				_step;
+	t_vi2d				_mpos;
 };
 
 bool					game_loop(t_blx *ctx);
