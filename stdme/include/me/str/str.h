@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 23:30:46 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 16:41:48 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 14:52:28 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,15 @@ t_str		str_map(t_const_str s, char (*f)(t_usize, char));
 /// @param out[out] the returned value, a vector of words
 /// @return True in case of error, false otherwise
 t_error		str_split(t_const_str str, t_const_str chrs, t_vec_str *out);
+
+
+/// @brief Split a string into a vector of strings
+/// @param str the string to be split
+/// @param chr the list of chars to be used as word delimiter
+/// @param out[out] the returned value, a vector of words
+/// @return True in case of error, false otherwise
+/// @note	this function split on EVERY character 
+t_error		str_split_single(t_const_str str, t_const_str chrs, t_vec_str *out);
 
 /// @brief Remove consecutive leading and trailing characters from a string
 /// @param str the string to trim

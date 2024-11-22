@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 15:56:59 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/10/12 17:52:47 by rparodi          ###   ########.fr       */
+/*   Updated: 2024/11/22 15:01:14 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,30 @@ t_error	str_split(t_const_str str, t_const_str chr, t_vec_str *out)
 			vec_str_push(&ret, buf.buf);
 			buf = string_new(16);
 		}
+	}
+	string_free(buf);
+	return (*out = ret, NO_ERROR);
+}
+
+t_error	str_split_single(t_const_str str, t_const_str chr, t_vec_str *out)
+{
+	t_vec_str	ret;
+	t_usize		idx;
+	t_string	buf;
+
+	if (out == NULL || chr == NULL || str == NULL)
+		return (ERROR);
+	idx = 0;
+	buf = string_new(16);
+	ret = vec_str_new(16, str_free);
+	while (str[idx] != '\0')
+	{
+		while (str[idx] != '\0' && str_find_chr(chr, str[idx]) == NULL)
+			string_push_char(&buf, str[idx++]);
+		if (str[idx] != '\0' && str_find_chr(chr, str[idx]) != NULL)
+			idx++;
+		vec_str_push(&ret, buf.buf);
+		buf = string_new(16);
 	}
 	string_free(buf);
 	return (*out = ret, NO_ERROR);

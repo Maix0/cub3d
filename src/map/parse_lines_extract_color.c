@@ -6,7 +6,7 @@
 /*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 17:50:31 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:03:21 by maiboyer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,14 @@ t_error	_extract_color(t_map_info *info, t_u8 col_type, t_str *line)
 
 	if (_extract_color_inner(info, col_type, line, &s))
 		return (ERROR);
-	if (str_split(s.buf, ", \t\r", &split))
+	if (str_split_single(s.buf, ",", &split))
 		return (string_free(s), ERROR);
 	slot = &info->floor_color;
 	if (col_type == CEIL__COLOR)
 		slot = &info->ceiling_color;
 	if (_col_atoh(&split, slot))
-		return (cube_error("Invalid format for color: %s", s.buf), \
-				string_free(s), vec_str_free(split), ERROR);
+		return (cube_error("Invalid format for color:%s %s", \
+	col_name(col_type), s.buf), string_free(s), vec_str_free(split), ERROR);
 	slot->a = 0x0;
 	(string_free(s), vec_str_free(split));
 	info->color_bitfield |= col_type;
