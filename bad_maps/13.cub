@@ -1,0 +1,13 @@
+EA ./ressources/texture_brown.xpm
+NO ./ressources/texture_light_gray.xpm
+SO ./ressources/texture_orange.xpm
+WE ./ressources/texture_cyan.xpm
+F 0,100,255
+C 0,100,255
+
+111111111111111
+100000000000001
+100000000000001
+100000000000001
+100000000000001
+111111111111111

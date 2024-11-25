@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 21:18:51 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 18:08:59 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:25:23 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 
 #define C_SIZE 20
 #define P_SIZE 0.48
-#define M_SIZE 5
+#define M_SIZE 10
 
+// Dans la minimap set up le cercle du player et la direction de son rayon
 static inline void	draw_player(t_blx *ctx, t_game *game)
 {
 	t_vi2d	endline;
@@ -36,6 +37,7 @@ static inline void	draw_player(t_blx *ctx, t_game *game)
 	blx_draw(ctx, endline, new_color(0, 0, 255));
 }
 
+//set up des couleurs de la grid de la minimap falses = ne dessine pas
 static inline bool	_minimap_get_col(\
 				t_tile tile, t_color *fill, t_color *border)
 {
@@ -63,6 +65,7 @@ static inline bool	_minimap_get_col(\
 		return (false);
 	return (true);
 }
+// globalement dessine un carre de 10x10 autour du joueur
 
 void	draw_minimap(t_blx *ctx, t_game *game)
 {

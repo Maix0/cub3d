@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_lines.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 18:05:17 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:25:10 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ t_error	parse_map(t_game *game, t_const_str filename)
 	if (file == NULL)
 		return (cube_error("Failed to open map file"), ERROR);
 	if (read_whole_map(file, &lines))
-		return (cube_error("Failed to read whole map"), ERROR);
+		return (close_fd(file), cube_error("Failed to read whole map"), ERROR);
 	close_fd(file);
 	if (get_mapinfo(&lines, &game->map.info, &map_idx))
 		return (vec_str_free(lines), ERROR);

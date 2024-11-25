@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_lines_map.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:19:54 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/19 18:04:33 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:23:57 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_error		_extract_color(t_map_info *info, t_u8 col_type, t_str *line);
 t_error	parse_map_handle_tile(\
 			t_game *game, char tile, t_vf2d pos, t_usize *sp_count)
 {
-	if (tile == '0' || tile == '_')
+	if (tile == '0')
 		vec_tile_push(&game->map.inner, TILE_FLOOR);
 	else if (tile == '1')
 		vec_tile_push(&game->map.inner, TILE_WALL);
@@ -47,6 +47,8 @@ t_error	parse_map_handle_tile(\
 		game->angle = _get_angle(tile);
 		vec_tile_push(&game->map.inner, TILE_FLOOR);
 	}
+	else if (tile == ' ')
+		vec_tile_push(&game->map.inner, TILE_EMPTY | TILE_SOLID);
 	else
 		return (cube_error("Invalid map char: '%c'(%#02x)", tile, tile), ERROR);
 	if (game->map.inner.buffer == NULL)

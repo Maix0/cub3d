@@ -33,7 +33,7 @@ PMAKE =
 ifndef PMAKE_DISABLE
 ifeq ($(shell uname), Linux)
 	PMAKE = -j$(shell grep -c ^processor /proc/cpuinfo)
-	#CFLAGS_ADDITIONAL	+= -DPRINT_BACKTRACE
+#	CFLAGS_ADDITIONAL	+= -DPRINT_BACKTRACE
 endif
 ifeq ($(shell uname), Darwin)
 	PMAKE = -j$(shell sysctl -n hw.ncpu)
@@ -50,7 +50,7 @@ ifeq ($(MAKECMDGOALS), bonus)
     BUILD_DIR := $(BUILD_DIR)/bonus
 endif
 
-NAME=cub3d
+NAME=cub3D
 # TODO: REMOVE THIS WHEN FINISHING THIS:
 # CFLAGS_ADDITIONAL	+= -O0 -Wno-\#warnings 
 # CFLAGS_ADDITIONAL	+= -gcolumn-info -g3 -fno-builtin

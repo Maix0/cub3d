@@ -1,6 +1,6 @@
 NO ./textures/nord.xpm
 SO ./textures/sud.xpm
-WE ./textures/ouest.xpm
+WE ./textures/ouest.xpm  
 EA ./textures/est.xpm
 
 F 232,222,146

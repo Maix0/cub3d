@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Cub3d.mk                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+         #
+#    By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/03 13:20:01 by maiboyer          #+#    #+#              #
-#    Updated: 2024/11/19 18:13:09 by maiboyer         ###   ########.fr        #
+#    Updated: 2024/11/25 14:11:39 by lgasqui          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 escape = $(subst ','\'',$(1))
-NAME			=	cub3d
+NAME			=	cub3D
 
 define noexpand
 ifeq ($$(origin $(1)),environment)

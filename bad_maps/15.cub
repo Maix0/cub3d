@@ -1,0 +1,13 @@
+EA          ./ressources/default_wall_east.xpm
+NO ./ressources/default_wall_north.xpm
+SO ./ressources/default_wall_south.xpm
+WE ./ressources/     default_wall_west.xpm
+F 0,100,255     
+C     255,   0,    25     
+
+1111111111111111
+1N0000000000001
+100000000000001
+100000000000001
+100000000000001
+111111111111111

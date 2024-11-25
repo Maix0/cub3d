@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_doors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 19:24:01 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/22 19:28:03 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:09:07 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "me/blx/blx_key.h"
 #include "me/vec2/vec2.h"
 
+// gestion ouverture, ne s'ouvre que si la SPC est released
 void	handle_door(t_blx *ctx, t_game *game, t_vi2d pos)
 {
 	t_tile	door_tile;

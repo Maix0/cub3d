@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_map.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maiboyer <maiboyer@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lgasqui <lgasqui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 12:31:46 by maiboyer          #+#    #+#             */
-/*   Updated: 2024/11/14 12:11:02 by maiboyer         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:13:38 by lgasqui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "me/vec/vec_tile.h"
 #include "me/vec2/vec2.h"
 
+//recup parsing map avant le set up des bits
 t_tile	get_tile(t_map *map, t_vi2d pos)
 {
 	t_tile	*out;
